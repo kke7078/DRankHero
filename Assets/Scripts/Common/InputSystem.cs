@@ -20,7 +20,7 @@ namespace KGY
 
             if (Input.GetMouseButtonDown(0))
             {
-                onClean?.Invoke(true);
+                onClean?.Invoke(true);   
             }
 
             if (Input.GetMouseButtonUp(0))

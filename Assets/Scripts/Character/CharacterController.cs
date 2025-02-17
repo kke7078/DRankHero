@@ -10,11 +10,8 @@ namespace KGY
     {
         public static CharacterController instance; 
 
-        protected float targetRotation;
-        protected float rotationVelocity;
-
         private CharacterBase characterBase;
-        private UnityEngine.CharacterController unityCharacterController;
+        
 
         private void Awake()
         {
@@ -22,29 +19,11 @@ namespace KGY
 
             //캐릭터 기본 클래스 선언
             characterBase = GetComponent<CharacterBase>();
-
-            //유니티엔진 캐릭터컨트롤러 선언
-            unityCharacterController = GetComponent<UnityEngine.CharacterController>();
         }
 
         private void Update()
         {
-            Move(characterBase.Direction, characterBase.GetSpeed());
-        }
-
-        private void Move(Vector2 direction, float speed)
-        {
-            float magnitude = direction.magnitude;
-            if (magnitude <= 0.1f) return;
-
-            Vector3 inputDirection = new Vector3(direction.x, 0, direction.y).normalized;
-            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, 0.15f);
-            transform.rotation = Quaternion.Euler(0, rotation, 0);
-
-            Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
-
-            unityCharacterController.Move(targetDirection * speed * Time.deltaTime);
+            characterBase.Move(characterBase.Direction, characterBase.GetSpeed());
         }
     }
 }

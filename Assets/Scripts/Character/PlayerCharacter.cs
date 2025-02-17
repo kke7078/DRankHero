@@ -9,11 +9,18 @@ namespace KGY
     public class PlayerCharacter : CharacterBase
     {
 
+        public Transform backPipeHolder;    //플레이어의 등에 위치한 파이프 홀더
+        public Transform handPipeHolder;    //플레이어의 손에 위치한 파이프 홀더
+
         protected bool isCleaning = false;    //플레이어의 청소 유무
+
+        private Animator animator; //플레이어의 애니메이터 컴포넌트
 
         public void OnEnable()
         {
             InputSystem.Singleton.onClean += Clean;
+
+            animator = GetComponent<Animator>();
         }
 
         private void Start()
@@ -24,6 +31,7 @@ namespace KGY
         private void Update()
         {
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
+            animator.SetFloat("isMove", Direction.magnitude);
 
             //플레이어의 회전 방향 설정
             if (isCleaning)
@@ -48,16 +56,33 @@ namespace KGY
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
         {
-
             if (isClean)
             {
                 isCleaning = true;
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
+                PipeEquip(isClean); //청소 도구 장착
+
+                animator.SetFloat("isClean", 1); //애니메이션 레이어 1로 설정
             }
             else
             {
                 isCleaning = false;
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
+                PipeEquip(isClean); //청소 도구 해제
+
+                animator.SetFloat("isClean", 0); //애니메이션 레이어 0으로 설정
+            }
+        }
+
+        private void PipeEquip(bool isClean) 
+        {
+            if (isClean)
+            {
+                Debug.Log("손에 장착해야함");
+            }
+            else
+            {
+                Debug.Log("등에 장착해야함!");
             }
         }
     }
