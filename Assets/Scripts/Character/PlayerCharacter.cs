@@ -11,6 +11,7 @@ namespace KGY
 
         public Transform backPipeHolder;    //플레이어의 등에 위치한 파이프 홀더
         public Transform handPipeHolder;    //플레이어의 손에 위치한 파이프 홀더
+        public GameObject pipe; //플레이어가 사용하는 파이프
 
         protected bool isCleaning = false;    //플레이어의 청소 유무
 
@@ -78,11 +79,17 @@ namespace KGY
         {
             if (isClean)
             {
-                Debug.Log("손에 장착해야함");
+                pipe.transform.SetParent(handPipeHolder);              //파이프를 손에 장착
+                pipe.transform.localRotation = Quaternion.identity;    //파이프의 회전을 초기화
+                pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
+                pipe.transform.Rotate(-90, 0, 0);                      //파이프의 회전을 설정
             }
             else
             {
-                Debug.Log("등에 장착해야함!");
+                pipe.transform.SetParent(backPipeHolder);              //파이프를 등에 장착
+                pipe.transform.localRotation = Quaternion.identity;    //파이프의 회전을 초기화
+                pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
+                pipe.transform.Rotate(0, -45, 90);                     //파이프의 회전을 설정
             }
         }
     }
