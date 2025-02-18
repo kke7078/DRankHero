@@ -12,7 +12,16 @@ Material:
   m_Parent: {fileID: 2100000, guid: e8ee16994bbfbbf4eba7431e79c154a1, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - COMMTRANSP
+  - FOAM
+  - INVERT
+  - LIGHTING
+  - REFLECTION
+  - RENDERING
+  - SQUARED
+  - TEXTURES
+  - WAVES
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
