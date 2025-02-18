@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace KGY
@@ -75,6 +76,7 @@ namespace KGY
             }
         }
 
+        //청소 도구 장착 및 해제
         private void PipeEquip(bool isClean) 
         {
             if (isClean)
@@ -91,6 +93,12 @@ namespace KGY
                 pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
                 pipe.transform.Rotate(0, -45, 90);                     //파이프의 회전을 설정
             }
+        }
+
+        //플레이어의 눈 깜빡임 효과
+        private void EyeBlink()
+        {
+
         }
     }
 }
