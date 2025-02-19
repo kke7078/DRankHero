@@ -60,21 +60,20 @@ namespace KGY
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
         {
+            isCleaning = isClean;
             water.SetActive(isClean); //물 오브젝트 활성화
 
             if (isClean)
             {
-                isCleaning = true;
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
-                PipeEquip(isClean); //청소 도구 장착
+                //PipeEquip(isClean); //청소 도구 장착
 
                 animator.SetFloat("isClean", 1); //애니메이션 레이어 1로 설정
             }
             else
             {
-                isCleaning = false;
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
-                PipeEquip(isClean); //청소 도구 해제
+                //PipeEquip(isClean); //청소 도구 해제
 
                 animator.SetFloat("isClean", 0); //애니메이션 레이어 0으로 설정
             }
@@ -97,12 +96,6 @@ namespace KGY
                 pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
                 pipe.transform.Rotate(0, -45, 90);                     //파이프의 회전을 설정
             }
-        }
-
-        //플레이어의 눈 깜빡임 효과
-        private void EyeBlink()
-        {
-
         }
     }
 }

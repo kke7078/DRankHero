@@ -37,7 +37,7 @@ namespace KGY
         }
 
         //캐릭터 이동 메서드
-        public virtual void Move(Vector2 direction, float speed)
+        public void Move(Vector2 direction, float speed)
         {
             float magnitude = direction.magnitude;
             if (magnitude <= 0.1f) return;
