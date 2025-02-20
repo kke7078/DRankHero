@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.UIElements;
 
 namespace KGY
@@ -15,6 +16,8 @@ namespace KGY
         public Transform backToolHolder;    //플레이어의 등에 위치한 청소도구 홀더
         public Transform handToolHolder;    //플레이어의 손에 위치한 청소도구 홀더
         public CleanToolManager currentTool;      //현재 장착된 청소도구
+
+        public TwoBoneIKConstraint rightHandIK;    //플레이어의 오른손 IK
 
         protected bool isCleaning = false;    //플레이어의 청소 유무
 
@@ -62,7 +65,7 @@ namespace KGY
         private void Clean(bool isClean)
         {
             isCleaning = isClean;
-            PipeEquip(isClean); //청소 도구 장착
+            ToolEquip(isClean); //청소 도구 장착
 
             if (isClean)
             {
@@ -77,16 +80,21 @@ namespace KGY
         }
 
         //청소 도구 장착 및 해제
-        private void PipeEquip(bool isClean) 
+        private void ToolEquip(bool isClean) 
         {
             if (isClean)
             {
                 currentTool.transform.SetParent(handToolHolder);             //청소도구를 손에 장착
                 currentTool.transform.localRotation = Quaternion.identity;  //청소도구의 회전을 초기화
                 currentTool.transform.localPosition = Vector3.zero;         //청소도구의 위치를 초기화
+
+                rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");
+                GetComponent<RigBuilder>().enabled = true;    //RigBuilder 컴포넌트 활성화
             }                                                                   
             else                                                                
-            {                                                                   
+            {
+                GetComponent<RigBuilder>().enabled = false;    //RigBuilder 컴포넌트 활성화
+
                 currentTool.transform.SetParent(backToolHolder);    //청소도구를 등에 장착
                 currentTool.transform.localPosition = currentTool.toolBackPosition;    //청소도구의 위치를 등에 위치한 위치로 설정
                 currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);  //청소도구의 위치를 등에 위치한 회전으로 설정
