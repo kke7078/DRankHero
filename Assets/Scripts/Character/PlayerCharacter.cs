@@ -11,9 +11,9 @@ namespace KGY
     public class PlayerCharacter : CharacterBase
     {
 
-        public Transform backPipeHolder;    //플레이어의 등에 위치한 파이프 홀더
-        public Transform handPipeHolder;    //플레이어의 손에 위치한 파이프 홀더
-        public GameObject currentTool;      //플레이어가 사용하는 파이프
+        public Transform backToolHolder;    //플레이어의 등에 위치한 청소도구 홀더
+        public Transform handToolHolder;    //플레이어의 손에 위치한 청소도구 홀더
+        public GameObject currentTool;      //플레이어가 사용하는 청소도구
 
         protected bool isCleaning = false;    //플레이어의 청소 유무
 
@@ -79,14 +79,14 @@ namespace KGY
         {
             if (isClean)
             {
-                currentTool.transform.SetParent(handPipeHolder);              //청소도구를 손에 장착
+                currentTool.transform.SetParent(handToolHolder);              //청소도구를 손에 장착
                 currentTool.transform.localRotation = Quaternion.identity;    //청소도구의 회전을 초기화
                 currentTool.transform.localPosition = Vector3.zero;           //청소도구의 위치를 초기화
                 currentTool.transform.Rotate(-90, 0, 30);                     //청소도구의 회전을 설정
             }                                                                   
             else                                                                
             {                                                                   
-                currentTool.transform.SetParent(backPipeHolder);              //청소도구를 등에 장착
+                currentTool.transform.SetParent(backToolHolder);              //청소도구를 등에 장착
                 currentTool.transform.localRotation = Quaternion.identity;    //청소도구의 회전을 초기화
                 currentTool.transform.localPosition = Vector3.zero;           //청소도구의 위치를 초기화
                 currentTool.transform.Rotate(0, -45, 90);                     //청소도구의 회전을 설정
