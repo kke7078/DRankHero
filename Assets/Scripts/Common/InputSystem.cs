@@ -8,6 +8,7 @@ namespace KGY
     public class InputSystem : SingletonBase<InputSystem>
     {
         public System.Action<bool> onClean;
+        public System.Action<int> onChangeTool;
 
         public Vector2 MoveInput { get; set; }
 

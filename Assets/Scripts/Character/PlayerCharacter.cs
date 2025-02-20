@@ -13,8 +13,7 @@ namespace KGY
 
         public Transform backPipeHolder;    //플레이어의 등에 위치한 파이프 홀더
         public Transform handPipeHolder;    //플레이어의 손에 위치한 파이프 홀더
-        public GameObject pipe; //플레이어가 사용하는 파이프
-        public GameObject water;
+        public GameObject currentTool;      //플레이어가 사용하는 파이프
 
         protected bool isCleaning = false;    //플레이어의 청소 유무
 
@@ -61,20 +60,16 @@ namespace KGY
         private void Clean(bool isClean)
         {
             isCleaning = isClean;
-            water.SetActive(isClean); //물 오브젝트 활성화
+            //PipeEquip(isClean); //청소 도구 장착
 
             if (isClean)
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
-                //PipeEquip(isClean); //청소 도구 장착
-
                 animator.SetFloat("isClean", 1); //애니메이션 레이어 1로 설정
             }
             else
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
-                //PipeEquip(isClean); //청소 도구 해제
-
                 animator.SetFloat("isClean", 0); //애니메이션 레이어 0으로 설정
             }
         }
@@ -84,17 +79,17 @@ namespace KGY
         {
             if (isClean)
             {
-                pipe.transform.SetParent(handPipeHolder);              //파이프를 손에 장착
-                pipe.transform.localRotation = Quaternion.identity;    //파이프의 회전을 초기화
-                pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
-                pipe.transform.Rotate(-90, 0, 20);                      //파이프의 회전을 설정
-            }
-            else
-            {
-                pipe.transform.SetParent(backPipeHolder);              //파이프를 등에 장착
-                pipe.transform.localRotation = Quaternion.identity;    //파이프의 회전을 초기화
-                pipe.transform.localPosition = Vector3.zero;           //파이프의 위치를 초기화
-                pipe.transform.Rotate(0, -45, 90);                     //파이프의 회전을 설정
+                currentTool.transform.SetParent(handPipeHolder);              //청소도구를 손에 장착
+                currentTool.transform.localRotation = Quaternion.identity;    //청소도구의 회전을 초기화
+                currentTool.transform.localPosition = Vector3.zero;           //청소도구의 위치를 초기화
+                currentTool.transform.Rotate(-90, 0, 30);                     //청소도구의 회전을 설정
+            }                                                                   
+            else                                                                
+            {                                                                   
+                currentTool.transform.SetParent(backPipeHolder);              //청소도구를 등에 장착
+                currentTool.transform.localRotation = Quaternion.identity;    //청소도구의 회전을 초기화
+                currentTool.transform.localPosition = Vector3.zero;           //청소도구의 위치를 초기화
+                currentTool.transform.Rotate(0, -45, 90);                     //청소도구의 회전을 설정
             }
         }
     }
