@@ -13,27 +13,30 @@ namespace KGY
     public class PlayerCharacter : CharacterBase
     {
 
-        public Transform backToolHolder;    //플레이어의 등에 위치한 청소도구 홀더
-        public Transform handToolHolder;    //플레이어의 손에 위치한 청소도구 홀더
-        public CleanToolManager currentTool;      //현재 장착된 청소도구
+        public Transform backToolHolder;        //플레이어의 등에 위치한 청소도구 홀더
+        public Transform handToolHolder;        //플레이어의 손에 위치한 청소도구 홀더
+        public TwoBoneIKConstraint rightHandIK; //플레이어의 오른손 IK
+        public TwoBoneIKConstraint leftHandIK;  //플레이어의 왼손 IK
 
-        public TwoBoneIKConstraint rightHandIK;    //플레이어의 오른손 IK
+        protected bool isCleaning = false;      //플레이어의 청소 유무
 
-        protected bool isCleaning = false;    //플레이어의 청소 유무
-
-        private Animator animator; //플레이어의 애니메이터 컴포넌트
+        private Animator animator;              //플레이어의 애니메이터 컴포넌트
+        private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
+        private CleanToolManager currentTool;   //현재 장착된 청소도구
+        
 
         public void OnEnable()
         {
             InputSystem.Singleton.onClean += Clean;
-
-            animator = GetComponent<Animator>();
         }
 
         private void Start()
         {
+            animator = GetComponent<Animator>();
+            rigBuilder = GetComponent<RigBuilder>();
+            currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
+
             SetSpeed(5.0f); //플레이어의 기본이동 속도 설정
-            currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //청소도구 설정
         }
 
         private void Update()
@@ -88,17 +91,22 @@ namespace KGY
                 currentTool.transform.localRotation = Quaternion.identity;  //청소도구의 회전을 초기화
                 currentTool.transform.localPosition = Vector3.zero;         //청소도구의 위치를 초기화
 
-                rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");
-                GetComponent<RigBuilder>().enabled = true;    //RigBuilder 컴포넌트 활성화
+                rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
+                leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
+                rigBuilder.layers[0].active = true;  //RigBuilder의 레이어 활성화
             }                                                                   
             else                                                                
             {
-                GetComponent<RigBuilder>().enabled = false;    //RigBuilder 컴포넌트 활성화
-
                 currentTool.transform.SetParent(backToolHolder);    //청소도구를 등에 장착
                 currentTool.transform.localPosition = currentTool.toolBackPosition;    //청소도구의 위치를 등에 위치한 위치로 설정
                 currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);  //청소도구의 위치를 등에 위치한 회전으로 설정
+
+                rightHandIK.data.target = null;         //오른손 IK 타겟 초기화
+                leftHandIK.data.target = null;          //왼손 IK 타겟 초기화
+                rigBuilder.layers[0].active = false;    //RigBuilder의 레이어 비활성화
             }
+
+            rigBuilder.Build(); //RigBuilder 재구성
         }
     }
 }
