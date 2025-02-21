@@ -101,9 +101,10 @@ namespace KGY
             }                                                                   
             else                                                                
             {
-                currentTool.transform.SetParent(backToolHolder);    //청소도구를 등에 장착
-                currentTool.transform.localPosition = currentTool.toolBackPosition;    //청소도구의 위치를 등에 위치한 위치로 설정
-                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);  //청소도구의 위치를 등에 위치한 회전으로 설정
+                //청소도구를 등에 장착
+                currentTool.transform.SetParent(backToolHolder);
+                currentTool.transform.localPosition = currentTool.toolBackPosition;
+                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);
             }
         }
 
