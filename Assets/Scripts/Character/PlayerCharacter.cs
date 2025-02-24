@@ -84,8 +84,8 @@ namespace KGY
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
                 //플레이어의 unEquip 애니메이션 설정
-                //animator.SetBool("isUnEquip", isClean);
-                //animator.SetTrigger("EquipTrigger");
+                animator.SetBool("isUnEquip", isClean);
+                animator.SetTrigger("EquipTrigger");
             }
         }
 
