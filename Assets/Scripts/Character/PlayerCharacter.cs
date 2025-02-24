@@ -83,13 +83,8 @@ namespace KGY
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
-                ToolEquip();
-                HandIKControl(isClean);
-                animator.SetFloat("isClean", 0);
-
                 //플레이어의 unEquip 애니메이션 설정
-                //animator.SetBool("isEquip", isClean);
-                //animator.SetBool("isUnEquip", !isClean);
+                //animator.SetBool("isUnEquip", isClean);
                 //animator.SetTrigger("EquipTrigger");
             }
         }
@@ -114,10 +109,11 @@ namespace KGY
         }
 
         //Hand IK 제어
-        public void HandIKControl(bool isActive)
+        public void HandIKControl()
         {
-            if (isActive)
+            if (isCleaning)
             {
+                Debug.Log("Hand IK : "+isCleaning);
                 rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
                 leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = true;  //RigBuilder의 레이어 활성화
@@ -130,6 +126,27 @@ namespace KGY
             }
 
             rigBuilder.Build(); //RigBuilder 재구성
+        }
+
+        public void EquipControl(string status)
+        {
+            Debug.Log(status);
+            if (status == "equip")
+            {
+                //청소도구 손에 장착
+                ToolEquip();
+            }
+            else if (status == "equipEnd")
+            {
+                //equip 애니메이션 해제
+                animator.SetBool("isEquip", false);
+
+                //Idle 애니메이션 설정
+                animator.SetFloat("isClean", 1);
+
+                //Hand IK 설정
+                Invoke("HandIKControl", 0.03f);
+            }
         }
     }
 }
