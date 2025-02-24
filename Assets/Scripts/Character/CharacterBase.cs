@@ -9,13 +9,12 @@ namespace KGY
     public class CharacterBase : MonoBehaviour
     {
         public Vector2 Direction { get; set; }  //이동 방향
-        
+        private Vector2 direction;
+
         protected float targetRotation;
         protected float rotationVelocity;
 
         private float baseSpeed;    //기본 이동 속도
-        private Vector2 direction;
-
         private UnityEngine.CharacterController unityCharacterController;
 
         protected virtual void Awake()

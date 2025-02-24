@@ -19,6 +19,7 @@ namespace KGY
         public TwoBoneIKConstraint leftHandIK;  //플레이어의 왼손 IK
 
         protected bool isCleaning = false;      //플레이어의 청소 유무
+        protected bool isEquipping = false;     //플레이어의 도구 장착 
 
         private Animator animator;              //플레이어의 애니메이터 컴포넌트
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
@@ -73,20 +74,24 @@ namespace KGY
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
 
-                animator.SetFloat("isClean", 1);    //청소도구 장착 애니메이션 실행
-                ToolEquip();                        //청소도구 장착
+                //플레이어의 Equip 애니메이션 설정
+                animator.SetBool("isEquip", isClean);
+                animator.SetTrigger("EquipTrigger");
+
             }
             else
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
-                //청소도구 장착 해제 애니메이션 실행
-                animator.SetBool("isUnEquip", true);
-                animator.SetTrigger("EquipTrigger");
+                ToolEquip();
+                HandIKControl(isClean);
                 animator.SetFloat("isClean", 0);
-            }
 
-            HandIKControl(isClean);    //손 IK 제어
+                //플레이어의 unEquip 애니메이션 설정
+                //animator.SetBool("isEquip", isClean);
+                //animator.SetBool("isUnEquip", !isClean);
+                //animator.SetTrigger("EquipTrigger");
+            }
         }
 
         //청소 도구 장착 및 해제
@@ -108,6 +113,7 @@ namespace KGY
             }
         }
 
+        //Hand IK 제어
         public void HandIKControl(bool isActive)
         {
             if (isActive)

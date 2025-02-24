@@ -9,7 +9,7 @@ namespace KGY
     public class CharacterController : MonoBehaviour
     {
         public static CharacterController instance; 
-
+        
         private CharacterBase characterBase;
         
 
