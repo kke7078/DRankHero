@@ -156,13 +156,13 @@ namespace KGY
             {
                 //청소도구 등에 장착
                 ToolEquip();
+
+                //Idle 애니메이션 설정
+                animator.SetFloat("isClean", 0);
             }
             else if (status == "unEquipEnd") {
                 //unEquip 애니메이션 해제
                 animator.SetBool("isUnEquip", false);
-
-                //Idle 애니메이션 설정
-                animator.SetFloat("isClean", 0);
             }
         }
     }
