@@ -83,9 +83,15 @@ namespace KGY
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
+                //플레이어의 Equip 애니메이션 초기화
+                animator.SetBool("isEquip", isClean);
+
                 //플레이어의 unEquip 애니메이션 설정
-                animator.SetBool("isUnEquip", isClean);
+                animator.SetBool("isUnEquip", !isClean);
                 animator.SetTrigger("EquipTrigger");
+
+                //Hand IK 초기화
+                HandIKControl();
             }
         }
 
@@ -130,7 +136,6 @@ namespace KGY
 
         public void EquipControl(string status)
         {
-            Debug.Log(status);
             if (status == "equip")
             {
                 //청소도구 손에 장착
@@ -141,11 +146,23 @@ namespace KGY
                 //equip 애니메이션 해제
                 animator.SetBool("isEquip", false);
 
-                //Idle 애니메이션 설정
+                //clean 애니메이션 설정
                 animator.SetFloat("isClean", 1);
 
                 //Hand IK 설정
                 Invoke("HandIKControl", 0.03f);
+            }
+            else if (status == "unEquip")
+            {
+                //청소도구 등에 장착
+                ToolEquip();
+            }
+            else if (status == "unEquipEnd") {
+                //unEquip 애니메이션 해제
+                animator.SetBool("isUnEquip", false);
+
+                //Idle 애니메이션 설정
+                animator.SetFloat("isClean", 0);
             }
         }
     }
