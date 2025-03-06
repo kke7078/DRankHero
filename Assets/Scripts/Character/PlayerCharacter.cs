@@ -119,7 +119,6 @@ namespace KGY
         {
             if (isCleaning)
             {
-                Debug.Log("Hand IK : "+isCleaning);
                 rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
                 leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = true;  //RigBuilder의 레이어 활성화
