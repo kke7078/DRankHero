@@ -512,7 +512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &42667859
 Transform:
   m_ObjectHideFlags: 0
@@ -652,13 +652,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229132145}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00031004043, y: 0.8367642, z: 0.5475633, w: 0.00006857672}
-  m_LocalPosition: {x: -0.138, y: 0.58, z: 0.758}
+  m_LocalRotation: {x: 0.18490872, y: 0.81529415, z: 0.54046667, w: -0.09486883}
+  m_LocalPosition: {x: 0.038, y: 0.768, z: 0.994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 657374975}
-  m_LocalEulerAnglesHint: {x: -66.4, y: 179.935, z: 0.085}
+  m_LocalEulerAnglesHint: {x: -66.4, y: 173.52, z: 29.8}
 --- !u!1 &243640777
 GameObject:
   m_ObjectHideFlags: 0
@@ -5178,7 +5178,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -5188,7 +5188,7 @@ ParticleSystem:
     outside: 0
     enter: 0
     exit: 0
-    colliderQueryMode: 0
+    colliderQueryMode: 2
     radiusScale: 1
     primitives: []
   SubModule:
@@ -10117,7 +10117,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -10127,7 +10127,7 @@ ParticleSystem:
     outside: 0
     enter: 0
     exit: 0
-    colliderQueryMode: 0
+    colliderQueryMode: 2
     radiusScale: 1
     primitives: []
   SubModule:
@@ -15155,7 +15155,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -15165,7 +15165,7 @@ ParticleSystem:
     outside: 0
     enter: 0
     exit: 0
-    colliderQueryMode: 0
+    colliderQueryMode: 2
     radiusScale: 1
     primitives: []
   SubModule:
@@ -20655,7 +20655,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -20665,7 +20665,7 @@ ParticleSystem:
     outside: 0
     enter: 0
     exit: 0
-    colliderQueryMode: 0
+    colliderQueryMode: 2
     radiusScale: 1
     primitives: []
   SubModule:
@@ -25498,7 +25498,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -25508,7 +25508,7 @@ ParticleSystem:
     outside: 0
     enter: 0
     exit: 0
-    colliderQueryMode: 0
+    colliderQueryMode: 2
     radiusScale: 1
     primitives: []
   SubModule:
