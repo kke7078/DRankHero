@@ -24,7 +24,6 @@ namespace KGY
         private Animator animator;              //플레이어의 애니메이터 컴포넌트
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
         private CleanToolManager currentTool;   //현재 장착된 청소도구
-        
 
         public void OnEnable()
         {
@@ -121,13 +120,17 @@ namespace KGY
             {
                 rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
                 leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
-                rigBuilder.layers[0].active = true;  //RigBuilder의 레이어 활성화
+                rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
+
+                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
             }
             else
             {
                 rightHandIK.data.target = null;       //오른손 IK 타겟 설정
                 leftHandIK.data.target = null;        //왼손 IK 타겟 설정
-                rigBuilder.layers[0].active = false;  //RigBuilder의 레이어 활성화
+                rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
+
+                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
             }
 
             rigBuilder.Build(); //RigBuilder 재구성

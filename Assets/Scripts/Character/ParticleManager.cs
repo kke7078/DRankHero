@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Security;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,11 +10,14 @@ namespace KGY
     public class ParticleManager : MonoBehaviour
     {
         private ParticleSystem ps;
+
         protected float fadeDuration = 0.05f;
+        public GameObject rippleEffect;
 
         private void Start()
         {
             ps = GetComponent<ParticleSystem>();
+            rippleEffect = GetComponentInParent<CleanToolManager>().toolSubEffect;
         }
 
         private void OnParticleCollision(GameObject other)
@@ -35,6 +39,9 @@ namespace KGY
 
             //업데이트된 파티클 정보를 적용하기
             ps.SetParticles(particles, numParticlesAlive);
+
+            //파티클 충돌 이펙트 활성화하기
+            rippleEffect.SetActive(true);
         }
     }
 }
