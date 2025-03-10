@@ -52,9 +52,13 @@ namespace KGY
                 if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, 1000f))
                 {
                     Vector3 direction = hitInfo.point - transform.position;
-                    Quaternion targetRot = Quaternion.LookRotation(direction);
-                    targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
-                    transform.rotation = targetRot;
+
+                    //캐릭터와 마우스 클릭 위치의 거리가 1f 이상일 때 회전
+                    if (direction.magnitude > 1f) {
+                        Quaternion targetRot = Quaternion.LookRotation(direction);
+                        targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
+                        transform.rotation = targetRot;
+                    }
                 }
             }
         }
@@ -130,7 +134,7 @@ namespace KGY
                 leftHandIK.data.target = null;        //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
-                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
+                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
             }
 
             rigBuilder.Build(); //RigBuilder 재구성

@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Security;
@@ -9,40 +10,45 @@ namespace KGY
     //ParticleManager : 캐릭터의 파티클을 관리하는 클래스
     public class ParticleWaterManager : MonoBehaviour
     {
-        private ParticleSystem ps;
-
-        protected GameObject rippleEffect;
-        protected float fadeDuration = 0.05f;
-        protected float distance;
+        public GameObject waterEffectPrefab;
+        private new ParticleSystem particleSystem;
 
         private void Start()
         {
-            ps = GetComponent<ParticleSystem>();
-            rippleEffect = GetComponentInParent<CleanToolManager>().toolSubEffect;
+            particleSystem = GetComponent<ParticleSystem>();
         }
 
         private void OnParticleCollision(GameObject other)
         {
-            //충돌한 파티클의 인덱스를 가져오기
-            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[ps.particleCount];
-            int numParticlesAlive = ps.GetParticles(particles);
+            //충돌한 파티클 정보를 저장할 리스트
+            List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
+            int numCollsiionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
 
-            //파티클 충돌 이펙트 활성화하기
-            rippleEffect.SetActive(true);
+            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
+            int numParticles = particleSystem.GetParticles(particles);
 
-            //충돌한 파티클을 서서히 사라지게 설정하기
-            for (int i = 0; i < numParticlesAlive; i++)
+            for (int i = 0; i < numCollsiionEvents; i++)
             {
-                if (particles[i].remainingLifetime > 0)
+                Vector3 hitPoint = collisionEvents[i].intersection; //충돌 위치
+                Vector3 hitNormal = collisionEvents[i].normal;      //충돌 법선
+
+                GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal));
+                Destroy(waterEffect, 0.5f);
+
+                //충돌한 파티클 입자 사라지게 설정
+                for (int j = 0; j < numParticles; j++)
                 {
-                    particles[i].remainingLifetime -= fadeDuration;
+                    if (particles[j].remainingLifetime > 0) {
 
-                    if (particles[i].remainingLifetime < 0) particles[i].remainingLifetime = 0;
+                        particles[j].remainingLifetime -= 0.5f;
+
+                        if (particles[j].remainingLifetime < 0) particles[j].remainingLifetime = 0;
+                    }
                 }
-            }
 
-            //업데이트된 파티클 정보를 적용하기
-            ps.SetParticles(particles, numParticlesAlive);
+                //업데이트 된 파티클 정보 적용
+                particleSystem.SetParticles(particles, numParticles);
+            }
         }
     }
 }
