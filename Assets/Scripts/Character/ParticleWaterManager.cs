@@ -7,12 +7,13 @@ using UnityEngine;
 namespace KGY
 {
     //ParticleManager : 캐릭터의 파티클을 관리하는 클래스
-    public class ParticleManager : MonoBehaviour
+    public class ParticleWaterManager : MonoBehaviour
     {
         private ParticleSystem ps;
 
+        protected GameObject rippleEffect;
         protected float fadeDuration = 0.05f;
-        public GameObject rippleEffect;
+        protected float distance;
 
         private void Start()
         {
@@ -26,22 +27,22 @@ namespace KGY
             ParticleSystem.Particle[] particles = new ParticleSystem.Particle[ps.particleCount];
             int numParticlesAlive = ps.GetParticles(particles);
 
+            //파티클 충돌 이펙트 활성화하기
+            rippleEffect.SetActive(true);
+
             //충돌한 파티클을 서서히 사라지게 설정하기
             for (int i = 0; i < numParticlesAlive; i++)
             {
                 if (particles[i].remainingLifetime > 0)
                 {
                     particles[i].remainingLifetime -= fadeDuration;
-                    
-                    if (particles[i].remainingLifetime < 0) particles[i].remainingLifetime = 0;               
+
+                    if (particles[i].remainingLifetime < 0) particles[i].remainingLifetime = 0;
                 }
             }
 
             //업데이트된 파티클 정보를 적용하기
             ps.SetParticles(particles, numParticlesAlive);
-
-            //파티클 충돌 이펙트 활성화하기
-            rippleEffect.SetActive(true);
         }
     }
 }
