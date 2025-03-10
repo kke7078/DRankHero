@@ -127,6 +127,7 @@ namespace KGY
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
                 currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
+                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 활성화
             }
             else
             {
@@ -135,6 +136,7 @@ namespace KGY
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
                 currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
+                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
             }
 
             rigBuilder.Build(); //RigBuilder 재구성

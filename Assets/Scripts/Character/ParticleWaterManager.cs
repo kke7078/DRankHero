@@ -11,6 +11,7 @@ namespace KGY
     public class ParticleWaterManager : MonoBehaviour
     {
         public GameObject waterEffectPrefab;
+        public Transform waterRipple;
         private new ParticleSystem particleSystem;
 
         private void Start()
@@ -32,7 +33,7 @@ namespace KGY
                 Vector3 hitPoint = collisionEvents[i].intersection; //충돌 위치
                 Vector3 hitNormal = collisionEvents[i].normal;      //충돌 법선
 
-                GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal));
+                GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal), waterRipple);
                 Destroy(waterEffect, 0.5f);
 
                 //충돌한 파티클 입자 사라지게 설정
@@ -40,7 +41,7 @@ namespace KGY
                 {
                     if (particles[j].remainingLifetime > 0) {
 
-                        particles[j].remainingLifetime -= 0.5f;
+                        particles[j].remainingLifetime -= 0.1f;
 
                         if (particles[j].remainingLifetime < 0) particles[j].remainingLifetime = 0;
                     }

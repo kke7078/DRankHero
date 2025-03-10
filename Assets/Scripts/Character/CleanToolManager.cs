@@ -14,5 +14,6 @@ namespace KGY
         public Quaternion toolBackRotation; //등에 위치한 청소도구의 회전
         
         public GameObject toolMainEffect;       //청소도구의 이펙트
+        public GameObject toolSubEffext;        //청소도구의 서브 이펙트
     }
 }
