@@ -28,6 +28,7 @@ namespace KGY
         public void OnEnable()
         {
             InputSystem.Singleton.onClean += Clean;
+            InputSystem.Singleton.onInteract += Interact;
         }
 
         private void Start()
@@ -172,6 +173,11 @@ namespace KGY
                 //unEquip 애니메이션 해제
                 animator.SetBool("isUnEquip", false);
             }
+        }
+
+        public override void Interact()
+        {
+            Debug.Log("Player Character Interact");
         }
     }
 }

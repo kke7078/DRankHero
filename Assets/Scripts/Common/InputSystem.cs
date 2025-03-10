@@ -9,6 +9,7 @@ namespace KGY
     {
         public System.Action<bool> onClean;
         public System.Action<int> onChangeTool;
+        public System.Action onInteract;
 
         public Vector2 MoveInput { get; set; }
 
@@ -27,6 +28,10 @@ namespace KGY
             if (Input.GetMouseButtonUp(0))
             {
                 onClean?.Invoke(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E)) {
+                onInteract?.Invoke();
             }
         }
     }

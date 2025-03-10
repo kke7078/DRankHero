@@ -50,5 +50,9 @@ namespace KGY
 
             unityCharacterController.Move(targetDirection * speed * Time.deltaTime);
         }
+
+        public virtual void Interact() {
+            Debug.Log("Character Base Interact");
+        }
     }
 }
