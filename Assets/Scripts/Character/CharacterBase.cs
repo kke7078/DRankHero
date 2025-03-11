@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace KGY
@@ -17,12 +18,20 @@ namespace KGY
         private float baseSpeed;    //기본 이동 속도
         private UnityEngine.CharacterController unityCharacterController;
 
+        private InteractionSensor interactionSensor;
+        private List<IInteractable> currentInteractionItems = new List<IInteractable>();
+
         protected virtual void Awake()
         {
             baseSpeed = 5.0f;   //기본 이동 속도 설정
 
             //유니티엔진 캐릭터컨트롤러 선언
             unityCharacterController = GetComponent<UnityEngine.CharacterController>();
+
+            //상호작용 센서 컴포넌트 선언
+            interactionSensor = GetComponent<InteractionSensor>();
+            //interactionSensor.OnDetected += OnDetectedInteraction;
+            //interactionSensor.OnLostSignal += OnLostSignalInteraction;
         }
 
         public float GetSpeed()    //이동 속도 반환 메서드
@@ -53,6 +62,21 @@ namespace KGY
 
         public virtual void Interact() {
             Debug.Log("Character Base Interact");
+
+            //if (currentInteractionItems.Count <= 0) return;
+
+            //currentInteractionItems[0].Interact(this);
+            //currentInteractionItems.RemoveAt(0);
+        }
+
+        public void OnDetectedInteraction(IInteractable interactable) {
+            //if (interactable.IsAutoInteract) interactable.Interact(this);
+            //else currentInteractionItems.Add(interactable);
+        }
+
+        public void OnLostSignalInteraction(IInteractable interactable)
+        {
+            //currentInteractionItems.Remove(interactable);
         }
     }
 }
