@@ -21,7 +21,7 @@ namespace KGY
         private InteractionSensor interactionSensor;
         private List<IInteractable> currentInteractionItems = new List<IInteractable>();
 
-        protected virtual void Awake()
+        protected virtual void Start()
         {
             baseSpeed = 5.0f;   //기본 이동 속도 설정
 
@@ -29,9 +29,9 @@ namespace KGY
             unityCharacterController = GetComponent<UnityEngine.CharacterController>();
 
             //상호작용 센서 컴포넌트 선언
-            interactionSensor = GetComponent<InteractionSensor>();
-            //interactionSensor.OnDetected += OnDetectedInteraction;
-            //interactionSensor.OnLostSignal += OnLostSignalInteraction;
+            interactionSensor = GetComponentInChildren<InteractionSensor>();
+            interactionSensor.OnDetected += OnDetectedInteraction;
+            interactionSensor.OnLostSignal += OnLostSignalInteraction;
         }
 
         public float GetSpeed()    //이동 속도 반환 메서드
@@ -61,22 +61,21 @@ namespace KGY
         }
 
         public virtual void Interact() {
-            Debug.Log("Character Base Interact");
+            if (currentInteractionItems.Count <= 0) return;
 
-            //if (currentInteractionItems.Count <= 0) return;
-
-            //currentInteractionItems[0].Interact(this);
-            //currentInteractionItems.RemoveAt(0);
+            currentInteractionItems[0].Interact(this);
+            currentInteractionItems.RemoveAt(0);
         }
 
         public void OnDetectedInteraction(IInteractable interactable) {
-            //if (interactable.IsAutoInteract) interactable.Interact(this);
-            //else currentInteractionItems.Add(interactable);
+
+            if (interactable.IsAutoInteract) interactable.Interact(this);
+            else currentInteractionItems.Add(interactable);
         }
 
         public void OnLostSignalInteraction(IInteractable interactable)
         {
-            //currentInteractionItems.Remove(interactable);
+            currentInteractionItems.Remove(interactable);
         }
     }
 }

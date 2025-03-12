@@ -31,8 +31,10 @@ namespace KGY
             InputSystem.Singleton.onInteract += Interact;
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+
             animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
@@ -175,9 +177,10 @@ namespace KGY
             }
         }
 
-        public override void Interact()
-        {
-            Debug.Log("Player Character Interact");
-        }
+        //public override void Interact()
+        //{
+            
+        //    Debug.Log("Player Character Interact");
+        //}
     }
 }
