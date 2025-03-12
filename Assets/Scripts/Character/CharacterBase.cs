@@ -14,12 +14,12 @@ namespace KGY
 
         protected float targetRotation;
         protected float rotationVelocity;
+        protected List<IInteractable> currentInteractionItems = new List<IInteractable>();
 
         private float baseSpeed;    //기본 이동 속도
         private UnityEngine.CharacterController unityCharacterController;
 
         private InteractionSensor interactionSensor;
-        private List<IInteractable> currentInteractionItems = new List<IInteractable>();
 
         protected virtual void Start()
         {
@@ -60,15 +60,7 @@ namespace KGY
             unityCharacterController.Move(targetDirection * speed * Time.deltaTime);
         }
 
-        public virtual void Interact() {
-            if (currentInteractionItems.Count <= 0) return;
-
-            currentInteractionItems[0].Interact(this);
-            currentInteractionItems.RemoveAt(0);
-        }
-
         public void OnDetectedInteraction(IInteractable interactable) {
-
             if (interactable.IsAutoInteract) interactable.Interact(this);
             else currentInteractionItems.Add(interactable);
         }

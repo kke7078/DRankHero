@@ -177,10 +177,12 @@ namespace KGY
             }
         }
 
-        //public override void Interact()
-        //{
-            
-        //    Debug.Log("Player Character Interact");
-        //}
+        public void Interact()
+        {
+            if (currentInteractionItems.Count <= 0) return;
+
+            currentInteractionItems[0].Interact(this);
+            currentInteractionItems.RemoveAt(0);
+        }
     }
 }

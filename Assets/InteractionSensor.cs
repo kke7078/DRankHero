@@ -21,7 +21,6 @@ namespace KGY
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log("trigger exit");
             if (other.transform.TryGetComponent(out IInteractable interactable))
             {
                 OnLostSignal?.Invoke(interactable);
