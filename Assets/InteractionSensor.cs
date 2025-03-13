@@ -10,7 +10,7 @@ namespace KGY
     {
         public System.Action<IInteractable> OnDetected; //상호작용 센서에서 상호작용 가능한 오브젝트를 감지했을 때 호출되는 이벤트
         public System.Action<IInteractable> OnLostSignal; //상호작용 센서에서 상호작용 가능한 오브젝트가 빠졌을 때 호출되는 이벤트
-
+    
         private void OnTriggerEnter(Collider other)
         {
             if (other.transform.TryGetComponent(out IInteractable interactable))

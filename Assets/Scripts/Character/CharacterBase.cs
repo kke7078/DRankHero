@@ -11,15 +11,18 @@ namespace KGY
     {
         public Vector2 Direction { get; set; }  //이동 방향
         private Vector2 direction;
+        public InteractionSensor interactionSensor;
+        public InteractionUI InteractionUI;
+
+        public List<IInteractable> currentInteractionItems = new List<IInteractable>();
+        public IInteractable closestInteractable;
 
         protected float targetRotation;
         protected float rotationVelocity;
-        protected List<IInteractable> currentInteractionItems = new List<IInteractable>();
 
         private float baseSpeed;    //기본 이동 속도
         private UnityEngine.CharacterController unityCharacterController;
 
-        private InteractionSensor interactionSensor;
 
         protected virtual void Start()
         {
@@ -29,7 +32,6 @@ namespace KGY
             unityCharacterController = GetComponent<UnityEngine.CharacterController>();
 
             //상호작용 센서 컴포넌트 선언
-            interactionSensor = GetComponentInChildren<InteractionSensor>();
             interactionSensor.OnDetected += OnDetectedInteraction;
             interactionSensor.OnLostSignal += OnLostSignalInteraction;
         }
@@ -58,6 +60,8 @@ namespace KGY
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
 
             unityCharacterController.Move(targetDirection * speed * Time.deltaTime);
+
+            FindClosestinteractable();
         }
 
         public void OnDetectedInteraction(IInteractable interactable) {
@@ -68,6 +72,31 @@ namespace KGY
         public void OnLostSignalInteraction(IInteractable interactable)
         {
             currentInteractionItems.Remove(interactable);
+        }
+
+        //캐릭터와 가장 가까운 상호작용 오브젝트 찾기
+        public void FindClosestinteractable() {
+            if (currentInteractionItems.Count == 0)
+            {
+                InteractionUI.HideUI();
+                return;
+            }
+            IInteractable closest = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (IInteractable interactable in currentInteractionItems)
+            {
+
+                float distance = Vector3.Distance(transform.position, interactable.GetTransform().position);
+                if (distance < closestDistance)
+                {
+                    closest = interactable;
+                    closestDistance = distance;
+                }
+            }
+
+            closestInteractable = closest;
+            InteractionUI.ShowUI(closestInteractable);
         }
     }
 }

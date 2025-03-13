@@ -8,9 +8,7 @@ namespace KGY
 {
     public class InteractionDoor : MonoBehaviour, IInteractable
     {
-        public bool IsAutoInteract { get; set; }
         public bool isAutoInteract;
-
         public bool isOpened;
         public bool isSlidingDoor;
         public Transform mainDoor;
@@ -21,11 +19,15 @@ namespace KGY
 
         private void Start()
         {
-            doorWidth = GetComponent<Collider>().bounds.size.x * 0.45f;
+            doorWidth = GetComponent<Collider>().bounds.size.x * 0.225f;
         }
 
-
         public string Message => "문을 열기";
+
+        public bool IsAutoInteract => isAutoInteract;
+
+        public string InteractionMsg => "문 열기";
+
         public void Interact(CharacterBase character)
         {
             if (!isOpened) {
@@ -41,12 +43,11 @@ namespace KGY
         }
 
         IEnumerator MoveDoor(string door) {
-            Debug.Log(door);
             float openDoorTime = 0f;
             if (door == "mainDoor")
             {
                 Vector3 doorInitPosition = mainDoor.localPosition;
-                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x - doorWidth, doorInitPosition.y, doorInitPosition.z);
+                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x + doorWidth, doorInitPosition.y, doorInitPosition.z);
 
                 while (openDoorTime < openSpeed)
                 {
@@ -64,7 +65,7 @@ namespace KGY
             }
             else if (door == "subDoor") {
                 Vector3 doorInitPosition = subDoor.localPosition;
-                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x + doorWidth, doorInitPosition.y, doorInitPosition.z);
+                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x - doorWidth, doorInitPosition.y, doorInitPosition.z);
 
                 while (openDoorTime < openSpeed)
                 {
@@ -76,6 +77,12 @@ namespace KGY
 
                 subDoor.localPosition = doorOpenPosition;
             }
+        }
+
+        //상호작용 가능한 오브젝트의 위치 반환 -> 상호작용 UI 표시를 위해 사용
+        public Transform GetTransform()
+        {
+            return transform;
         }
     }
 }

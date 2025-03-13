@@ -9,7 +9,11 @@ namespace KGY
     {
         public bool IsAutoInteract { get; }
         public string Message { get; }
+        public string InteractionMsg { get; }
 
         public void Interact(CharacterBase character);
+
+        //상호작용 오브젝트의 위치 반환
+        Transform GetTransform();
     }
 }

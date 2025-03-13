@@ -42,7 +42,7 @@ namespace KGY
             SetSpeed(5.0f); //플레이어의 기본이동 속도 설정
         }
 
-        private void Update()
+        protected void Update()
         {
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
             animator.SetFloat("isMove", Direction.magnitude);
@@ -180,9 +180,10 @@ namespace KGY
         public void Interact()
         {
             if (currentInteractionItems.Count <= 0) return;
+            closestInteractable.Interact(this);
+            currentInteractionItems.Remove(closestInteractable);
 
-            currentInteractionItems[0].Interact(this);
-            currentInteractionItems.RemoveAt(0);
+            InteractionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
         }
     }
 }
