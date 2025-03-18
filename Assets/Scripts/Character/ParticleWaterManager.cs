@@ -28,28 +28,34 @@ namespace KGY
             ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
             int numParticles = particleSystem.GetParticles(particles);
 
+            bool isToolCollision = other.CompareTag("Player");
+
             for (int i = 0; i < numCollsiionEvents; i++)
             {
                 Vector3 hitPoint = collisionEvents[i].intersection; //충돌 위치
                 Vector3 hitNormal = collisionEvents[i].normal;      //충돌 법선
 
-                GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal), waterRipple);
-                Destroy(waterEffect, 0.5f);
-
                 //충돌한 파티클 입자 사라지게 설정
                 for (int j = 0; j < numParticles; j++)
                 {
                     if (particles[j].remainingLifetime > 0) {
-
-                        particles[j].remainingLifetime -= 0.1f;
-
-                        if (particles[j].remainingLifetime < 0) particles[j].remainingLifetime = 0;
+                        if (isToolCollision) particles[j].remainingLifetime = 0;
+                        else {
+                            particles[j].remainingLifetime -= 0.1f;
+                            if (particles[j].remainingLifetime < 0) particles[j].remainingLifetime = 0;
+                        }
                     }
                 }
 
-                //업데이트 된 파티클 정보 적용
-                particleSystem.SetParticles(particles, numParticles);
+                //잔물결 효과 생성
+                if (!isToolCollision) {
+                    GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal), waterRipple);
+                    Destroy(waterEffect, 0.5f);
+                }
             }
+
+            //업데이트 된 파티클 정보 적용
+            particleSystem.SetParticles(particles, numParticles);
         }
     }
 }

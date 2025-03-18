@@ -12,7 +12,6 @@ namespace KGY
     //PlayerCharacter 클래스 : 플레이어 캐릭터의 속성 및 동작을 정의하는 클래스 (CharacterBase 클래스를 상속받아서 확장)
     public class PlayerCharacter : CharacterBase
     {
-
         public Transform backToolHolder;        //플레이어의 등에 위치한 청소도구 홀더
         public Transform handToolHolder;        //플레이어의 손에 위치한 청소도구 홀더
         public TwoBoneIKConstraint rightHandIK; //플레이어의 오른손 IK
@@ -80,11 +79,9 @@ namespace KGY
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
 
-                animator.SetFloat("isClean", 1); //플레이어의 청소 애니메이션 설정
-
                 //플레이어의 Equip 애니메이션 설정
-                //animator.SetBool("isEquip", isClean);
-                //animator.SetTrigger("EquipTrigger");
+                animator.SetBool("isEquip", isClean);
+                animator.SetTrigger("EquipTrigger");
 
             }
             else
@@ -94,9 +91,9 @@ namespace KGY
                 //플레이어의 Equip 애니메이션 초기화
                 //animator.SetBool("isEquip", isClean);
 
-                ////플레이어의 unEquip 애니메이션 설정
-                //animator.SetBool("isUnEquip", !isClean);
-                //animator.SetTrigger("EquipTrigger");
+                //플레이어의 unEquip 애니메이션 설정
+                animator.SetBool("isUnEquip", !isClean);
+                animator.SetTrigger("EquipTrigger");
 
                 //Hand IK 초기화
                 HandIKControl();
