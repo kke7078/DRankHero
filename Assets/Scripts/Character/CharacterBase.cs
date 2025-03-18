@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -19,6 +20,7 @@ namespace KGY
 
         protected float targetRotation;
         protected float rotationVelocity;
+        protected Animator animator;
 
         private float baseSpeed;    //기본 이동 속도
         private UnityEngine.CharacterController unityCharacterController;
@@ -27,6 +29,8 @@ namespace KGY
         protected virtual void Start()
         {
             baseSpeed = 5.0f;   //기본 이동 속도 설정
+
+            animator = GetComponent<Animator>();
 
             //유니티엔진 캐릭터컨트롤러 선언
             unityCharacterController = GetComponent<UnityEngine.CharacterController>();
@@ -97,6 +101,28 @@ namespace KGY
 
             closestInteractable = closest;
             InteractionUI.ShowUI(closestInteractable);
+        }
+
+        protected void OnAnimatorIK(int layerIndex)
+        {
+            if (animator == null) return;
+
+            AdjustFootPosition(AvatarIKGoal.LeftFoot);
+            AdjustFootPosition(AvatarIKGoal.RightFoot);
+        }
+
+        private void AdjustFootPosition(AvatarIKGoal foot)
+        {
+            RaycastHit hit;
+            Vector3 footPosition = animator.GetIKPosition(foot);
+            Vector3 rayOrigin = footPosition + Vector3.up * 0.5f;
+
+            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 1f)) 
+            {
+                footPosition.y = hit.point.y + 0.5f;
+                animator.SetIKPosition(foot, footPosition);
+            }
+
         }
     }
 }

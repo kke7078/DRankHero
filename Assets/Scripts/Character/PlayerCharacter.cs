@@ -21,7 +21,6 @@ namespace KGY
         protected bool isCleaning = false;      //플레이어의 청소 유무
         protected bool isEquipping = false;     //플레이어의 도구 장착 
 
-        private Animator animator;              //플레이어의 애니메이터 컴포넌트
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
         private CleanToolManager currentTool;   //현재 장착된 청소도구
 
@@ -35,7 +34,8 @@ namespace KGY
         {
             base.Start();
 
-            animator = GetComponent<Animator>();
+            transform.position += Vector3.up * 0.15f; //플레이어의 높이 설정
+
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
 
@@ -80,9 +80,11 @@ namespace KGY
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
 
+                animator.SetFloat("isClean", 1); //플레이어의 청소 애니메이션 설정
+
                 //플레이어의 Equip 애니메이션 설정
-                animator.SetBool("isEquip", isClean);
-                animator.SetTrigger("EquipTrigger");
+                //animator.SetBool("isEquip", isClean);
+                //animator.SetTrigger("EquipTrigger");
 
             }
             else
@@ -90,11 +92,11 @@ namespace KGY
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
                 //플레이어의 Equip 애니메이션 초기화
-                animator.SetBool("isEquip", isClean);
+                //animator.SetBool("isEquip", isClean);
 
-                //플레이어의 unEquip 애니메이션 설정
-                animator.SetBool("isUnEquip", !isClean);
-                animator.SetTrigger("EquipTrigger");
+                ////플레이어의 unEquip 애니메이션 설정
+                //animator.SetBool("isUnEquip", !isClean);
+                //animator.SetTrigger("EquipTrigger");
 
                 //Hand IK 초기화
                 HandIKControl();
@@ -180,6 +182,7 @@ namespace KGY
         public void Interact()
         {
             if (currentInteractionItems.Count <= 0) return;
+
             closestInteractable.Interact(this);
             currentInteractionItems.Remove(closestInteractable);
 
