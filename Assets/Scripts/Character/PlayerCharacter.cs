@@ -18,8 +18,8 @@ namespace KGY
         public TwoBoneIKConstraint leftHandIK;  //플레이어의 왼손 IK
 
         protected bool isCleaning = false;      //플레이어의 청소 유무
-        protected bool isEquipping = false;     //플레이어의 도구 장착 
 
+        private bool isEquipping = false;           //플레이어의 장비 유무
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
         private CleanToolManager currentTool;   //현재 장착된 청소도구
 
@@ -79,25 +79,43 @@ namespace KGY
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
 
-                //플레이어의 Equip 애니메이션 설정
-                animator.SetBool("isEquip", isClean);
-                animator.SetTrigger("EquipTrigger");
-
+                Equip();
             }
             else
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
 
-                //플레이어의 Equip 애니메이션 초기화
-                //animator.SetBool("isEquip", isClean);
-
-                //플레이어의 unEquip 애니메이션 설정
-                animator.SetBool("isUnEquip", !isClean);
-                animator.SetTrigger("EquipTrigger");
+                UnEquip();
 
                 //Hand IK 초기화
                 HandIKControl();
             }
+        }
+
+        public void Equip() {
+            if (isEquipping) return;
+
+            isEquipping = true;
+
+            //플레이어의 UnEquip 애니메이션 초기화
+            animator.SetBool("isUnEquip", !isEquipping);
+            animator.ResetTrigger("UnEquipTrigger");
+
+            //플레이어의 Equip 애니메이션 실행
+            animator.SetBool("isEquip", isEquipping);
+            animator.SetTrigger("EquipTrigger");
+        }
+
+        public void UnEquip() {
+            isEquipping = false;
+
+            //플레이어의 Equip 애니메이션 초기화
+            animator.SetBool("isEquip", isEquipping);
+            animator.ResetTrigger("EquipTrigger");
+
+            //플레이어의 UnEquip 애니메이션 실행
+            animator.SetBool("isUnEquip", true);
+            animator.SetTrigger("UnEquipTrigger");
         }
 
         //청소 도구 장착 및 해제

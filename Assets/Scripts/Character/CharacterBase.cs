@@ -85,12 +85,12 @@ namespace KGY
                 InteractionUI.HideUI();
                 return;
             }
+
             IInteractable closest = null;
             float closestDistance = float.MaxValue;
 
             foreach (IInteractable interactable in currentInteractionItems)
             {
-
                 float distance = Vector3.Distance(transform.position, interactable.GetTransform().position);
                 if (distance < closestDistance)
                 {
