@@ -114,7 +114,7 @@ namespace KGY
             animator.ResetTrigger("EquipTrigger");
 
             //플레이어의 UnEquip 애니메이션 실행
-            animator.SetBool("isUnEquip", true);
+            animator.SetBool("isUnEquip", !isEquipping);
             animator.SetTrigger("UnEquipTrigger");
         }
 
