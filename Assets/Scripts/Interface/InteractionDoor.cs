@@ -11,6 +11,7 @@ namespace KGY
         public bool isAutoInteract;
         public bool isOpened;
         public bool isSlidingDoor;
+        public bool isKeepOut;
         public string interactionMsg;
         public Transform mainDoor;
         public Transform subDoor;
@@ -23,60 +24,99 @@ namespace KGY
             doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
         }
 
-        public string Message => "문을 열기";
-
         public bool IsAutoInteract => isAutoInteract;
+
+        public bool IsOffLimit => isKeepOut;
 
         public string InteractionMsg => interactionMsg;
 
         public void Interact(CharacterBase character)
         {
+            if (isKeepOut) return;
+
             if (!isOpened) {
-                //슬라이딩 도어라면
-                if (isSlidingDoor) {
-                    //양쪽으로 열리는 문
-                    if (subDoor != null) {
-                        StartCoroutine(MoveDoor("mainDoor"));
-                        StartCoroutine(MoveDoor("subDoor"));
-                    }
+                //양쪽으로 열리는 문
+                if (subDoor != null)
+                {
+                    StartCoroutine(MoveDoor("mainDoor"));
+                    StartCoroutine(MoveDoor("subDoor"));
                 }
             }
         }
 
         IEnumerator MoveDoor(string door) {
             float openDoorTime = 0f;
-            if (door == "mainDoor")
+            if (isSlidingDoor)
             {
-                Vector3 doorInitPosition = mainDoor.localPosition;
-                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x + doorWidth, doorInitPosition.y, doorInitPosition.z);
-
-                while (openDoorTime < openSpeed)
+                if (door == "mainDoor")
                 {
-                    mainDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
-                    openDoorTime += Time.deltaTime * 3f;
+                    Vector3 doorInitPosition = mainDoor.localPosition;
+                    Vector3 doorOpenPosition = new Vector3(doorInitPosition.x - doorWidth, doorInitPosition.y, doorInitPosition.z);
 
-                    yield return null;
+                    while (openDoorTime < openSpeed)
+                    {
+                        mainDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
+                        openDoorTime += Time.deltaTime * 3f;
+
+                        yield return null;
+                    }
+
+                    mainDoor.localPosition = doorOpenPosition;
+
+                    //문 콜라이더 제거
+                    isOpened = true;
+                    GetComponent<Collider>().enabled = !isOpened;
                 }
+                else if (door == "subDoor")
+                {
+                    Vector3 doorInitPosition = subDoor.localPosition;
+                    Vector3 doorOpenPosition = new Vector3(doorInitPosition.x + doorWidth, doorInitPosition.y, doorInitPosition.z);
 
-                mainDoor.localPosition = doorOpenPosition;
+                    while (openDoorTime < openSpeed)
+                    {
+                        subDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
+                        openDoorTime += Time.deltaTime * 3f;
 
-                //문 콜라이더 제거
-                isOpened = true;
-                GetComponent<Collider>().enabled = !isOpened;
+                        yield return null;
+                    }
+
+                    subDoor.localPosition = doorOpenPosition;
+                }
             }
-            else if (door == "subDoor") {
-                Vector3 doorInitPosition = subDoor.localPosition;
-                Vector3 doorOpenPosition = new Vector3(doorInitPosition.x - doorWidth, doorInitPosition.y, doorInitPosition.z);
+            else {
+                if (door == "mainDoor") {
+                    Quaternion doorInitRoction = mainDoor.localRotation;
+                    Vector3 doorOpenRoction = new Vector3(doorInitRoction.x, doorInitRoction.y + -90f, doorInitRoction.z);
 
-                while (openDoorTime < openSpeed)
-                {
-                    subDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
-                    openDoorTime += Time.deltaTime * 3f;
+                    while (openDoorTime < openSpeed) 
+                    { 
+                        mainDoor.localRotation = Quaternion.Lerp(doorInitRoction, Quaternion.Euler(doorOpenRoction), openDoorTime / openSpeed);
+                        openDoorTime += Time.deltaTime * 3f;
 
-                    yield return null;
+                        yield return null;
+                    }
+
+                    mainDoor.localRotation = Quaternion.Euler(doorOpenRoction);
+
+                    //문 콜라이더 제거
+                    isOpened = true;
+                    GetComponent<Collider>().enabled = !isOpened;
                 }
+                else
+                {
+                    Quaternion doorInitRoction = subDoor.localRotation;
+                    Vector3 doorOpenRoction = new Vector3(doorInitRoction.x, doorInitRoction.y + 90f, doorInitRoction.z);
 
-                subDoor.localPosition = doorOpenPosition;
+                    while (openDoorTime < openSpeed)
+                    {
+                        subDoor.localRotation = Quaternion.Lerp(doorInitRoction, Quaternion.Euler(doorOpenRoction), openDoorTime / openSpeed);
+                        openDoorTime += Time.deltaTime * 3f;
+
+                        yield return null;
+                    }
+
+                    subDoor.localRotation = Quaternion.Euler(doorOpenRoction);
+                }
             }
         }
 

@@ -8,7 +8,9 @@ namespace KGY
     public interface IInteractable
     {
         public bool IsAutoInteract { get; }
-        public string Message { get; }
+
+        public bool IsOffLimit { get; }
+
         public string InteractionMsg { get; }
 
         public void Interact(CharacterBase character);

@@ -30,7 +30,7 @@ namespace KGY
 
         public void ShowUI(IInteractable interactable)
         {
-            if (!interactable.IsAutoInteract)
+            if (!interactable.IsAutoInteract || interactable.IsOffLimit)
             {
                 interactionText.text = interactable.InteractionMsg;
 
