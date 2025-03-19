@@ -11,6 +11,7 @@ namespace KGY
         public bool isAutoInteract;
         public bool isOpened;
         public bool isSlidingDoor;
+        public string interactionMsg;
         public Transform mainDoor;
         public Transform subDoor;
 
@@ -19,14 +20,14 @@ namespace KGY
 
         private void Start()
         {
-            doorWidth = GetComponent<Collider>().bounds.size.x * 0.225f;
+            doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
         }
 
         public string Message => "문을 열기";
 
         public bool IsAutoInteract => isAutoInteract;
 
-        public string InteractionMsg => "문 열기";
+        public string InteractionMsg => interactionMsg;
 
         public void Interact(CharacterBase character)
         {
