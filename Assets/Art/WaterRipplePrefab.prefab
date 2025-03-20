@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2174311327665834351}
   - component: {fileID: 2055317138949746618}
   - component: {fileID: 2606758849409044103}
+  - component: {fileID: 3701404288715974317}
   m_Layer: 0
   m_Name: WaterRipplePrefab
-  m_TagString: Untagged
+  m_TagString: WaterRipple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4831,6 +4832,27 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!135 &3701404288715974317
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6283906879140850039}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8194131691182437416
 GameObject:
   m_ObjectHideFlags: 0

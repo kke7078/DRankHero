@@ -7,6 +7,7 @@ TagManager:
   - Wall
   - Ground
   - NPC
+  - WaterRipple
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Player
   - 
   - 
   - 
