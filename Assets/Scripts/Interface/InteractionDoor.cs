@@ -10,8 +10,8 @@ namespace KGY
     {
         public bool isAutoInteract;
         public bool isOpened;
-        public bool isSlidingDoor;
         public bool isKeepOut;
+        public bool isSlidingDoor;
         public string interactionMsg;
         public Transform mainDoor;
         public Transform subDoor;
@@ -32,15 +32,9 @@ namespace KGY
 
         public void Interact(CharacterBase character)
         {
-            if (isKeepOut) return;
-
-            if (!isOpened) {
-                //양쪽으로 열리는 문
-                if (subDoor != null)
-                {
-                    StartCoroutine(MoveDoor("mainDoor"));
-                    StartCoroutine(MoveDoor("subDoor"));
-                }
+            if (!isOpened || !isKeepOut) {
+                StartCoroutine(MoveDoor("mainDoor"));
+                if (subDoor != null) StartCoroutine(MoveDoor("subDoor"));
             }
         }
 

@@ -30,9 +30,14 @@ namespace KGY
 
         public void ShowUI(IInteractable interactable)
         {
-            if (!interactable.IsAutoInteract || interactable.IsOffLimit)
+            if (!interactable.IsAutoInteract)
             {
-                interactionText.text = interactable.InteractionMsg;
+                //형변환 : 오브젝트가 문일 때
+                if (interactable is InteractionDoor door) {
+                    if (door.isOpened || door.isKeepOut) return;
+                }
+
+                    interactionText.text = interactable.InteractionMsg;
 
                 //부모 레이아웃을 강제로 갱신
                 RectTransform parentRect = interactionText.GetComponent<RectTransform>().parent as RectTransform;

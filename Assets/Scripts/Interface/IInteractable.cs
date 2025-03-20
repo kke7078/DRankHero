@@ -9,8 +9,6 @@ namespace KGY
     {
         public bool IsAutoInteract { get; }
 
-        public bool IsOffLimit { get; }
-
         public string InteractionMsg { get; }
 
         public void Interact(CharacterBase character);
