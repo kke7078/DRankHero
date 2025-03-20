@@ -17,7 +17,7 @@ namespace KGY
         private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("WaterRipple")) {
-                if (projector.fieldOfView > 10) projector.fieldOfView -= 0.1f;
+                if (projector.fieldOfView > 10) projector.fieldOfView -= 5f * Time.deltaTime;
                 else {
                     projector.fieldOfView = 0f;
                     projector.gameObject.SetActive(false);
