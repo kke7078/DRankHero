@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -12,6 +13,7 @@ namespace KGY
     //PlayerCharacter 클래스 : 플레이어 캐릭터의 속성 및 동작을 정의하는 클래스 (CharacterBase 클래스를 상속받아서 확장)
     public class PlayerCharacter : CharacterBase
     {
+        public static PlayerCharacter instance;
         public Transform backToolHolder;        //플레이어의 등에 위치한 청소도구 홀더
         public Transform handToolHolder;        //플레이어의 손에 위치한 청소도구 홀더
         public TwoBoneIKConstraint rightHandIK; //플레이어의 오른손 IK
@@ -29,6 +31,11 @@ namespace KGY
             InputSystem.Singleton.onInteract += Interact;
         }
 
+        private void Awake()
+        {
+            instance = this;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -43,6 +50,8 @@ namespace KGY
 
         protected void Update()
         {
+            if (!isMoving) return;
+
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
             animator.SetFloat("isMove", Direction.magnitude);
 
@@ -73,6 +82,8 @@ namespace KGY
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
         {
+            if (!isMoving) return;
+
             isCleaning = isClean;
 
             if (isClean)
@@ -202,6 +213,33 @@ namespace KGY
             currentInteractionItems.Remove(closestInteractable);
 
             InteractionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
+        }
+
+        public void StartTrigger() {
+            animator.SetFloat("isMove", 1);
+            transform.rotation = Quaternion.Euler(0, 45f, 0);
+            Clean(false);
+            isMoving = false;
+
+            StartCoroutine(StartMove());
+        }
+
+        IEnumerator StartMove() {
+            Vector3 startPosition = transform.position;
+            Vector3 endPosition = transform.position + transform.forward * 3f;
+
+            float elapsedTime = 0;
+            float duration = 1f;
+
+            while (elapsedTime < duration)
+            {
+                transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+                elapsedTime += 1f * Time.deltaTime;
+                yield return null; // 다음 프레임까지 대기
+            }
+
+            transform.position = endPosition;
+            animator.SetFloat("isMove", 0);
         }
     }
 }

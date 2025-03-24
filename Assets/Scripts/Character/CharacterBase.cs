@@ -14,6 +14,7 @@ namespace KGY
         private Vector2 direction;
         public InteractionSensor interactionSensor;
         public InteractionUI InteractionUI;
+        public bool isMoving = true;
 
         public List<IInteractable> currentInteractionItems = new List<IInteractable>();
         public IInteractable closestInteractable;
@@ -53,6 +54,8 @@ namespace KGY
         //캐릭터 이동 메서드
         public void Move(Vector2 direction, float speed)
         {
+            if (!isMoving) return;
+
             float magnitude = direction.magnitude;
             if (magnitude <= 0.1f) return;
 

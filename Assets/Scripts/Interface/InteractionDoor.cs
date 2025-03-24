@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
@@ -15,13 +16,24 @@ namespace KGY
         public string interactionMsg;
         public Transform mainDoor;
         public Transform subDoor;
+        public enum DoorType { 
+            defaultDoor,
+            startPointDoor,
+            stageStartDoor,
+        }
+        public DoorType currentDoor;
 
         private float openSpeed = 1f;
         private float doorWidth;
+        private GameObject moveKey;
+        private ParticleSystem doorParticleSystem;
 
         private void Start()
         {
             doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
+            moveKey = GameObject.Find("MoveKey");
+            doorParticleSystem = GetComponentInChildren<ParticleSystem>();
+            if(doorParticleSystem != null) doorParticleSystem.gameObject.SetActive(false);
         }
 
         public bool IsAutoInteract => isAutoInteract;
@@ -35,6 +47,18 @@ namespace KGY
             if (!isOpened || !isKeepOut) {
                 StartCoroutine(MoveDoor("mainDoor"));
                 if (subDoor != null) StartCoroutine(MoveDoor("subDoor"));
+            }
+
+            switch (currentDoor) {
+                case DoorType.startPointDoor:
+                    GetComponent<Collider>().isTrigger = true;
+                    break;
+                case DoorType.stageStartDoor:
+                    doorParticleSystem.gameObject.SetActive(true);
+                    GameManager.Singleton.IsGameStarted = true;
+                    break;
+                case DoorType.defaultDoor:
+                    break;
             }
         }
 
@@ -56,10 +80,9 @@ namespace KGY
                     }
 
                     mainDoor.localPosition = doorOpenPosition;
-
-                    //문 콜라이더 제거
+                    
                     isOpened = true;
-                    GetComponent<Collider>().enabled = !isOpened;
+                    if(currentDoor != DoorType.startPointDoor) GetComponent<Collider>().enabled = !isOpened;
                 }
                 else if (door == "subDoor")
                 {
@@ -92,9 +115,8 @@ namespace KGY
 
                     mainDoor.localRotation = Quaternion.Euler(doorOpenRoction);
 
-                    //문 콜라이더 제거
                     isOpened = true;
-                    GetComponent<Collider>().enabled = !isOpened;
+                    if (currentDoor != DoorType.startPointDoor) GetComponent<Collider>().enabled = !isOpened;
                 }
                 else
                 {
@@ -118,6 +140,21 @@ namespace KGY
         public Transform GetTransform()
         {
             return transform;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out PlayerCharacter player)) moveKey.SetActive(false);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.TryGetComponent(out PlayerCharacter player)) {
+                //대화창 호출
+
+                //콜라이더 삭제
+                GetComponent<Collider>().enabled = !isOpened;
+            }
         }
     }
 }
