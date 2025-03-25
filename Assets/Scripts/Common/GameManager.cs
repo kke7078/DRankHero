@@ -12,13 +12,13 @@ namespace KGY
             get { return isGameStarted; }
             set {
                 isGameStarted = value;
-                Debug.Log(isGameStarted);
+                gameHUD.StartStage();
             }
         }
         private bool isGameStarted;
 
         public InteractionDoor startPointDoor;
-        public CharacterBase player;
+        public GameHUD gameHUD;
 
         public void Start()
         {
@@ -26,7 +26,7 @@ namespace KGY
         }
 
         public void GameStart() {
-            startPointDoor.Interact(player);
+            startPointDoor.Interact(null);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace KGY
         public RectTransform cleanRoomGaugeBar;
         public TextMeshProUGUI cleanRoomText;
         public Image cleanRoomGauge;
+        public Animator stageStart;
 
         private bool isShow;
 
@@ -55,6 +56,21 @@ namespace KGY
             isShow = false;
             cleanRoomText.text = "";
             cleanRoomGauge.fillAmount = 0;
+        }
+
+        public void StartStage() {
+            stageStart.gameObject.SetActive(true);
+            stageStart.SetTrigger("showTrigger");
+
+            StartCoroutine("StartStageHide");
+        }
+
+        IEnumerator StartStageHide()
+        {
+            yield return new WaitForSeconds(1.5f);
+            stageStart.SetTrigger("hideTrigger");
+            yield return new WaitForSeconds(1.5f);
+            stageStart.gameObject.SetActive(false);
         }
     }
 }
