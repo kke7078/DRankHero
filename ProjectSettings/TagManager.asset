@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - NPC
   - WaterRipple
+  - MinimapCamera
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - MinimapOnly
   - 
   - Player
   - 
