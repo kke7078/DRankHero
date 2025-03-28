@@ -40,7 +40,7 @@ namespace KGY
         {
             base.Start();
 
-            transform.position += Vector3.up * 0.15f; //플레이어의 높이 설정
+            //transform.position += Vector3.up * 0.15f; //플레이어의 높이 설정
 
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
@@ -129,25 +129,6 @@ namespace KGY
             animator.SetTrigger("UnEquipTrigger");
         }
 
-        //청소 도구 장착 및 해제
-        public void ToolEquip() 
-        {
-            if (isCleaning)
-            {
-                //청소도구 손에 장착
-                currentTool.transform.SetParent(handToolHolder);
-                currentTool.transform.localRotation = Quaternion.identity;
-                currentTool.transform.localPosition = Vector3.zero;
-            }                                                                   
-            else                                                                
-            {
-                //청소도구를 등에 장착
-                currentTool.transform.SetParent(backToolHolder);
-                currentTool.transform.localPosition = currentTool.toolBackPosition;
-                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);
-            }
-        }
-
         public void EquipControl(string status)
         {
             if (status == "equip")
@@ -179,7 +160,26 @@ namespace KGY
                 animator.SetBool("isUnEquip", false);
             }
         }
-        
+
+        //청소 도구 장착 및 해제
+        public void ToolEquip()
+        {
+            if (isCleaning)
+            {
+                //청소도구 손에 장착
+                currentTool.transform.SetParent(handToolHolder);
+                currentTool.transform.localRotation = Quaternion.identity;
+                currentTool.transform.localPosition = Vector3.zero;
+            }
+            else
+            {
+                //청소도구를 등에 장착
+                currentTool.transform.SetParent(backToolHolder);
+                currentTool.transform.localPosition = currentTool.toolBackPosition;
+                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);
+            }
+        }
+
         //Hand IK 제어
         public void HandIKControl()
         {
@@ -213,33 +213,6 @@ namespace KGY
             currentInteractionItems.Remove(closestInteractable);
 
             InteractionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
-        }
-
-        public void StartTrigger() {
-            animator.SetFloat("isMove", 1);
-            transform.rotation = Quaternion.Euler(0, 45f, 0);
-            Clean(false);
-            isMoving = false;
-
-            StartCoroutine(StartMove());
-        }
-
-        IEnumerator StartMove() {
-            Vector3 startPosition = transform.position;
-            Vector3 endPosition = transform.position + transform.forward * 3f;
-
-            float elapsedTime = 0;
-            float duration = 1f;
-
-            while (elapsedTime < duration)
-            {
-                transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
-                elapsedTime += 1f * Time.deltaTime;
-                yield return null; // 다음 프레임까지 대기
-            }
-
-            transform.position = endPosition;
-            animator.SetFloat("isMove", 0);
         }
     }
 }
