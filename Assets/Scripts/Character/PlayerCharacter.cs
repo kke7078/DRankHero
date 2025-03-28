@@ -186,7 +186,7 @@ namespace KGY
             if (isCleaning)
             {
                 rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
-                //leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
+                leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
                 //currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
