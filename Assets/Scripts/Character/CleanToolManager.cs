@@ -11,7 +11,7 @@ namespace KGY
     {
         public string toolName;             //청소도구의 이름
         public Vector3 toolBackPosition;    //등에 위치한 청소도구의 위치
-        public Quaternion toolBackRotation; //등에 위치한 청소도구의 회전
+        public Vector3 toolBackRotation; //등에 위치한 청소도구의 회전
         
         public GameObject toolMainEffect;       //청소도구의 이펙트
         public GameObject toolSubEffext;        //청소도구의 서브 이펙트

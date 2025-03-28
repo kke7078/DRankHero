@@ -176,7 +176,7 @@ namespace KGY
                 //청소도구를 등에 장착
                 currentTool.transform.SetParent(backToolHolder);
                 currentTool.transform.localPosition = currentTool.toolBackPosition;
-                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, 0);
+                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, currentTool.toolBackRotation.z);
             }
         }
 
@@ -186,11 +186,11 @@ namespace KGY
             if (isCleaning)
             {
                 rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
-                leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
+                //leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
-                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
-                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 활성화
+                //currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
+                //currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 활성화
             }
             else
             {
@@ -198,8 +198,8 @@ namespace KGY
                 leftHandIK.data.target = null;        //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
-                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
-                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
+                //currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
+                //currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
             }
 
             rigBuilder.Build(); //RigBuilder 재구성
