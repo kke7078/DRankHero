@@ -40,7 +40,7 @@ namespace KGY
         {
             base.Start();
 
-            //transform.position += Vector3.up * 0.15f; //플레이어의 높이 설정
+            //transform.position += Vector3.up * 0.75f; //플레이어의 높이 설정
 
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정

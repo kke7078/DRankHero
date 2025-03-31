@@ -27,6 +27,7 @@ namespace KGY
 
         public void GameStart() {
             startPointDoor.Interact(null);
+            PlayerCharacter.instance.isMoving = true;
         }
     }
 }

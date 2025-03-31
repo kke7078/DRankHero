@@ -36,8 +36,8 @@ namespace KGY
                 if (interactable is InteractionDoor door) {
                     if (door.isOpened || door.isKeepOut) return;
                 }
-
-                    interactionText.text = interactable.InteractionMsg;
+                
+                interactionText.text = interactable.InteractionMsg;
 
                 //부모 레이아웃을 강제로 갱신
                 RectTransform parentRect = interactionText.GetComponent<RectTransform>().parent as RectTransform;

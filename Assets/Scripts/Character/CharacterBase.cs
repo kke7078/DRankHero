@@ -14,7 +14,7 @@ namespace KGY
         private Vector2 direction;
         public InteractionSensor interactionSensor;
         public InteractionUI InteractionUI;
-        public bool isMoving = true;
+        public bool isMoving;
 
         public List<IInteractable> currentInteractionItems = new List<IInteractable>();
         public IInteractable closestInteractable;
@@ -125,7 +125,6 @@ namespace KGY
                 footPosition.y = hit.point.y + 0.5f;
                 animator.SetIKPosition(foot, footPosition);
             }
-
         }
     }
 }
