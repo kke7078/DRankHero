@@ -5,11 +5,12 @@ using UnityEngine;
 namespace KGY
 {
     //DirectionGuide : 플레이어의 이동 방향을 가이드하는 UI를 관리하는 클래스
-    public class DirectionGuide : MonoBehaviour
+    public class PlayerUIManager : MonoBehaviour
     {
         private void Update()
         {
             if (!PlayerCharacter.instance.isMoving) return;
+            if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") return;
 
             //마우스 위치 방향으로 회전
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
