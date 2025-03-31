@@ -1,4 +1,4 @@
-Shader "Projector/NoWhiteOverlap" {
+Shader "Projector/ProjectorDecal" {
     Properties {
         _ShadowTex ("Cookie", 2D) = "white" {}  // 기본값을 흰색으로 설정
         _FalloffTex ("FallOff", 2D) = "white" {}
@@ -10,7 +10,7 @@ Shader "Projector/NoWhiteOverlap" {
         Pass {
             ZWrite Off
             ZTest LEqual
-            Cull Off
+            Cull Back
             ColorMask RGB
             Blend SrcAlpha OneMinusSrcAlpha  // 투명도 블렌딩
             Offset -1, -1
