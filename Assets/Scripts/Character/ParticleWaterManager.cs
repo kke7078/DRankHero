@@ -13,49 +13,27 @@ namespace KGY
         public GameObject waterEffectPrefab;
         public Transform waterRipple;
         private new ParticleSystem particleSystem;
+        private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
         private void Start()
         {
             particleSystem = GetComponent<ParticleSystem>();
         }
 
+        //Collision 속성 ON, Send Collison Message ON 설정되어야 동작
         private void OnParticleCollision(GameObject other)
         {
-            //충돌한 파티클 정보를 저장할 리스트
-            List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
-            int numCollsiionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
+            int numCollisionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
 
-            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
-            int numParticles = particleSystem.GetParticles(particles);
-
-            bool isToolCollision = other.CompareTag("Player");
-
-            for (int i = 0; i < numCollsiionEvents; i++)
+            for (int i = 0; i < numCollisionEvents; i++)
             {
-                Vector3 hitPoint = collisionEvents[i].intersection; //충돌 위치
-                Vector3 hitNormal = collisionEvents[i].normal;      //충돌 법선
-
-                //충돌한 파티클 입자 사라지게 설정
-                for (int j = 0; j < numParticles; j++)
-                {
-                    if (particles[j].remainingLifetime > 0) {
-                        if (isToolCollision) particles[j].remainingLifetime = 0;
-                        else {
-                            particles[j].remainingLifetime -= 0.1f;
-                            if (particles[j].remainingLifetime < 0) particles[j].remainingLifetime = 0;
-                        }
-                    }
-                }
+                Vector3 collisionPoint = collisionEvents[i].intersection;   //충돌 위치
+                Vector3 collisionNormal = collisionEvents[i].normal;        //충돌 법선
 
                 //잔물결 효과 생성
-                if (!isToolCollision) {
-                    GameObject waterEffect = Instantiate(waterEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal), waterRipple);
-                    Destroy(waterEffect, 0.5f);
-                }
+                GameObject waterEffect = Instantiate(waterEffectPrefab, collisionPoint, Quaternion.LookRotation(collisionNormal), waterRipple);
+                Destroy(waterEffect, 0.5f);
             }
-
-            //업데이트 된 파티클 정보 적용
-            particleSystem.SetParticles(particles, numParticles);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace KGY
         public TextMeshProUGUI cleanRoomText;
         public Image cleanRoomGauge;
         public Animator stageStart;
+        public Animator miniMap;
 
         private bool isShow;
 
@@ -59,10 +60,12 @@ namespace KGY
         }
 
         public void StartStage() {
-            stageStart.gameObject.SetActive(true);
+            //스테이지 시작 UI 표시
             stageStart.SetTrigger("showTrigger");
-
             StartCoroutine("StartStageHide");
+
+            //미니맵 UI 표시
+            miniMap.SetTrigger("showTrigger");
         }
 
         IEnumerator StartStageHide()

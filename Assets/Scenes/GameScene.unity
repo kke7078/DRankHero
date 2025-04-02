@@ -299,6 +299,7 @@ MonoBehaviour:
   cleanRoomText: {fileID: 2146406449}
   cleanRoomGauge: {fileID: 638460578}
   stageStart: {fileID: 239226016}
+  miniMap: {fileID: 1215008227}
 --- !u!1 &52562662
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &72160001
 Transform:
   m_ObjectHideFlags: 0
@@ -898,7 +899,8 @@ GameObject:
   - component: {fileID: 167663553}
   - component: {fileID: 167663552}
   - component: {fileID: 167663551}
-  m_Layer: 6
+  - component: {fileID: 167663554}
+  m_Layer: 20
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -991,6 +993,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167663549}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &167663554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167663549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &176004834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,7 +1358,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 15fa1064a396a19459bfe7300e6e11c9, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &284642167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1370,7 @@ GameObject:
   - component: {fileID: 284642168}
   - component: {fileID: 284642170}
   - component: {fileID: 284642169}
+  - component: {fileID: 284642171}
   m_Layer: 15
   m_Name: Particle1
   m_TagString: Untagged
@@ -1370,7 +1387,7 @@ Transform:
   m_GameObject: {fileID: 284642167}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.60876137, z: 0, w: 0.7933534}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1397,7 +1414,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 8d3bf20d9e62f424ba7828f6e852d6cc, type: 2}
+  - {fileID: 2100000, guid: 8d3bf20d9e62f424ba7828f6e852d6cc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1418,7 +1436,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 0
+  m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -1441,7 +1459,7 @@ ParticleSystemRenderer:
   m_VertexStreams: 00010304
   m_UseCustomTrailVertexStreams: 0
   m_TrailVertexStreams: 00010304
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -1533,7 +1551,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1586,7 +1604,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 2.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1704,7 +1722,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.35
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4642,7 +4660,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   SizeBySpeedModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -4653,22 +4671,22 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.19457014
+          inSlope: 1.3524151
+          outSlope: 1.3524151
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.09368192
+        - serializedVersion: 3
+          time: 1
+          value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.49893188
-          value: 1
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -4802,7 +4820,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    range: {x: 0, y: 1}
+    range: {x: 1, y: 5}
     separateAxes: 0
   RotationBySpeedModule:
     enabled: 0
@@ -5036,9 +5054,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -5101,7 +5119,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5154,7 +5172,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -5209,11 +5227,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 1048823
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -5351,8 +5369,8 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     ratio: 1
     lifetime:
       serializedVersion: 2
@@ -5487,15 +5505,15 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     widthOverTrail:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 2
       scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 1
+          time: 0.0043182373
+          value: 0.95022774
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -5504,7 +5522,7 @@ ParticleSystem:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 1
+          value: 0.9321251
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -5519,7 +5537,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0.88687706
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -5527,8 +5545,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
-          value: 1
+          time: 0.9956665
+          value: 0.8914032
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -6173,6 +6191,20 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &284642171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284642167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb05cabf77b9894a8240056581ab06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterEffectPrefab: {fileID: 6283906879140850039, guid: 23bd5ed6c184d474d841e2a069e15ff6, type: 3}
+  waterRipple: {fileID: 106428683}
 --- !u!1 &289555290
 GameObject:
   m_ObjectHideFlags: 0
@@ -6417,7 +6449,8 @@ GameObject:
   - component: {fileID: 337624007}
   - component: {fileID: 337624006}
   - component: {fileID: 337624005}
-  m_Layer: 6
+  - component: {fileID: 337624008}
+  m_Layer: 20
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6510,6 +6543,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337624003}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &337624008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337624003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &339201739
 GameObject:
   m_ObjectHideFlags: 0
@@ -6755,7 +6802,7 @@ GameObject:
   - component: {fileID: 419765985}
   - component: {fileID: 419765984}
   - component: {fileID: 419765986}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8280,7 +8327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b7465feb61ff5438b9825c9936a596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAutoInteract: 1
+  isAutoInteract: 0
   isOpened: 0
   isKeepOut: 0
   isSlidingDoor: 1
@@ -9357,7 +9404,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 904875892}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Door (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9684,7 +9731,8 @@ GameObject:
   - component: {fileID: 965356043}
   - component: {fileID: 965356042}
   - component: {fileID: 965356041}
-  m_Layer: 6
+  - component: {fileID: 965356044}
+  m_Layer: 20
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9777,6 +9825,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965356039}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &965356044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965356039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &975301362
 GameObject:
   m_ObjectHideFlags: 0
@@ -10317,7 +10379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1057479490
 Transform:
   m_ObjectHideFlags: 0
@@ -10327,7 +10389,7 @@ Transform:
   m_GameObject: {fileID: 1057479489}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03331, y: -0.00123, z: -0.00468}
+  m_LocalPosition: {x: -0.035, y: -0.00123, z: -0.00468}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10531,7 +10593,7 @@ Transform:
   m_GameObject: {fileID: 1177357348}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.00000006322027, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: -0, z: 1.744}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10609,7 +10671,8 @@ GameObject:
   - component: {fileID: 1205748535}
   - component: {fileID: 1205748534}
   - component: {fileID: 1205748533}
-  m_Layer: 6
+  - component: {fileID: 1205748536}
+  m_Layer: 20
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10702,6 +10765,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1205748531}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1205748536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205748531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &1215008222
 GameObject:
   m_ObjectHideFlags: 0
@@ -10714,6 +10791,7 @@ GameObject:
   - component: {fileID: 1215008225}
   - component: {fileID: 1215008224}
   - component: {fileID: 1215008226}
+  - component: {fileID: 1215008227}
   m_Layer: 5
   m_Name: MinimapUI
   m_TagString: Untagged
@@ -10728,19 +10806,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1215008222}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2114732368}
   m_Father: {fileID: 18650342}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -30}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -760, y: 308}
   m_SizeDelta: {x: 300, y: 300}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1215008224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10794,6 +10872,27 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!95 &1215008227
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215008222}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a5170cea5f5f7b841b888cff9945a1cd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1217485604
 GameObject:
   m_ObjectHideFlags: 0
@@ -10837,7 +10936,7 @@ GameObject:
   - component: {fileID: 1230993323}
   - component: {fileID: 1230993322}
   - component: {fileID: 1230993321}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11051,8 +11150,8 @@ Transform:
   m_GameObject: {fileID: 1241594043}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.12, y: 1.655, z: -0.54}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalPosition: {x: -2.12, y: 1.66, z: -0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1177357349}
@@ -11076,7 +11175,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 5aac8ac4a3758244fa59e5832a9c560d, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 41015
+    m_Bits: 41207
 --- !u!1 &1259369418
 GameObject:
   m_ObjectHideFlags: 0
@@ -11501,7 +11600,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 756f0cdeaedff5b42994fe78c77094a1, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &1365088249
 GameObject:
   m_ObjectHideFlags: 0
@@ -11514,7 +11613,8 @@ GameObject:
   - component: {fileID: 1365088253}
   - component: {fileID: 1365088252}
   - component: {fileID: 1365088251}
-  m_Layer: 6
+  - component: {fileID: 1365088254}
+  m_Layer: 20
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11607,6 +11707,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365088249}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1365088254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365088249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &1366273914
 GameObject:
   m_ObjectHideFlags: 0
@@ -12016,7 +12130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1415209646}
-  m_Layer: 6
+  m_Layer: 20
   m_Name: Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12309,7 +12423,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: ef20f847f9bb82a4a9cffd5f8de75419, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &1506547193
 GameObject:
   m_ObjectHideFlags: 0
@@ -12361,7 +12475,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 15fa1064a396a19459bfe7300e6e11c9, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &1514386725
 GameObject:
   m_ObjectHideFlags: 0
@@ -12772,7 +12886,7 @@ GameObject:
   - component: {fileID: 1573355983}
   - component: {fileID: 1573355982}
   - component: {fileID: 1573355984}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13897,7 +14011,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 756f0cdeaedff5b42994fe78c77094a1, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 41015
+    m_Bits: 41207
 --- !u!1 &1717400956
 GameObject:
   m_ObjectHideFlags: 0
@@ -14675,8 +14789,8 @@ MonoBehaviour:
   currentTool: 0
   toolBackPosition: {x: 0.701, y: -0.347, z: 0.535}
   toolBackRotation: {x: 0, y: 0, z: -45}
-  toolMainEffect: {fileID: 0}
-  toolSubEffext: {fileID: 0}
+  toolMainEffect: {fileID: 1057479489}
+  toolSubEffext: {fileID: 106428682}
 --- !u!1 &1875953202
 GameObject:
   m_ObjectHideFlags: 0
@@ -15032,7 +15146,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: 756f0cdeaedff5b42994fe78c77094a1, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &1908501563
 GameObject:
   m_ObjectHideFlags: 0
@@ -15499,7 +15613,7 @@ Projector:
   m_Material: {fileID: 2100000, guid: c9410b34b48b7304180a37ee5fa9c570, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
-    m_Bits: 45111
+    m_Bits: 41207
 --- !u!1 &2057852719
 GameObject:
   m_ObjectHideFlags: 0
@@ -15708,7 +15822,8 @@ GameObject:
   - component: {fileID: 2074040607}
   - component: {fileID: 2074040606}
   - component: {fileID: 2074040605}
-  m_Layer: 6
+  - component: {fileID: 2074040608}
+  m_Layer: 20
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15801,6 +15916,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074040603}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2074040608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074040603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
 --- !u!1 &2079908581
 GameObject:
   m_ObjectHideFlags: 0
@@ -15961,7 +16090,7 @@ GameObject:
   - component: {fileID: 2081813275}
   - component: {fileID: 2081813276}
   - component: {fileID: 2081813277}
-  m_Layer: 6
+  m_Layer: 20
   m_Name: Room1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21548,7 +21677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4773928378801317111}
   - component: {fileID: 2282351333947699257}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Door (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21583,7 +21712,7 @@ GameObject:
   - component: {fileID: 890620732487339144}
   - component: {fileID: 6837414852128752480}
   - component: {fileID: 2597881643718549628}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47362,7 +47491,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -47397,7 +47526,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -52380,7 +52509,7 @@ GameObject:
   - component: {fileID: 3433313059213747321}
   - component: {fileID: 3904895256092829927}
   - component: {fileID: 6401149778059593839}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52399,7 +52528,7 @@ GameObject:
   - component: {fileID: 2188802729834879331}
   - component: {fileID: 375972462530461765}
   - component: {fileID: 6259971922527133532}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53310,7 +53439,7 @@ GameObject:
   - component: {fileID: 8709918107638885384}
   - component: {fileID: 8646892112632400350}
   - component: {fileID: 997877579605599598}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53329,7 +53458,7 @@ GameObject:
   - component: {fileID: 1682890393047681993}
   - component: {fileID: 7202672458295408074}
   - component: {fileID: 323444425057721238}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

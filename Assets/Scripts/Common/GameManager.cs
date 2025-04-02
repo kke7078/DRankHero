@@ -26,7 +26,7 @@ namespace KGY
         }
 
         public void GameStart() {
-            startPointDoor.Interact(null);
+            startPointDoor.Interact(PlayerCharacter.instance);
             startPointDoor.isOpened = true;
         }
     }

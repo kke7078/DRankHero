@@ -21,7 +21,7 @@ namespace KGY
             if (other.CompareTag("WaterRipple")) {
                 float currentFOV = 0;
 
-                if (projector.fieldOfView > 10) projector.fieldOfView -= 5f * Time.deltaTime;
+                if (projector.fieldOfView > 10) projector.fieldOfView -= 7f * Time.deltaTime;
                 else
                 {
                     projector.fieldOfView = 0.001f;

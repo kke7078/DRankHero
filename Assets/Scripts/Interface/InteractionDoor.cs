@@ -44,9 +44,11 @@ namespace KGY
 
         public void Interact(CharacterBase character)
         {
-            if (!isOpened || !isKeepOut) {
+            if (!isOpened && !isKeepOut) {
                 StartCoroutine(MoveDoor("mainDoor"));
                 if (subDoor != null) StartCoroutine(MoveDoor("subDoor"));
+
+                isOpened = !isOpened;
             }
 
             switch (currentDoor) {
