@@ -16,6 +16,7 @@ namespace KGY
         public Image cleanRoomGauge;
         public Animator stageStart;
         public Animator miniMap;
+        public Animator timeLimit;
 
         private bool isShow;
 
@@ -66,6 +67,9 @@ namespace KGY
 
             //미니맵 UI 표시
             miniMap.SetTrigger("showTrigger");
+
+            //남은 시간 UI 표시
+            timeLimit.SetTrigger("showTrigger");
         }
 
         IEnumerator StartStageHide()
