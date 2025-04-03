@@ -18,6 +18,8 @@ namespace KGY
         public Animator miniMap;
         public Animator timeLimit;
 
+        private float timeRemaining = 300f; //남은 시간
+
         private bool isShow;
 
         private void Start()
@@ -31,6 +33,15 @@ namespace KGY
         {
             Vector2 showPosition = isShow ? new Vector2(cleanRoomGaugeBar.anchoredPosition.x, 20f) : new Vector2(cleanRoomGaugeBar.anchoredPosition.x, -80f);
             cleanRoomGaugeBar.anchoredPosition = Vector2.Lerp(cleanRoomGaugeBar.anchoredPosition, showPosition, Time.deltaTime * 10f);
+
+            if (GameManager.Singleton.IsGameStarted) {
+                if (timeRemaining > 0)
+                {
+                    timeRemaining -= Time.deltaTime;
+                    UpdateTimerUI();
+                }
+                else TimerEnd();
+            }
         }
 
         public void OnEnterCleanRoom(CleanRoom roomData)
@@ -64,20 +75,34 @@ namespace KGY
             //스테이지 시작 UI 표시
             stageStart.SetTrigger("showTrigger");
             StartCoroutine("StartStageHide");
+        }
+
+        IEnumerator StartStageHide()
+        {
+            yield return new WaitForSeconds(1f);
+            stageStart.SetTrigger("hideTrigger");
 
             //미니맵 UI 표시
             miniMap.SetTrigger("showTrigger");
 
             //남은 시간 UI 표시
             timeLimit.SetTrigger("showTrigger");
+
+            yield return new WaitForSeconds(0.5f);
+            stageStart.gameObject.SetActive(false);
         }
 
-        IEnumerator StartStageHide()
+        public void UpdateTimerUI()
         {
-            yield return new WaitForSeconds(1.5f);
-            stageStart.SetTrigger("hideTrigger");
-            yield return new WaitForSeconds(1.5f);
-            stageStart.gameObject.SetActive(false);
+            int minutes = Mathf.FloorToInt(timeRemaining / 60f);
+            int seconds = Mathf.FloorToInt(timeRemaining % 60f);
+            string timerText = string.Format("{0:0}:{1:00}", minutes, seconds);
+            timeLimit.GetComponent<TextMeshProUGUI>().text = timerText;
+        }
+
+        public void TimerEnd() {
+            //타이머 종료
+            Debug.Log("게임 오버");
         }
     }
 }
