@@ -12,8 +12,9 @@ namespace KGY
             get { return isComplete; }
             set {
                 isComplete = value;
-                if (isComplete) { 
+                if (isComplete) {
                     //Complete ÆÄÆ¼Å¬ È¿°ú Àç»ý
+                    Debug.Log("¶ì·Î·Õ~~");
                 }
             }
         }

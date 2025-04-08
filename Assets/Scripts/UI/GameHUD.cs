@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +18,12 @@ namespace KGY
         public Animator stageStart;
         public Animator miniMap;
         public Animator timeLimit;
+        public Animator cleanRoomUI;
 
+
+        private GameObject map;
+        private float cleanRoomCount = 0;   //청소한 방의 개수
         private float timeRemaining = 300f; //남은 시간
-
         private bool isShow;
 
         private void Start()
@@ -27,6 +31,17 @@ namespace KGY
             cleanRoomSensor.OnEnterRoom += (CleanRoom roomData) => OnEnterCleanRoom(roomData);
             cleanRoomSensor.OnStayRoom += (CleanRoom roomData) => OnStayCleanRoom(roomData);
             cleanRoomSensor.OnEixtRoom += (CleanRoom roomData) => OnExitCleanRoom(roomData);
+
+            map = GameObject.Find("Map");
+            for (int i = 0; i < map.GetComponentsInChildren<Canvas>().Length; i++)
+            {
+                if(map.GetComponentsInChildren<Canvas>()[i].name == "MinimapCleanRoomIcon") 
+                {
+                    cleanRoomCount++;
+                }
+            }
+
+            cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운 <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", cleanRoomCount); //남은 장소 UI 표시
         }
 
         private void Update()
@@ -55,11 +70,15 @@ namespace KGY
 
         public void OnStayCleanRoom(CleanRoom roomData)
         {
-            if (roomData.isComplete) return;
+            if (roomData.IsComplete) return;
 
             cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
 
-            if (roomData.dirtyTotalValue == roomData.dirtyCleanValue) isShow = false;
+            if (roomData.dirtyTotalValue == roomData.dirtyCleanValue)
+            {
+                roomData.IsComplete = true;
+                isShow = false;
+            }
         }
 
         public void OnExitCleanRoom(CleanRoom roomData)
@@ -87,6 +106,9 @@ namespace KGY
 
             //남은 시간 UI 표시
             timeLimit.SetTrigger("showTrigger");
+
+            //남은 장소 UI 표시
+            cleanRoomUI.gameObject.SetActive(true);
 
             yield return new WaitForSeconds(0.5f);
             stageStart.gameObject.SetActive(false);
