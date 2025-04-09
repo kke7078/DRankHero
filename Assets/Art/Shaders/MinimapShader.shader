@@ -3,11 +3,15 @@ Shader "Custom/MinimapShader_BottomOnly"
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
+        _IsMinimapHide ("Is Minimap Hidden", Float) = 0
     }
     SubShader
     {
-        Tags { "Queue" = "Geometry" }
-        Cull Off // 양면 렌더링
+        Tags { "Queue" = "Transparent" }
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+        Cull Off
+
         Pass
         {
             CGPROGRAM
@@ -28,19 +32,28 @@ Shader "Custom/MinimapShader_BottomOnly"
             };
 
             fixed4 _Color;
+            float _IsMinimapHide;
 
             v2f vert (appdata_t v)
             {
                 v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex); // 오브젝트를 화면 좌표로 변환
-                o.normal = UnityObjectToWorldNormal(v.normal); // 월드 좌표에서 노멀 벡터
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.normal = UnityObjectToWorldNormal(v.normal);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // 벽의 아랫면만 보이도록
-                if (i.normal.y > -0.1) discard;  // y축 방향으로 위쪽 면을 걸러내고 아랫면만 렌더링
+                if (_IsMinimapHide > 0.5)
+                {
+                    // 미니맵에서 숨기기 (완전 투명)
+                    return fixed4(_Color.rgb, 0);
+                }
+
+                // 아랫면만 보이도록
+                if (i.normal.y > -0.1)
+                    discard;
+
                 return _Color;
             }
             ENDCG

@@ -1273,6 +1273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &176004834
 GameObject:
   m_ObjectHideFlags: 0
@@ -6900,6 +6901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &316708249
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7298,6 +7300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &338223895
 GameObject:
   m_ObjectHideFlags: 0
@@ -7347,6 +7350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &338223898
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7943,7 +7947,7 @@ Transform:
   - {fileID: 338223896}
   - {fileID: 1813245531}
   - {fileID: 757865184}
-  - {fileID: 649535879}
+  - {fileID: 690178780}
   - {fileID: 1959665356}
   - {fileID: 1909287063}
   m_Father: {fileID: 1647105255}
@@ -8100,6 +8104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &434925196
 GameObject:
   m_ObjectHideFlags: 0
@@ -8535,6 +8540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &513014243
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8655,6 +8661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &536269287
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8869,6 +8876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &568519235
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14506,6 +14514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!1 &624180413
 GameObject:
   m_ObjectHideFlags: 0
@@ -14723,126 +14732,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 913449714}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &649535878
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 649535879}
-  - component: {fileID: 649535883}
-  - component: {fileID: 649535882}
-  - component: {fileID: 649535881}
-  - component: {fileID: 649535880}
-  m_Layer: 6
-  m_Name: Cube (5)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &649535879
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649535878}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.8499963, y: 0.89979994, z: 0.24999948}
-  m_LocalScale: {x: 9.5, y: 1.8, z: 0.3}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 424475084}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &649535880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649535878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minimapCamera: {fileID: 100780335}
-  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
---- !u!65 &649535881
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649535878}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &649535882
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649535878}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &649535883
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649535878}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &653666560
 GameObject:
   m_ObjectHideFlags: 0
@@ -15010,6 +14899,127 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 677262785}
   m_Mesh: {fileID: -6219848842421530281, guid: 809af592130c8e04f9ac167ffd0602f0, type: 3}
+--- !u!1 &690178779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 690178780}
+  - component: {fileID: 690178784}
+  - component: {fileID: 690178783}
+  - component: {fileID: 690178782}
+  - component: {fileID: 690178781}
+  m_Layer: 6
+  m_Name: Cube (12)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &690178780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690178779}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 2.8499963, y: 0.89979994, z: 0.24999948}
+  m_LocalScale: {x: 9.5, y: 1.8, z: 0.3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 424475084}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &690178781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690178779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1dd9e0bb2fe45f42a3c15a57de3ecdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapCamera: {fileID: 100780335}
+  minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
+--- !u!65 &690178782
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690178779}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &690178783
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690178779}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &690178784
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690178779}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &703086816
 GameObject:
   m_ObjectHideFlags: 0
@@ -15360,6 +15370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &757865186
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15831,6 +15842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &820503223
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16115,6 +16127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &916957026
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16538,6 +16551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &975301362
 GameObject:
   m_ObjectHideFlags: 0
@@ -16843,6 +16857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &999437849
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17111,6 +17126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1056997483
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17412,6 +17428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1126801025
 GameObject:
   m_ObjectHideFlags: 0
@@ -17689,6 +17706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!1 &1215008222
 GameObject:
   m_ObjectHideFlags: 0
@@ -18289,6 +18307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1272617722
 GameObject:
   m_ObjectHideFlags: 0
@@ -18658,6 +18677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1336526088
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18849,6 +18869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1366273914
 GameObject:
   m_ObjectHideFlags: 0
@@ -18929,6 +18950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &1374963423
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20014,6 +20036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1541840650
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20205,6 +20228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1548862059
 GameObject:
   m_ObjectHideFlags: 0
@@ -25663,6 +25687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1590844457
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25886,6 +25911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1640729169
 GameObject:
   m_ObjectHideFlags: 0
@@ -26069,6 +26095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1680697628
 GameObject:
   m_ObjectHideFlags: 0
@@ -26308,6 +26335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1693156195
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26730,6 +26758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!65 &1728812160
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26921,6 +26950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!1 &1758813807
 GameObject:
   m_ObjectHideFlags: 0
@@ -27187,6 +27217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1782685993
 GameObject:
   m_ObjectHideFlags: 0
@@ -27548,6 +27579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &1813245533
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27952,6 +27984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!1 &1879869061
 GameObject:
   m_ObjectHideFlags: 0
@@ -28401,6 +28434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &1959665355
 GameObject:
   m_ObjectHideFlags: 0
@@ -28450,6 +28484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 1
 --- !u!65 &1959665358
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29399,6 +29434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimapCamera: {fileID: 100780335}
   minimapShader: {fileID: 4800000, guid: 6ddbf025efe8f5142a23a5356ee7503f, type: 3}
+  isMinimapHide: 0
 --- !u!1 &2079908581
 GameObject:
   m_ObjectHideFlags: 0
