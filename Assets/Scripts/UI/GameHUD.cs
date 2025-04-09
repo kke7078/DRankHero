@@ -20,11 +20,35 @@ namespace KGY
         public Animator timeLimit;
         public Animator cleanRoomUI;
 
+        public float CleanRoomCount {
+            get { return cleanRoomCount; }
+            set {
+                cleanRoomCount = value;
+
+                if (cleanRoomCount != 0)
+                {
+                    cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", cleanRoomCount); //남은 장소 UI 표시
+                }
+                else
+                {
+                    cleanRoomUI.SetTrigger("changeValue");
+                }
+            }
+        }
+        public bool IsGaugeBarShow
+        {
+            get { return isGaugeBarShow; }
+            set
+            {
+                isGaugeBarShow = value;
+                ShowCleanRoomGaugeBar(isGaugeBarShow);
+            }
+        }
 
         private GameObject map;
         private float cleanRoomCount = 0;   //청소한 방의 개수
         private float timeRemaining = 300f; //남은 시간
-        private bool isShow;
+        private bool isGaugeBarShow;
 
         private void Start()
         {
@@ -37,19 +61,16 @@ namespace KGY
             {
                 if(map.GetComponentsInChildren<Canvas>()[i].name == "MinimapCleanRoomIcon") 
                 {
-                    cleanRoomCount++;
+                    CleanRoomCount++;
                 }
             }
-
-            cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운 <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", cleanRoomCount); //남은 장소 UI 표시
         }
 
         private void Update()
         {
-            Vector2 showPosition = isShow ? new Vector2(cleanRoomGaugeBar.anchoredPosition.x, 20f) : new Vector2(cleanRoomGaugeBar.anchoredPosition.x, -80f);
-            cleanRoomGaugeBar.anchoredPosition = Vector2.Lerp(cleanRoomGaugeBar.anchoredPosition, showPosition, Time.deltaTime * 10f);
-
-            if (GameManager.Singleton.IsGameStarted) {
+            //타이머 UI 업데이트
+            if (GameManager.Singleton.IsGameStarted)
+            {
                 if (timeRemaining > 0)
                 {
                     timeRemaining -= Time.deltaTime;
@@ -61,9 +82,9 @@ namespace KGY
 
         public void OnEnterCleanRoom(CleanRoom roomData)
         {
-            if (roomData.isComplete) return;
+            if (roomData.IsComplete) return;
 
-            isShow = true;
+            IsGaugeBarShow = true;
             cleanRoomText.text = roomData.dirtyRoomName;
             cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
         }
@@ -77,17 +98,35 @@ namespace KGY
             if (roomData.dirtyTotalValue == roomData.dirtyCleanValue)
             {
                 roomData.IsComplete = true;
-                isShow = false;
+                IsGaugeBarShow = false;
             }
         }
 
         public void OnExitCleanRoom(CleanRoom roomData)
         {
-            if (roomData.isComplete) return;
+            if (roomData.IsComplete) return;
 
-            isShow = false;
-            cleanRoomText.text = "";
-            cleanRoomGauge.fillAmount = 0;
+            IsGaugeBarShow = false;
+        }
+
+        public void ShowCleanRoomGaugeBar(bool isShow)
+        {
+            cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isShow", isShow);
+            cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isHide", !isShow);
+
+            //게이지바 UI 표시
+            if (isShow)
+            {
+                cleanRoomGaugeBar.GetComponent<Animator>().SetTrigger("showTrigger");
+                cleanRoomGaugeBar.GetComponent<Animator>().ResetTrigger("hideTrigger");
+            }
+
+            //게이지바 UI 숨김
+            else 
+            {
+                cleanRoomGaugeBar.GetComponent<Animator>().ResetTrigger("showTrigger");
+                cleanRoomGaugeBar.GetComponent<Animator>().SetTrigger("hideTrigger");
+            }
         }
 
         public void StartStage() {
@@ -101,11 +140,13 @@ namespace KGY
             yield return new WaitForSeconds(1f);
             stageStart.SetTrigger("hideTrigger");
 
-            //미니맵 UI 표시
-            miniMap.SetTrigger("showTrigger");
-
             //남은 시간 UI 표시
             timeLimit.SetTrigger("showTrigger");
+
+            yield return new WaitForSeconds(0.3f);
+
+            //미니맵 UI 표시
+            miniMap.SetTrigger("showTrigger");
 
             //남은 장소 UI 표시
             cleanRoomUI.gameObject.SetActive(true);

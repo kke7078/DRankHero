@@ -13,16 +13,24 @@ namespace KGY
             set {
                 isComplete = value;
                 if (isComplete) {
-                    //Complete 파티클 효과 재생
-                    Debug.Log("띠로롱~~");
+                    //게임HUD의 청소한 방 개수 감소
+                    GameManager.Singleton.gameHUD.CleanRoomCount--;
+
+                    //미니맵 아이콘 비활성화
+                    minimapIcon.gameObject.SetActive(false);
+
+                    //청소 완료된 방의 프로젝터 삭제
+                    Destroy(projectors);
                 }
             }
         }
-        public bool isComplete;
+        private bool isComplete;
 
         public string dirtyRoomName;
         public float dirtyTotalValue;
         public float dirtyCleanValue;
+        public Canvas minimapIcon;
+        public GameObject projectors;
 
         private void Start()
         {
