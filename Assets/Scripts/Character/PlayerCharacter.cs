@@ -64,12 +64,9 @@ namespace KGY
                 {
                     Vector3 direction = hitInfo.point - transform.position;
 
-                    //캐릭터와 마우스 클릭 위치의 거리가 0.1f 이상일 때 회전
-                    if (direction.magnitude > 0.1f) {
-                        Quaternion targetRot = Quaternion.LookRotation(direction);
-                        targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
-                        transform.rotation = targetRot;
-                    }
+                    Quaternion targetRot = Quaternion.LookRotation(direction);
+                    targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
+                    transform.rotation = targetRot;
                 }
             }
         }
