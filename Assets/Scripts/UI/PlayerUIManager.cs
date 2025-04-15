@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KGY
 {
-    //DirectionGuide : 플레이어의 이동 방향을 가이드하는 UI를 관리하는 클래스
+    //PlayerUIManager : 플레이어의 UI(DirectGuide, MinimapIcon 등)를 관리하는 클래스
     public class PlayerUIManager : MonoBehaviour
     {
         private void Update()

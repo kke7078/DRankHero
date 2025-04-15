@@ -19,6 +19,7 @@ namespace KGY
         public Animator miniMap;
         public Animator timeLimit;
         public Animator cleanRoomUI;
+        public DialogueUI dialogueUI;
 
         public float CleanRoomCount {
             get { return cleanRoomCount; }
@@ -109,6 +110,7 @@ namespace KGY
             IsGaugeBarShow = false;
         }
 
+        //청소 게이지바 UI 표시/숨김
         public void ShowCleanRoomGaugeBar(bool isShow)
         {
             cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isShow", isShow);
@@ -129,12 +131,14 @@ namespace KGY
             }
         }
 
+        //스테이지 시작 UI 표시
         public void StartStage() {
             //스테이지 시작 UI 표시
             stageStart.SetTrigger("showTrigger");
             StartCoroutine("StartStageHide");
         }
 
+        //스테이지 시작 UI 숨김
         IEnumerator StartStageHide()
         {
             yield return new WaitForSeconds(1f);
@@ -155,6 +159,7 @@ namespace KGY
             stageStart.gameObject.SetActive(false);
         }
 
+        //남은 시간 UI 업데이트
         public void UpdateTimerUI()
         {
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
@@ -163,9 +168,13 @@ namespace KGY
             timeLimit.GetComponent<TextMeshProUGUI>().text = timerText;
         }
 
+        //타미어 종료
         public void TimerEnd() {
             //타이머 종료
             Debug.Log("게임 오버");
         }
+
+        //Dialog UI 표시
+
     }
 }

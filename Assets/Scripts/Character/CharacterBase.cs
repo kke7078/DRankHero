@@ -13,8 +13,9 @@ namespace KGY
         public Vector2 Direction { get; set; }  //이동 방향
         private Vector2 direction;
         public InteractionSensor interactionSensor;
-        public InteractionUI InteractionUI;
         public bool isMoving;
+
+        public Sprite[] characterPortraits; //Dialogue UI에 사용될 캐릭터 초상화
 
         public List<IInteractable> currentInteractionItems = new List<IInteractable>();
         public IInteractable closestInteractable;
@@ -85,7 +86,7 @@ namespace KGY
         public void FindClosestinteractable() {
             if (currentInteractionItems.Count == 0)
             {
-                InteractionUI.HideUI();
+                closestInteractable = null; //가장 가까운 상호작용 오브젝트가 없을 경우 null로 설정
                 return;
             }
 
@@ -103,7 +104,6 @@ namespace KGY
             }
 
             closestInteractable = closest;
-            InteractionUI.ShowUI(closestInteractable);
         }
 
         protected void OnAnimatorIK(int layerIndex)

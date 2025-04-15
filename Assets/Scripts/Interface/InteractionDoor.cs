@@ -153,9 +153,6 @@ namespace KGY
         {
             if (other.TryGetComponent(out PlayerCharacter player)) {
                 //대화창 호출
-
-                //콜라이더 삭제
-                GetComponent<Collider>().enabled = !isOpened;
             }
         }
     }

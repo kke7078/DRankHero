@@ -18,6 +18,7 @@ namespace KGY
         public Transform handToolHolder;        //플레이어의 손에 위치한 청소도구 홀더
         public TwoBoneIKConstraint rightHandIK; //플레이어의 오른손 IK
         public TwoBoneIKConstraint leftHandIK;  //플레이어의 왼손 IK
+        public InteractionUI interactionUI;
 
         protected bool isCleaning = false;      //플레이어의 청소 유무
 
@@ -40,12 +41,12 @@ namespace KGY
         {
             base.Start();
 
-            //transform.position += Vector3.up * 0.75f; //플레이어의 높이 설정
-
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
 
             SetSpeed(5.0f); //플레이어의 기본이동 속도 설정
+
+            interactionUI.HideUI(); //플레이어의 상호작용 UI 비활성화
         }
 
         protected void Update()
@@ -69,6 +70,9 @@ namespace KGY
                     transform.rotation = targetRot;
                 }
             }
+
+            //Interaction UI 업데이트
+            UpdateInteractionUI();
         }
 
         public void OnDisabled()
@@ -209,7 +213,26 @@ namespace KGY
             closestInteractable.Interact(this);
             currentInteractionItems.Remove(closestInteractable);
 
-            InteractionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
+            interactionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
+        }
+
+        //상호작용 UI 업데이트
+        private void UpdateInteractionUI()
+        {
+            if (closestInteractable != null) interactionUI.ShowUI(closestInteractable);
+            else interactionUI.HideUI();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.name == "StartScriptGimmick") {
+                Clean(false); //청소 비활성화
+                isMoving = false; //플레이어 움직임 비활성화
+                animator.SetFloat("isMove", 0); //플레이어 애니메이션 초기화
+
+                other.GetComponent<BoxCollider>().enabled = false; //상자 콜라이더 비활성화
+                GameManager.Singleton.gameHUD.dialogueUI.StartDialogue(GameManager.Singleton.gameHUD.dialogueUI.dialogueData);
+            }
         }
     }
 }
