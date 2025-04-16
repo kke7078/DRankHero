@@ -17,6 +17,7 @@ namespace KGY
 
         private Animator animator; //애니메이션 컴포넌트
         private Queue<DialogueLine> dialogueQueue; //대화 내용 큐
+        private DialogueLine currentLine; //현재 대화 내용
         private Coroutine typingCoroutine; //타이핑 코루틴
         private bool isTyping = false; //타이핑 중인지 여부
         private bool isShow = false; //대화창이 보이는지 여부
@@ -45,17 +46,19 @@ namespace KGY
             if (isTyping)
             {
                 StopCoroutine(typingCoroutine);
-                dialogueText.text = dialogueQueue.Peek().dialogueText;
+                dialogueText.text = currentLine.dialogueText;
                 isTyping = false;
                 return;
             }
 
-            if (dialogueQueue.Count == 0) {
+            if (dialogueQueue.Count == 0)
+            {
                 EndDialogue();
                 return;
             }
 
             DialogueLine line = dialogueQueue.Dequeue();
+            currentLine = line;
             speakerName.text = line.speakerName;
             typingCoroutine = StartCoroutine(TypeSentence(line.dialogueText));
         }
@@ -75,8 +78,10 @@ namespace KGY
 
         public void EndDialogue() {
             isShow = false;
-            DialogueSetActive(isShow);
-            Debug.Log("대화 종료!");
+            isTyping = false;
+            DialogueSetActive(false);
+
+            PlayerCharacter.instance.isMoving = true; //플레이어 이동 가능
         }
 
         public void DialogueSetActive(bool show) {
