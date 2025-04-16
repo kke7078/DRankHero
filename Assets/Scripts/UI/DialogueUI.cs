@@ -64,7 +64,7 @@ namespace KGY
             {
                 if (ch.characterName == line.characterName)
                 {
-                    speakerImage.sprite = ch.characterPortraits[line.portraitIndex];
+                    speakerImage.sprite = ch.characterPortraits[(int)line.faceType];
                     speakerName.text = line.characterName;
                     break;
                 }

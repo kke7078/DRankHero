@@ -7,12 +7,24 @@ using UnityEngine.TextCore.Text;
 
 namespace KGY
 {
+    public enum FaceType
+    {
+        Neutral,    //기본
+        Happy,      //즐거움
+        Angry,      //분노
+        Sad,        //슬픔
+        Surprised,  //놀람
+        Doubt       //의심
+    }
+
     [System.Serializable]
     public class DialogueLine
     {
         public string characterName; //대화하는 캐릭터의 이름
         [TextArea] public string dialogueText; //말하는 내용
-        public int portraitIndex; //캐릭터의 이미지 인덱스
+        public FaceType faceType; // 캐릭터 표정
+
+        //public int portraitIndex; //캐릭터의 이미지 인덱스
     }
 
     //DialogueData 클래스 : 대화 데이터를 저장하는 클래스

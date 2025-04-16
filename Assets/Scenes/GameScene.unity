@@ -20186,7 +20186,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 18
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -40100,11 +40100,12 @@ MonoBehaviour:
   isMoving: 0
   characterName: "\uB9C8\uC774\uCF65"
   characterPortraits:
-  - {fileID: -1688656860, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
+  - {fileID: -1760070962, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: -1742091336, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 2062555808, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 2099471266, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 388734736, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
+  - {fileID: -1688656860, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
 --- !u!33 &101230865207619818
 MeshFilter:
   m_ObjectHideFlags: 0

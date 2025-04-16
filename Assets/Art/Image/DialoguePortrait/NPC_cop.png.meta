@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: NPC_cop_0
+      name: NPC_cop_Neutral
       rect:
         serializedVersion: 2
         x: 0
@@ -118,7 +118,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NPC_cop_1
+      name: NPC_cop_Angry
       rect:
         serializedVersion: 2
         x: 498
@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NPC_cop_2
+      name: NPC_cop_Doubt
       rect:
         serializedVersion: 2
         x: 0
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NPC_cop_3
+      name: NPC_cop_Surprised
       rect:
         serializedVersion: 2
         x: 498
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NPC_cop_4
+      name: NPC_cop_Happy
       rect:
         serializedVersion: 2
         x: 0
@@ -202,7 +202,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NPC_cop_5
+      name: NPC_cop_Sad
       rect:
         serializedVersion: 2
         x: 498
@@ -233,12 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      NPC_cop_0: -1760070962
-      NPC_cop_1: 2062555808
-      NPC_cop_2: -1688656860
-      NPC_cop_3: 388734736
-      NPC_cop_4: -1742091336
-      NPC_cop_5: 2099471266
+      NPC_cop_Angry: 2062555808
+      NPC_cop_Doubt: -1688656860
+      NPC_cop_Happy: -1742091336
+      NPC_cop_Neutral: -1760070962
+      NPC_cop_Sad: 2099471266
+      NPC_cop_Surprised: 388734736
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
