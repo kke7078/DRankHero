@@ -80,8 +80,17 @@ namespace KGY
             InputSystem.Singleton.onClean -= Clean;
         }
 
+        public void SetPlayerMovementState(bool moving) {
+            isMoving = moving;
+
+            if (!moving) {
+                Clean(moving);
+                animator.SetFloat("isMove", 0);
+            }
+        }
+
         //플레이어의 청소 유무에 따른 변화 체크
-        private void Clean(bool isClean)
+        public void Clean(bool isClean)
         {
             if (!isMoving) return;
 
@@ -221,18 +230,6 @@ namespace KGY
         {
             if (closestInteractable != null) interactionUI.ShowUI(closestInteractable);
             else interactionUI.HideUI();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.name == "StartScriptGimmick") {
-                Clean(false); //청소 비활성화
-                isMoving = false; //플레이어 움직임 비활성화
-                animator.SetFloat("isMove", 0); //플레이어 애니메이션 초기화
-
-                other.GetComponent<BoxCollider>().enabled = false; //상자 콜라이더 비활성화
-                GameManager.Singleton.gameHUD.dialogueUI.StartDialogue(GameManager.Singleton.gameHUD.dialogueUI.dialogueData);
-            }
         }
     }
 }

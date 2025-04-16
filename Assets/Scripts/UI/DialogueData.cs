@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.TextCore.Text;
 
 namespace KGY
 {
     [System.Serializable]
     public class DialogueLine
     {
-        public string speakerName;  //말하는 사람
+        public string characterName; //대화하는 캐릭터의 이름
         [TextArea] public string dialogueText; //말하는 내용
         public int portraitIndex; //캐릭터의 이미지 인덱스
     }
@@ -17,6 +19,27 @@ namespace KGY
     [CreateAssetMenu(menuName = "Dialogue/DialogueData")]
     public class DialogueData : ScriptableObject
     {
+        public List<CharacterBase> character = new List<CharacterBase>();
         public List<DialogueLine> lines; //대화 내용
+
+        public void SetCharacter() {
+            //씬에 등장하는 캐릭터를 가져옴
+            CharacterBase[] characterInScene = FindObjectsOfType<CharacterBase>();
+
+            //각 대화 내용에 등장하는 캐릭터를 초기화
+            character.Clear();
+
+            //대화에 등장하는 캐릭터들을 리스트에 추가
+            foreach (var ch in characterInScene)
+            {
+                foreach (var line in lines)
+                {
+                    if (line.characterName == ch.characterName)
+                    {
+                        if(!character.Contains(ch)) character.Add(ch);
+                    }
+                }
+            }
+        }
     }
 }

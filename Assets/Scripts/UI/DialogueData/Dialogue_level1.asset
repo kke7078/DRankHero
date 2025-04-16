@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3274a6bd54c63454982733bcf43bdcbb, type: 3}
   m_Name: Dialogue_level1
   m_EditorClassIdentifier: 
+  character: []
   lines:
-  - speakerName: "\uBE0C\uB9AD\uC2A4"
+  - characterName: "\uB9C8\uC774\uCF65"
     dialogueText: "\uC548\uB155\uC548\uB155\n\uC5D4\uD130\uB97C \uCE58\uBA74 \uC6B0\uC9F8
       \uB098\uC628\uB2E4\uB0D0~~?\n\uAD81\uAE08\uD558\uAD6C\uB9CC\uC694"
     portraitIndex: 0
-  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+  - characterName: "\uB2E4\uC774\uB178"
     dialogueText: "\uD50C\uB808\uC774\uC5B4\uAC00 \uB9D0 \uD560 \uCC28\uB840\uC774\uC2E0\uB514\n\uC21C\uC11C\uB300\uB85C
       \uC798 \uB098\uC62C\uB791\uAC00?"
     portraitIndex: 0

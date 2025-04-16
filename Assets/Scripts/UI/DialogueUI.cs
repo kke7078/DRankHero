@@ -9,13 +9,13 @@ namespace KGY
     //DialogueUI 클래스 : 대화 UI를 나타내는 클래스
     public class DialogueUI : MonoBehaviour
     {
-        public DialogueData dialogueData;
         public Image speakerImage;
         public TextMeshProUGUI speakerName;
         public TextMeshProUGUI dialogueText;
         public float typingSpeed = 0.05f; //타이핑 속도
 
         private Animator animator; //애니메이션 컴포넌트
+        private DialogueData dialogueData; //대화 데이터
         private Queue<DialogueLine> dialogueQueue; //대화 내용 큐
         private DialogueLine currentLine; //현재 대화 내용
         private Coroutine typingCoroutine; //타이핑 코루틴
@@ -26,10 +26,11 @@ namespace KGY
         {
             animator = GetComponent<Animator>();
             InputSystem.Singleton.onDialogueNextText += ShowNextLine; //다음 대화 텍스트 표시
+
         }
 
-
         public void StartDialogue(DialogueData dialogue) {
+            dialogueData = dialogue;
             if (!isShow) {
                 isShow = true;
                 DialogueSetActive(isShow);
@@ -59,7 +60,16 @@ namespace KGY
 
             DialogueLine line = dialogueQueue.Dequeue();
             currentLine = line;
-            speakerName.text = line.speakerName;
+            foreach (var ch in dialogueData.character)
+            {
+                if (ch.characterName == line.characterName)
+                {
+                    speakerImage.sprite = ch.characterPortraits[line.portraitIndex];
+                    speakerName.text = line.characterName;
+                    break;
+                }
+            }
+
             typingCoroutine = StartCoroutine(TypeSentence(line.dialogueText));
         }
 
@@ -81,7 +91,7 @@ namespace KGY
             isTyping = false;
             DialogueSetActive(false);
 
-            PlayerCharacter.instance.isMoving = true; //플레이어 이동 가능
+            PlayerCharacter.instance.SetPlayerMovementState(true); //플레이어 이동 가능
         }
 
         public void DialogueSetActive(bool show) {

@@ -15,6 +15,7 @@ namespace KGY
         public InteractionSensor interactionSensor;
         public bool isMoving;
 
+        public string characterName; //캐릭터 이름
         public Sprite[] characterPortraits; //Dialogue UI에 사용될 캐릭터 초상화
 
         public List<IInteractable> currentInteractionItems = new List<IInteractable>();

@@ -803,7 +803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1178035106, guid: e4602be6c2bb0494fb4d8795ccfd7a32, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9235,6 +9235,7 @@ GameObject:
   - component: {fileID: 452455675}
   - component: {fileID: 452455676}
   - component: {fileID: 452455677}
+  - component: {fileID: 452455678}
   m_Layer: 0
   m_Name: StartScriptGimmick
   m_TagString: Untagged
@@ -9305,6 +9306,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &452455678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452455674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2efb203e06ced45985684de7079d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueData: {fileID: 11400000, guid: 556823056719fc54a898077d94389810, type: 2}
+  dialogueUI: {fileID: 1506159399}
 --- !u!1 &458326753
 GameObject:
   m_ObjectHideFlags: 0
@@ -24918,7 +24933,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12543a82e41af0e44bc8c0d536fa9fe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueData: {fileID: 11400000, guid: 556823056719fc54a898077d94389810, type: 2}
   speakerImage: {fileID: 78207623}
   speakerName: {fileID: 987133682}
   dialogueText: {fileID: 1005748351}
@@ -40084,13 +40098,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionSensor: {fileID: 1109627571}
   isMoving: 0
+  characterName: "\uB9C8\uC774\uCF65"
   characterPortraits:
   - {fileID: -1688656860, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: -1742091336, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 2062555808, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 2099471266, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
   - {fileID: 388734736, guid: 91d1b5eafb5fc3a41bea97c8852f099b, type: 3}
-  npcName: "\uBE0C\uB9AD"
 --- !u!33 &101230865207619818
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40878,7 +40892,7 @@ GameObject:
   - component: {fileID: 5866666020286997503}
   m_Layer: 15
   m_Name: PlayerCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74995,7 +75009,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionSensor: {fileID: 458326757}
   isMoving: 1
-  characterPortraits: []
+  characterName: "\uB2E4\uC774\uB178"
+  characterPortraits:
+  - {fileID: 21300000, guid: 72f6dd0a45d7f8f4ebf1fa49e829710d, type: 3}
   backToolHolder: {fileID: 1046444705}
   handToolHolder: {fileID: 1575547869}
   rightHandIK: {fileID: 1984510961}
