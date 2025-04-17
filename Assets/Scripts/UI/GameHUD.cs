@@ -16,8 +16,8 @@ namespace KGY
         public TextMeshProUGUI cleanRoomText;
         public Image cleanRoomGauge;
         public Animator stageStart;
-        public Animator miniMap;
-        public Animator timeLimit;
+        public Animator miniMapUI;
+        public Animator timeLimitUI;
         public Animator cleanRoomUI;
         public DialogueUI dialogueUI;
 
@@ -30,10 +30,7 @@ namespace KGY
                 {
                     cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", cleanRoomCount); //남은 장소 UI 표시
                 }
-                else
-                {
-                    cleanRoomUI.SetTrigger("changeValue");
-                }
+                else GameManager.Singleton.IsCleanComplete = true; //청소 완료 상태 변경
             }
         }
         public bool IsGaugeBarShow
@@ -145,12 +142,12 @@ namespace KGY
             stageStart.SetTrigger("hideTrigger");
 
             //남은 시간 UI 표시
-            timeLimit.SetTrigger("showTrigger");
+            timeLimitUI.SetTrigger("showTrigger");
 
             yield return new WaitForSeconds(0.3f);
 
             //미니맵 UI 표시
-            miniMap.SetTrigger("showTrigger");
+            miniMapUI.SetTrigger("showTrigger");
 
             //남은 장소 UI 표시
             cleanRoomUI.gameObject.SetActive(true);
@@ -165,7 +162,7 @@ namespace KGY
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
             int seconds = Mathf.FloorToInt(timeRemaining % 60f);
             string timerText = string.Format("{0:0}:{1:00}", minutes, seconds);
-            timeLimit.GetComponent<TextMeshProUGUI>().text = timerText;
+            timeLimitUI.GetComponent<TextMeshProUGUI>().text = timerText;
         }
 
         //타미어 종료
@@ -174,7 +171,13 @@ namespace KGY
             Debug.Log("게임 오버");
         }
 
-        //Dialog UI 표시
+        //청소 완료!
+        public void CleanComplete() {
+            cleanRoomUI.SetTrigger("changeValue");
 
+            MinimapIndicator minimapIndicator = miniMapUI.GetComponent<MinimapIndicator>();
+            minimapIndicator.exitIcon.gameObject.SetActive(true);
+            minimapIndicator.exitTransform.gameObject.SetActive(true);
+        }
     }
 }
