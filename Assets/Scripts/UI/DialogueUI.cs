@@ -26,6 +26,7 @@ namespace KGY
         {
             animator = GetComponent<Animator>();
             InputSystem.Singleton.onDialogueNextText += ShowNextLine; //다음 대화 텍스트 표시
+            InputSystem.Singleton.onDialogueEnd += EndDialogue; //대화 종료
 
         }
 
