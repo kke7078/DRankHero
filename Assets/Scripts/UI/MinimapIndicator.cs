@@ -19,7 +19,7 @@ namespace KGY
         private void Start()
         {
             minimapRadius = GetComponent<RectTransform>().rect.width / 2;
-            threshold = (minimapRadius * 0.1f);
+            threshold = (minimapRadius * 0.1f) + 6f;
         }
 
         private void Update()
