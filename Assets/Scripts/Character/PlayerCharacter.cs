@@ -81,11 +81,11 @@ namespace KGY
         }
 
         public void SetPlayerMovementState(bool moving) {
-            isMoving = moving;
-
             if (!moving) {
                 Clean(moving);
                 animator.SetFloat("isMove", 0);
+
+                isMoving = moving;
             }
         }
 

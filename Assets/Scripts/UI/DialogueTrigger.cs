@@ -14,9 +14,6 @@ namespace KGY
         {
             if (other.CompareTag("Player"))
             {
-                //플레이어 동작 제어
-                PlayerCharacter.instance.SetPlayerMovementState(false);
-
                 dialogueData.SetCharacter(); //대화 데이터에 캐릭터 설정
                 dialogueUI.StartDialogue(dialogueData); //대화 시작
 

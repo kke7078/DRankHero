@@ -26271,7 +26271,7 @@ Transform:
   m_GameObject: {fileID: 1419854946}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.92387956, z: 0, w: 0.38268343}
-  m_LocalPosition: {x: 3.6870508, y: 0.0059, z: -2.7258434}
+  m_LocalPosition: {x: 3.848, y: 0.0059, z: -2.525}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27195,7 +27195,7 @@ MonoBehaviour:
   speakerImage: {fileID: 78207623}
   speakerName: {fileID: 987133682}
   dialogueText: {fileID: 1005748351}
-  typingSpeed: 0.05
+  virtualCamera: {fileID: 1995947432}
 --- !u!95 &1506159400
 Animator:
   serializedVersion: 5
