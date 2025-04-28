@@ -149,7 +149,7 @@ namespace KGY
             }
             else
             {
-                desiredOffset = new Vector3(currentOffset.x, 0.5f, currentOffset.z);
+                desiredOffset = new Vector3(currentOffset.x, 1f, currentOffset.z);
             }
 
             if (Vector3.Distance(currentOffset, desiredOffset) > 0.01f)

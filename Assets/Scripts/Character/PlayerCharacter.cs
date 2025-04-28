@@ -84,9 +84,9 @@ namespace KGY
             if (!moving) {
                 Clean(moving);
                 animator.SetFloat("isMove", 0);
-
-                isMoving = moving;
             }
+
+            isMoving = moving;
         }
 
         //플레이어의 청소 유무에 따른 변화 체크
