@@ -15,7 +15,6 @@ namespace KGY
         private void Start()
         {
             standardShader = Shader.Find("Standard");
-            
         }
 
         void OnWillRenderObject()
@@ -23,13 +22,15 @@ namespace KGY
             var renderer = GetComponent<Renderer>();
             var mat = renderer.material;
 
-            if (Camera.current == minimapCamera) {
+            if (Camera.current == minimapCamera)
+            {
                 mat.shader = minimapShader;
 
                 if (isMinimapHide) mat.SetFloat("_IsMinimapHide", 1f);
                 else mat.SetFloat("_IsMinimapHide", 0f);
             }
             else GetComponent<Renderer>().material.shader = standardShader;
+
         }
     }
 }
