@@ -29,8 +29,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _HeightEnd: -8
-    - _HeightStart: 0
-    - _Tiling: 0.46
+    - _HeightEnd: -8.5
+    - _HeightStart: 5
+    - _Tiling: 0.45
     m_Colors: []
   m_BuildTextureStacks: []
