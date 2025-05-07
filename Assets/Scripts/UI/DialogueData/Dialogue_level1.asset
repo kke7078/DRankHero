@@ -23,7 +23,7 @@ MonoBehaviour:
       \uB6AB\uC744 \uC904 \uC54C\uC558\uB2E4\uBA74 \uD070 \uCC29\uAC01\uC774\uB2E4!"
     faceType: 2
   - characterName: "\uB2E4\uC774\uB178"
-    dialogueText: "\uC548\uB155\uD558\uC138\uC694, \uB9C8\uC774\uCF65! \uC800\uC608\uC694.
+    dialogueText: "\uC548\uB155\uD558\uC138\uC694, \uB9C8\uC774\uCF65!\n\uC800\uC608\uC694.
       \uB2E4\uC774\uB178."
     faceType: 0
   - characterName: "\uB9C8\uC774\uCF65"
