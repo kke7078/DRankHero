@@ -1,0 +1,11 @@
+Model Information:
+* title:	GH'STORE Box
+* source:	https://sketchfab.com/3d-models/ghstore-box-e12589fb4a764dd7b6d9bb67bc8836e1
+* author:	alexisdaf82pvp (https://sketchfab.com/alexisdaf82pvp)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "GH'STORE Box" (https://sketchfab.com/3d-models/ghstore-box-e12589fb4a764dd7b6d9bb67bc8836e1) by alexisdaf82pvp (https://sketchfab.com/alexisdaf82pvp) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
