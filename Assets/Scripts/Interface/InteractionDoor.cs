@@ -14,19 +14,33 @@ namespace KGY
         public bool isKeepOut;
         public bool isSlidingDoor;
         public string interactionMsg;
+
         public Transform mainDoor;
         public Transform subDoor;
+
         public enum DoorType { 
-            defaultDoor,
-            startPointDoor,
-            stageStartDoor,
+            DefaultDoor,
+            StartPointDoor,
+            StageStartDoor,
         }
         public DoorType currentDoor;
+
+        public enum DoorOpenType
+        { 
+            Sliding,
+            Rotating,
+            Overhead
+        }
+        public DoorOpenType doorOpenType;
 
         private float openSpeed = 1f;
         private float doorWidth;
         private GameObject moveKey;
         private ParticleSystem doorParticleSystem;
+
+        public bool IsAutoInteract => isAutoInteract;
+        public bool IsOffLimit => isKeepOut;
+        public string InteractionMsg => interactionMsg;
 
         private void Start()
         {
@@ -36,33 +50,48 @@ namespace KGY
             if(doorParticleSystem != null) doorParticleSystem.gameObject.SetActive(false);
         }
 
-        public bool IsAutoInteract => isAutoInteract;
-
-        public bool IsOffLimit => isKeepOut;
-
-        public string InteractionMsg => interactionMsg;
-
         public void Interact(CharacterBase character)
         {
             if (!isOpened && !isKeepOut) {
-                StartCoroutine(MoveDoor("mainDoor"));
-                if (subDoor != null) StartCoroutine(MoveDoor("subDoor"));
+                switch (doorOpenType)
+                {
+                    case DoorOpenType.Sliding:
+                        if (mainDoor != null) StartCoroutine(MoveSlidingDoor(mainDoor, -1));
+                        if (subDoor != null) StartCoroutine(MoveSlidingDoor(subDoor, 1));
+                        break;
+                }
 
                 isOpened = !isOpened;
             }
 
             switch (currentDoor) {
-                case DoorType.startPointDoor:
+                case DoorType.StartPointDoor:
                     GetComponent<Collider>().isTrigger = true;
                     break;
-                case DoorType.stageStartDoor:
+                case DoorType.StageStartDoor:
                     doorParticleSystem.gameObject.SetActive(true);
                     GameManager.Singleton.IsGameStarted = true;
                     break;
-                case DoorType.defaultDoor:
+                case DoorType.DefaultDoor:
                     break;
             }
         }
+
+        IEnumerator MoveSlidingDoor(Transform door, float direction)
+        {
+            float time = 0f;
+            Vector3 startPosition = door.localPosition;
+            Vector3 endPosition = startPosition + new Vector3(direction * doorWidth, 0, 0);
+
+            while (time < openSpeed) { 
+                door.localPosition = Vector3.Lerp(startPosition, endPosition, time / openSpeed);
+                time += Time.deltaTime * 3f;
+                yield return null;
+            }
+
+            door.localPosition = endPosition;
+        }
+
 
         IEnumerator MoveDoor(string door) {
             float openDoorTime = 0f;
@@ -84,7 +113,7 @@ namespace KGY
                     mainDoor.localPosition = doorOpenPosition;
                     
                     isOpened = true;
-                    if(currentDoor != DoorType.startPointDoor) GetComponent<Collider>().enabled = !isOpened;
+                    if(currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
                 }
                 else if (door == "subDoor")
                 {
@@ -118,7 +147,7 @@ namespace KGY
                     mainDoor.localRotation = Quaternion.Euler(doorOpenRoction);
 
                     isOpened = true;
-                    if (currentDoor != DoorType.startPointDoor) GetComponent<Collider>().enabled = !isOpened;
+                    if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
                 }
                 else
                 {
@@ -146,13 +175,26 @@ namespace KGY
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out PlayerCharacter player)) moveKey.SetActive(false);
+
+            if (other.TryGetComponent(out PlayerCharacter player)) 
+            {
+                DoorTriggerEvent();
+            }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void DoorTriggerEvent()
         {
-            if (other.TryGetComponent(out PlayerCharacter player)) {
-                //대화창 호출
+            switch (gameObject.name) 
+            {
+                case "StartPointDoor":
+                    if(moveKey.activeSelf) moveKey.SetActive(false);
+                    if (GameManager.Singleton.IsCleanComplete)
+                    { 
+                        //청소 완료 상태일 경우 레벨 클리어
+
+                    }
+
+                    break;
             }
         }
     }
