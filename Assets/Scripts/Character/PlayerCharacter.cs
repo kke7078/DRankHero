@@ -70,9 +70,6 @@ namespace KGY
                     transform.rotation = targetRot;
                 }
             }
-
-            //Interaction UI 업데이트
-            UpdateInteractionUI();
         }
 
         public void OnDisabled()
@@ -223,13 +220,6 @@ namespace KGY
             currentInteractionItems.Remove(closestInteractable);
 
             interactionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
-        }
-
-        //상호작용 UI 업데이트
-        private void UpdateInteractionUI()
-        {
-            if (closestInteractable != null) interactionUI.ShowUI(closestInteractable);
-            else interactionUI.HideUI();
         }
     }
 }

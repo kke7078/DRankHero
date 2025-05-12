@@ -26,6 +26,16 @@ namespace KGY
             //화면 좌표를 다시 월드 좌표로 변환해서 UI 배치
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, GetComponent<Canvas>().planeDistance));
             interactionObj.position = worldPos;
+
+            //Interaction UI 업데이트
+            UpdateInteractionUI();
+        }
+
+        //상호작용 UI 업데이트
+        private void UpdateInteractionUI()
+        {
+            if (PlayerCharacter.instance.closestInteractable != null) ShowUI(PlayerCharacter.instance.closestInteractable);
+            else HideUI();
         }
 
         public void ShowUI(IInteractable interactable)
@@ -34,7 +44,7 @@ namespace KGY
             {
                 //형변환 : 오브젝트가 문일 때
                 if (interactable is InteractionDoor door) {
-                    if (door.isOpened || door.isKeepOut) return;
+                    if (door.isOpened) return;
                 }
                 
                 interactionText.text = interactable.InteractionMsg;

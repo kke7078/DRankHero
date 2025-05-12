@@ -11,7 +11,6 @@ namespace KGY
     {
         public bool isAutoInteract;
         public bool isOpened;
-        public bool isKeepOut;
         public bool isSlidingDoor;
         public string interactionMsg;
 
@@ -39,7 +38,6 @@ namespace KGY
         private ParticleSystem doorParticleSystem;
 
         public bool IsAutoInteract => isAutoInteract;
-        public bool IsOffLimit => isKeepOut;
         public string InteractionMsg => interactionMsg;
 
         private void Start()
@@ -52,7 +50,7 @@ namespace KGY
 
         public void Interact(CharacterBase character)
         {
-            if (!isOpened && !isKeepOut) {
+            if (!isOpened) {
                 switch (doorOpenType)
                 {
                     case DoorOpenType.Sliding:
@@ -90,6 +88,9 @@ namespace KGY
             }
 
             door.localPosition = endPosition;
+
+            isOpened = true;
+            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
         }
 
 
