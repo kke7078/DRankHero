@@ -9,6 +9,7 @@ namespace KGY
     {
         public DialogueData dialogueData; //대화 데이터
         public DialogueUI dialogueUI; //대화 UI
+        public Animator speechBubble; //대화 말풍선    
 
         private void OnTriggerEnter(Collider other)
         {
@@ -18,6 +19,14 @@ namespace KGY
                 dialogueUI.StartDialogue(dialogueData); //대화 시작
 
                 gameObject.SetActive(false); //트리거 비활성화
+
+                if (speechBubble != null) 
+                {
+                    dialogueUI.speechBubble = speechBubble; //대화 UI에 말풍선 애니메이션 설정
+
+                    speechBubble.SetBool("isShow", true);
+                    speechBubble.SetTrigger("showTrigger");
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ namespace KGY
         public TextMeshProUGUI speakerName;
         public TextMeshProUGUI dialogueText;
         public CinemachineVirtualCamera virtualCamera;
+        public Animator speechBubble; //대화 말풍선 애니메이션
 
         private float typingSpeed = 0.05f; //타이핑 속도
         private Animator animator; //애니메이션 컴포넌트
@@ -114,6 +115,16 @@ namespace KGY
             isShow = false;
             isTyping = false;
             DialogueSetActive(false);
+
+            //말풍선 삭제
+            if (speechBubble != null)
+            {
+                speechBubble.SetBool("isShow", false);
+                speechBubble.ResetTrigger("showTrigger");
+
+                speechBubble.SetBool("isHide", true);
+                speechBubble.SetTrigger("hideTrigger");
+            }
 
             PlayerCharacter.instance.SetPlayerMovementState(true); //플레이어 이동 가능
         }
