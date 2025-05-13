@@ -21,16 +21,18 @@ namespace KGY
         public Animator cleanRoomUI;
         public DialogueUI dialogueUI;
 
-        public float CleanRoomCount {
-            get { return cleanRoomCount; }
-            set {
-                cleanRoomCount = value;
+        private string mapObjectName = "Map";
+        private float stageTimeLimit = 300f; //스테이지 시간 제한 (5분)
+        private float completedRooms = 0;   //청소한 방의 개수
+        private float timeRemaining; //남은 시간
+        private bool isGaugeBarShow;
+        private GameObject map;
 
-                if (cleanRoomCount != 0)
-                {
-                    cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", cleanRoomCount); //남은 장소 UI 표시
-                }
-                else GameManager.Singleton.IsCleanComplete = true; //청소 완료 상태 변경
+        public float CleanRoomCount {
+            get { return completedRooms; }
+            set {
+                completedRooms = value;
+                UpdateCleanRoomText();
             }
         }
         public bool IsGaugeBarShow
@@ -43,25 +45,17 @@ namespace KGY
             }
         }
 
-        private GameObject map;
-        private float cleanRoomCount = 0;   //청소한 방의 개수
-        private float timeRemaining = 300f; //남은 시간
-        private bool isGaugeBarShow;
-
         private void Start()
         {
-            cleanRoomSensor.OnEnterRoom += (CleanRoom roomData) => OnEnterCleanRoom(roomData);
-            cleanRoomSensor.OnStayRoom += (CleanRoom roomData) => OnStayCleanRoom(roomData);
-            cleanRoomSensor.OnEixtRoom += (CleanRoom roomData) => OnExitCleanRoom(roomData);
+            timeRemaining = stageTimeLimit; //스테이지 시간 제한 초기화
 
-            map = GameObject.Find("Map");
-            for (int i = 0; i < map.GetComponentsInChildren<Canvas>().Length; i++)
-            {
-                if(map.GetComponentsInChildren<Canvas>()[i].name == "MinimapCleanRoomIcon") 
-                {
-                    CleanRoomCount++;
-                }
-            }
+            //이벤트 등록
+            cleanRoomSensor.OnEnterRoom += OnEnterCleanRoom;
+            cleanRoomSensor.OnStayRoom += OnStayCleanRoom;
+            cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
+
+            map = GameObject.Find(mapObjectName);
+            CountCleanRooms();
         }
 
         private void Update()
@@ -78,22 +72,25 @@ namespace KGY
             }
         }
 
+        
+        
+        #region Room Events
         public void OnEnterCleanRoom(CleanRoom roomData)
         {
             if (roomData.IsComplete) return;
 
             IsGaugeBarShow = true;
             cleanRoomText.text = roomData.dirtyRoomName;
-            cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
+            UpdateGaugeValue(roomData);
         }
 
         public void OnStayCleanRoom(CleanRoom roomData)
         {
             if (roomData.IsComplete) return;
 
-            cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
+            UpdateGaugeValue(roomData);
 
-            if (roomData.dirtyTotalValue == roomData.dirtyCleanValue)
+            if (roomData.dirtyTotalValue >= roomData.dirtyCleanValue)
             {
                 roomData.IsComplete = true;
                 IsGaugeBarShow = false;
@@ -107,36 +104,73 @@ namespace KGY
             IsGaugeBarShow = false;
         }
 
+        //청소 게이지바 UI 업데이트
+        private void UpdateGaugeValue(CleanRoom roomData)
+        {
+            cleanRoomGauge.fillAmount = roomData.dirtyTotalValue == 0 ? 0 : roomData.dirtyCleanValue / roomData.dirtyTotalValue;
+        }
+        #endregion
+
+        #region UI Updates
+        //청소한 방 개수 업데이트
+        private void CountCleanRooms()
+        {
+            int count = 0;
+            foreach (var canvas in map.GetComponentsInChildren<Canvas>())
+            {
+                if (canvas.name == "MinimapCleanRoomIcon") count++;
+            }
+
+            completedRooms = count;
+        }
+
+        //남은 장소 UI 업데이트
+        private void UpdateCleanRoomText()
+        {
+            var textComponent = cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>();
+            if (completedRooms > 0)
+            {
+                cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", completedRooms);
+            }
+            else GameManager.Singleton.IsCleanComplete = true;
+        }
+
+        //남은 시간 UI 업데이트
+        private void UpdateTimerUI()
+        {
+            int minutes = Mathf.FloorToInt(timeRemaining / 60f);
+            int seconds = Mathf.FloorToInt(timeRemaining % 60f);
+            timeLimitUI.GetComponent<TextMeshProUGUI>().text = $"{minutes:0}:{seconds:00}";
+        }
+
         //청소 게이지바 UI 표시/숨김
         public void ShowCleanRoomGaugeBar(bool isShow)
         {
-            cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isShow", isShow);
+            Animator animator = cleanRoomGaugeBar.GetComponent<Animator>();
+            animator.SetBool("isShow", isShow);
             cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isHide", !isShow);
 
-            //게이지바 UI 표시
             if (isShow)
             {
-                cleanRoomGaugeBar.GetComponent<Animator>().SetTrigger("showTrigger");
-                cleanRoomGaugeBar.GetComponent<Animator>().ResetTrigger("hideTrigger");
+                animator.SetTrigger("showTrigger");
+                animator.ResetTrigger("hideTrigger");
             }
-
-            //게이지바 UI 숨김
-            else 
+            else
             {
-                cleanRoomGaugeBar.GetComponent<Animator>().ResetTrigger("showTrigger");
-                cleanRoomGaugeBar.GetComponent<Animator>().SetTrigger("hideTrigger");
+                animator.ResetTrigger("showTrigger");
+                animator.SetTrigger("hideTrigger");
             }
         }
 
         //스테이지 시작 UI 표시
-        public void StartStage() {
-            //스테이지 시작 UI 표시
+        public void StartStage()
+        {
             stageStart.SetTrigger("showTrigger");
-            StartCoroutine("StartStageHide");
+            StartCoroutine(HideStageStartSequence());
         }
 
-        //스테이지 시작 UI 숨김
-        IEnumerator StartStageHide()
+        //시간, 맵, 장소 UI  표시
+        IEnumerator HideStageStartSequence()
         {
             yield return new WaitForSeconds(1f);
             stageStart.SetTrigger("hideTrigger");
@@ -144,40 +178,29 @@ namespace KGY
             //남은 시간 UI 표시
             timeLimitUI.SetTrigger("showTrigger");
 
-            yield return new WaitForSeconds(0.3f);
-
             //미니맵 UI 표시
+            yield return new WaitForSeconds(0.3f);
             miniMapUI.SetTrigger("showTrigger");
 
             //남은 장소 UI 표시
             cleanRoomUI.gameObject.SetActive(true);
-
-            yield return new WaitForSeconds(0.5f);
-            stageStart.gameObject.SetActive(false);
         }
 
-        //남은 시간 UI 업데이트
-        public void UpdateTimerUI()
+        //타이머 종료 (게임 오버)
+        public void TimerEnd()
         {
-            int minutes = Mathf.FloorToInt(timeRemaining / 60f);
-            int seconds = Mathf.FloorToInt(timeRemaining % 60f);
-            string timerText = string.Format("{0:0}:{1:00}", minutes, seconds);
-            timeLimitUI.GetComponent<TextMeshProUGUI>().text = timerText;
-        }
-
-        //타미어 종료
-        public void TimerEnd() {
-            //타이머 종료
             Debug.Log("게임 오버");
         }
 
         //청소 완료!
-        public void CleanComplete() {
+        public void CleanComplete()
+        {
             cleanRoomUI.SetTrigger("changeValue");
 
-            MinimapIndicator minimapIndicator = miniMapUI.GetComponent<MinimapIndicator>();
-            minimapIndicator.exitIcon.gameObject.SetActive(true);
-            minimapIndicator.exitTransform.gameObject.SetActive(true);
+            var minimap = miniMapUI.GetComponent<MinimapIndicator>();
+            minimap.exitIcon.gameObject.SetActive(true);
+            minimap.exitTransform.gameObject.SetActive(true);
         }
+        #endregion
     }
 }
