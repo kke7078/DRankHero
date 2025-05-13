@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 
 namespace KGY
 {
@@ -14,17 +15,21 @@ namespace KGY
                 isComplete = value;
                 if (isComplete) {
                     //게임HUD의 청소한 방 개수 감소
-                    GameManager.Singleton.gameHUD.CleanRoomCount--;
+                    GameManager.Singleton.gameHUD.CountDirtyRooms--;
 
                     //미니맵 아이콘 비활성화
                     minimapIcon.gameObject.SetActive(false);
-
-                    //청소 완료된 방의 프로젝터 삭제
-                    Destroy(projectors);
                 }
             }
         }
         private bool isComplete;
+
+        public float ColliderCount
+        {
+            get { return colliderCount; }
+            set { colliderCount = value; }
+        }
+        [SerializeField] private float colliderCount;
 
         public string dirtyRoomName;
         public float dirtyTotalValue;

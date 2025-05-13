@@ -23,27 +23,20 @@ namespace KGY
 
         private string mapObjectName = "Map";
         private float stageTimeLimit = 300f; //스테이지 시간 제한 (5분)
-        private float completedRooms = 0;   //청소한 방의 개수
-        private float timeRemaining; //남은 시간
-        private bool isGaugeBarShow;
+        private float countDirtyRooms;      //청소해야하는 방의 개수
+        private float timeRemaining;        //남은 시간
         private GameObject map;
 
-        public float CleanRoomCount {
-            get { return completedRooms; }
-            set {
-                completedRooms = value;
-                UpdateCleanRoomText();
-            }
-        }
-        public bool IsGaugeBarShow
+        public float CountDirtyRooms
         {
-            get { return isGaugeBarShow; }
+            get { return countDirtyRooms; }
             set
             {
-                isGaugeBarShow = value;
-                ShowCleanRoomGaugeBar(isGaugeBarShow);
+                countDirtyRooms = value;
+                UpdatecompletedRoomsText();
             }
         }
+
 
         private void Start()
         {
@@ -55,7 +48,7 @@ namespace KGY
             cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
 
             map = GameObject.Find(mapObjectName);
-            CountCleanRooms();
+            SetDirtyRooms();
         }
 
         private void Update()
@@ -71,7 +64,6 @@ namespace KGY
                 else TimerEnd();
             }
         }
-
         
         
         #region Room Events
@@ -79,7 +71,9 @@ namespace KGY
         {
             if (roomData.IsComplete) return;
 
-            IsGaugeBarShow = true;
+            roomData.ColliderCount++;
+            ShowCleanRoomGaugeBar(roomData.ColliderCount);
+
             cleanRoomText.text = roomData.dirtyRoomName;
             UpdateGaugeValue(roomData);
         }
@@ -90,10 +84,11 @@ namespace KGY
 
             UpdateGaugeValue(roomData);
 
-            if (roomData.dirtyTotalValue >= roomData.dirtyCleanValue)
+            if (roomData.dirtyCleanValue >= roomData.dirtyTotalValue)
             {
                 roomData.IsComplete = true;
-                IsGaugeBarShow = false;
+                roomData.ColliderCount = 0;
+                ShowCleanRoomGaugeBar(roomData.ColliderCount);
             }
         }
 
@@ -101,36 +96,37 @@ namespace KGY
         {
             if (roomData.IsComplete) return;
 
-            IsGaugeBarShow = false;
+            roomData.ColliderCount--;
+            ShowCleanRoomGaugeBar(roomData.ColliderCount);
         }
 
         //청소 게이지바 UI 업데이트
         private void UpdateGaugeValue(CleanRoom roomData)
         {
-            cleanRoomGauge.fillAmount = roomData.dirtyTotalValue == 0 ? 0 : roomData.dirtyCleanValue / roomData.dirtyTotalValue;
+            cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
         }
         #endregion
 
         #region UI Updates
-        //청소한 방 개수 업데이트
-        private void CountCleanRooms()
+        //청소해야하는 방 개수 업데이트
+        private void SetDirtyRooms()
         {
             int count = 0;
             foreach (var canvas in map.GetComponentsInChildren<Canvas>())
             {
-                if (canvas.name == "MinimapCleanRoomIcon") count++;
+                if (canvas.name == "MinimapDirtyRoomIcon") count++;
             }
 
-            completedRooms = count;
+            CountDirtyRooms = count;
         }
 
         //남은 장소 UI 업데이트
-        private void UpdateCleanRoomText()
+        private void UpdatecompletedRoomsText()
         {
             var textComponent = cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>();
-            if (completedRooms > 0)
+            if (CountDirtyRooms > 0)
             {
-                cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", completedRooms);
+                cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", CountDirtyRooms);
             }
             else GameManager.Singleton.IsCleanComplete = true;
         }
@@ -144,11 +140,15 @@ namespace KGY
         }
 
         //청소 게이지바 UI 표시/숨김
-        public void ShowCleanRoomGaugeBar(bool isShow)
+        public void ShowCleanRoomGaugeBar(float colliderCount)
         {
+            bool isShow;
+            if (colliderCount != 0) isShow = true;
+            else isShow = false;
+            
             Animator animator = cleanRoomGaugeBar.GetComponent<Animator>();
             animator.SetBool("isShow", isShow);
-            cleanRoomGaugeBar.GetComponent<Animator>().SetBool("isHide", !isShow);
+            animator.SetBool("isHide", !isShow);
 
             if (isShow)
             {
