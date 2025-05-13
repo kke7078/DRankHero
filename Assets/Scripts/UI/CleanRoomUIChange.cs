@@ -9,13 +9,14 @@ namespace KGY
 {
     public class CleanRoomUIChange : MonoBehaviour
     {
-        public Sprite exitImage;
+        public Sprite spriteImage;
         public Image icon;
         public TextMeshProUGUI text;
 
         public void ChangeUI(string changedText) {
-            icon.sprite = exitImage;
+            if (spriteImage != null) icon.sprite = spriteImage;
             text.text = changedText;
+
             LayoutRebuilder.ForceRebuildLayoutImmediate(text.GetComponent<RectTransform>());
         }
     }

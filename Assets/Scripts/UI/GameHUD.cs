@@ -72,7 +72,7 @@ namespace KGY
             if (roomData.IsComplete) return;
 
             roomData.ColliderCount++;
-            ShowCleanRoomGaugeBar(roomData.ColliderCount);
+            ShowCleanRoomGaugeBar(roomData);
 
             cleanRoomText.text = roomData.dirtyRoomName;
             UpdateGaugeValue(roomData);
@@ -87,8 +87,9 @@ namespace KGY
             if (roomData.dirtyCleanValue >= roomData.dirtyTotalValue)
             {
                 roomData.IsComplete = true;
+
                 roomData.ColliderCount = 0;
-                ShowCleanRoomGaugeBar(roomData.ColliderCount);
+                ShowCleanRoomGaugeBar(roomData);
             }
         }
 
@@ -97,7 +98,7 @@ namespace KGY
             if (roomData.IsComplete) return;
 
             roomData.ColliderCount--;
-            ShowCleanRoomGaugeBar(roomData.ColliderCount);
+            ShowCleanRoomGaugeBar(roomData);
         }
 
         //청소 게이지바 UI 업데이트
@@ -140,12 +141,29 @@ namespace KGY
         }
 
         //청소 게이지바 UI 표시/숨김
-        public void ShowCleanRoomGaugeBar(float colliderCount)
+        private void ShowCleanRoomGaugeBar(CleanRoom roomData)
         {
             bool isShow;
-            if (colliderCount != 0) isShow = true;
+            if (roomData.ColliderCount != 0 && !roomData.IsComplete) isShow = true;
             else isShow = false;
-            
+
+            //현재 룸 청소 완료
+            if (roomData.IsComplete)
+            {
+                cleanRoomText.GetComponent<Animator>().SetTrigger("changeValue");
+                StartCoroutine(DelayGaugeAnimation());
+            }
+            else ApplyGaugeAnimation(isShow);
+        }
+
+        private IEnumerator DelayGaugeAnimation()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ApplyGaugeAnimation(false);
+        }
+
+        private void ApplyGaugeAnimation(bool isShow)
+        {
             Animator animator = cleanRoomGaugeBar.GetComponent<Animator>();
             animator.SetBool("isShow", isShow);
             animator.SetBool("isHide", !isShow);
@@ -187,7 +205,7 @@ namespace KGY
         }
 
         //타이머 종료 (게임 오버)
-        public void TimerEnd()
+        private void TimerEnd()
         {
             Debug.Log("게임 오버");
         }

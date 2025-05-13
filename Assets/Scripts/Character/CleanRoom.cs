@@ -29,7 +29,7 @@ namespace KGY
             get { return colliderCount; }
             set { colliderCount = value; }
         }
-        [SerializeField] private float colliderCount;
+        private float colliderCount;
 
         public string dirtyRoomName;
         public float dirtyTotalValue;
