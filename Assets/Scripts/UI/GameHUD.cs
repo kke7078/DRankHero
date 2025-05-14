@@ -47,7 +47,6 @@ namespace KGY
             cleanRoomSensor.OnStayRoom += OnStayCleanRoom;
             cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
 
-            map = GameObject.Find(mapObjectName);
             SetDirtyRooms();
         }
 
@@ -112,6 +111,8 @@ namespace KGY
         //청소해야하는 방 개수 업데이트
         private void SetDirtyRooms()
         {
+            map = GameObject.Find(mapObjectName);
+
             int count = 0;
             foreach (var canvas in map.GetComponentsInChildren<Canvas>())
             {

@@ -8,7 +8,7 @@ namespace KGY
     public class MinimapCamera : MonoBehaviour
     {
         public Transform player;
-        public float followHeight = 18.0f;
+        public float followHeight = 0f;
 
         private void Update()
         {

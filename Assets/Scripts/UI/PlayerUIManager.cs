@@ -27,7 +27,7 @@ namespace KGY
         {
             //플레이어 캐릭터를 따라다니도록 설정
             Vector3 guideFollowTargetPoint = PlayerCharacter.instance.transform.position;
-            if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") guideFollowTargetPoint.y = 5f;
+            if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") guideFollowTargetPoint.y = 50f;
             else guideFollowTargetPoint.y = 0.01f;
 
             transform.position = guideFollowTargetPoint;
