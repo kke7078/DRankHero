@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace KGY
@@ -11,52 +12,45 @@ namespace KGY
     public class CharacterBase : MonoBehaviour
     {
         public Vector2 Direction { get; set; }  //이동 방향
-        private Vector2 direction;
-        public InteractionSensor interactionSensor;
-        public bool isMoving;
 
-        public string characterName; //캐릭터 이름
-        public Sprite[] characterPortraits; //Dialogue UI에 사용될 캐릭터 초상화
+        public bool IsMoving { get; set; } //캐릭터 이동 가능 여부
 
-        public List<IInteractable> currentInteractionItems = new List<IInteractable>();
-        public IInteractable closestInteractable;
+        //Dialogue UI에 사용될  캐릭터 이름
+        public string CharacterName => characterName;
+        [SerializeField] private string characterName;
 
-        protected float targetRotation;
-        protected float rotationVelocity;
+        //Dialogue UI에 사용될 캐릭터 초상화
+        public IReadOnlyList<Sprite> CharacterPortraits => characterPortraits;
+        [SerializeField] private Sprite[] characterPortraits; 
+
         protected Animator animator;
 
-        private float baseSpeed;    //기본 이동 속도
+        private float targetRotation;
+        private float rotationVelocity;
+        private float baseSpeed;
         private UnityEngine.CharacterController unityCharacterController;
-
 
         protected virtual void Start()
         {
-            baseSpeed = 5.0f;   //기본 이동 속도 설정
-
+            SetSpeed(5.0f);   //기본 이동 속도 설정
             animator = GetComponent<Animator>();
-
-            //유니티엔진 캐릭터컨트롤러 선언
-            unityCharacterController = GetComponent<UnityEngine.CharacterController>();
-
-            //상호작용 센서 컴포넌트 선언
-            interactionSensor.OnDetected += OnDetectedInteraction;
-            interactionSensor.OnLostSignal += OnLostSignalInteraction;
+            unityCharacterController = GetComponent<UnityEngine.CharacterController>(); //유니티엔진 캐릭터컨트롤러 선언
         }
 
-        public float GetSpeed()    //이동 속도 반환 메서드
+        public float GetSpeed()
         {
             return baseSpeed;
         }
 
-        public void SetSpeed(float newSpeed)    //이동 속도 설정 메서드
+        public void SetSpeed(float newSpeed)
         {
             baseSpeed = newSpeed;
         }
 
         //캐릭터 이동 메서드
-        public void Move(Vector2 direction, float speed)
+        public virtual void Move(Vector2 direction, float speed)
         {
-            if (!isMoving) return;
+            if (IsMoving) return;
 
             float magnitude = direction.magnitude;
             if (magnitude <= 0.1f) return;
@@ -69,63 +63,6 @@ namespace KGY
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
 
             unityCharacterController.Move(targetDirection * speed * Time.deltaTime);
-
-            FindClosestinteractable();
-        }
-
-        public void OnDetectedInteraction(IInteractable interactable) {
-            if (interactable.IsAutoInteract) interactable.Interact(this);
-            else currentInteractionItems.Add(interactable);
-        }
-
-        public void OnLostSignalInteraction(IInteractable interactable)
-        {
-            currentInteractionItems.Remove(interactable);
-        }
-
-        //캐릭터와 가장 가까운 상호작용 오브젝트 찾기
-        public void FindClosestinteractable() {
-            if (currentInteractionItems.Count == 0)
-            {
-                closestInteractable = null; //가장 가까운 상호작용 오브젝트가 없을 경우 null로 설정
-                return;
-            }
-
-            IInteractable closest = null;
-            float closestDistance = float.MaxValue;
-
-            foreach (IInteractable interactable in currentInteractionItems)
-            {
-                float distance = Vector3.Distance(transform.position, interactable.GetTransform().position);
-                if (distance < closestDistance)
-                {
-                    closest = interactable;
-                    closestDistance = distance;
-                }
-            }
-
-            closestInteractable = closest;
-        }
-
-        protected void OnAnimatorIK(int layerIndex)
-        {
-            if (animator == null) return;
-
-            AdjustFootPosition(AvatarIKGoal.LeftFoot);
-            AdjustFootPosition(AvatarIKGoal.RightFoot);
-        }
-
-        private void AdjustFootPosition(AvatarIKGoal foot)
-        {
-            RaycastHit hit;
-            Vector3 footPosition = animator.GetIKPosition(foot);
-            Vector3 rayOrigin = footPosition + Vector3.up * 0.5f;
-
-            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 1f)) 
-            {
-                footPosition.y = hit.point.y + 0.5f;
-                animator.SetIKPosition(foot, footPosition);
-            }
         }
     }
 }
