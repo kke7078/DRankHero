@@ -44,7 +44,7 @@ namespace KGY
             {
                 foreach (var line in lines)
                 {
-                    if (line.characterName == ch.characterName)
+                    if (line.characterName == ch.CharacterName)
                     {
                         if(!character.Contains(ch)) character.Add(ch);
                     }

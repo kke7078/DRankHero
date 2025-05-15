@@ -21,33 +21,13 @@ namespace KGY
         public Animator cleanRoomUI;
         public DialogueUI dialogueUI;
 
-        private float stageTimeLimit = 300f; //스테이지 시간 제한 (5분)
-        private float timeRemaining;        //남은 시간
-
         private void Start()
         {
-            timeRemaining = stageTimeLimit; //스테이지 시간 제한 초기화
-
             //이벤트 등록
             cleanRoomSensor.OnEnterRoom += OnEnterCleanRoom;
             cleanRoomSensor.OnStayRoom += OnStayCleanRoom;
             cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
         }
-
-        private void Update()
-        {
-            //타이머 UI 업데이트
-            if (GameManager.Singleton.IsGameStarted)
-            {
-                if (timeRemaining > 0)
-                {
-                    timeRemaining -= Time.deltaTime;
-                    UpdateTimerUI();
-                }
-                else TimerEnd();
-            }
-        }
-        
         
         #region Room Events
         public void OnEnterCleanRoom(CleanRoom roomData)
@@ -106,7 +86,7 @@ namespace KGY
         }
 
         //남은 시간 UI 업데이트
-        private void UpdateTimerUI()
+        public void UpdateTimerUI(float timeRemaining)
         {
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
             int seconds = Mathf.FloorToInt(timeRemaining % 60f);

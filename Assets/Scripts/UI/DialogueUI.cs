@@ -83,9 +83,9 @@ namespace KGY
             currentLine = line;
             foreach (var ch in dialogueData.character)
             {
-                if (ch.characterName == line.characterName)
+                if (ch.CharacterName == line.characterName)
                 {
-                    speakerImage.sprite = ch.characterPortraits[(int)line.faceType];
+                    speakerImage.sprite = ch.CharacterPortraits[(int)line.faceType];
                     speakerName.text = line.characterName;
                     break;
                 }

@@ -4,11 +4,37 @@ using UnityEngine;
 
 namespace KGY
 {
+    [System.Serializable]
+    public class DirtyObjInteract
+    {
+        public Sprite interactIcon;
+        public string interactKey;
+        public string interactMsg;
+
+        public DirtyObjInteract(Sprite icon, string key, string msg)
+        {
+            interactIcon = icon;
+            interactKey = key;
+            interactMsg = msg;
+        }
+    }
+
     //ProjectorCollider : 프로젝터의 충돌을 관리하는 클래스
     public class ProjectorCollider : MonoBehaviour
     {
+        public enum DirtyType
+        {
+            Water,
+            Vacuum,
+            Repair,
+        }
+        [SerializeField]private DirtyType dirtyType;
+
         private CleanRoom currentRoom;
         private Projector projector;
+
+        public List<DirtyObjInteract> DirtyObjInteract => dirtyInteract;
+        [SerializeField] private List<DirtyObjInteract> dirtyInteract;
 
         private void Start()
         {
@@ -18,22 +44,22 @@ namespace KGY
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag("WaterRipple")) {
+            if (other.CompareTag("WaterRipple"))
+            {
                 float currentFOV = 0;
 
-                if (projector.fieldOfView > 10) projector.fieldOfView -= 7f * Time.deltaTime;
-                else
+                // 물줄기 충돌 시 프로젝터의 Field of View를 줄여줌
+                projector.fieldOfView = Mathf.Max(projector.fieldOfView - 7f * Time.deltaTime, 0.001f);
+                if (projector.fieldOfView <= 0.001f) projector.gameObject.SetActive(false);
+
+                var projectors = currentRoom.GetComponentsInChildren<Projector>();
+                // 프로젝터의 Field of View를 모두 더하여 청소된 정도를 계산
+                for (int i = 0; i < projectors.Length; i++)
                 {
-                    projector.fieldOfView = 0.001f;
-                    projector.gameObject.SetActive(false);
+                    currentFOV += projectors[i].fieldOfView;
                 }
 
-                for (int i = 0; i < currentRoom.GetComponentsInChildren<Projector>().Length; i++)
-                {
-                    currentFOV += currentRoom.GetComponentsInChildren<Projector>()[i].fieldOfView;
-                }
-
-                currentRoom.dirtyCleanValue = currentRoom.dirtyTotalValue - currentFOV;
+                currentRoom.DirtyCleanValue = currentRoom.DirtyTotalValue - currentFOV;
             }
         }
     }

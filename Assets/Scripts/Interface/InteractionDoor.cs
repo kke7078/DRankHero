@@ -4,15 +4,16 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KGY
 {
     public class InteractionDoor : MonoBehaviour, IInteractable
     {
-        public bool isAutoInteract;
+        public List<InteractionInfo> InteractionInfos => interactions;
+        [SerializeField] private List<InteractionInfo> interactions;
+
         public bool isOpened;
-        public bool isSlidingDoor;
-        public string interactionMsg;
 
         public Transform mainDoor;
         public Transform subDoor;
@@ -22,7 +23,7 @@ namespace KGY
             StartPointDoor,
             StageStartDoor,
         }
-        public DoorType currentDoor;
+        [SerializeField] private DoorType currentDoor;
 
         public enum DoorOpenType
         { 
@@ -30,22 +31,29 @@ namespace KGY
             Rotating,
             Overhead
         }
-        public DoorOpenType doorOpenType;
+        private DoorOpenType doorOpenType;
 
-        private float openSpeed = 1f;
+        private const float openSpeed = 1f;
         private float doorWidth;
         private GameObject moveKey;
         private ParticleSystem doorParticleSystem;
-
-        public bool IsAutoInteract => isAutoInteract;
-        public string InteractionMsg => interactionMsg;
-
         private void Start()
         {
-            doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
             moveKey = GameObject.Find("MoveKey");
+
+            doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
+
             doorParticleSystem = GetComponentInChildren<ParticleSystem>();
             if(doorParticleSystem != null) doorParticleSystem.gameObject.SetActive(false);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+
+            if (other.TryGetComponent(out PlayerCharacter player))
+            {
+                DoorTriggerEvent();
+            }
         }
 
         public void Interact(CharacterBase character)
@@ -62,17 +70,7 @@ namespace KGY
                 isOpened = !isOpened;
             }
 
-            switch (currentDoor) {
-                case DoorType.StartPointDoor:
-                    GetComponent<Collider>().isTrigger = true;
-                    break;
-                case DoorType.StageStartDoor:
-                    doorParticleSystem.gameObject.SetActive(true);
-                    GameManager.Singleton.IsGameStarted = true;
-                    break;
-                case DoorType.DefaultDoor:
-                    break;
-            }
+            HandleDoorAction();
         }
 
         IEnumerator MoveSlidingDoor(Transform door, float direction)
@@ -89,84 +87,9 @@ namespace KGY
 
             door.localPosition = endPosition;
 
-            isOpened = true;
             if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
         }
 
-
-        IEnumerator MoveDoor(string door) {
-            float openDoorTime = 0f;
-            if (isSlidingDoor)
-            {
-                if (door == "mainDoor")
-                {
-                    Vector3 doorInitPosition = mainDoor.localPosition;
-                    Vector3 doorOpenPosition = new Vector3(doorInitPosition.x - doorWidth, doorInitPosition.y, doorInitPosition.z);
-
-                    while (openDoorTime < openSpeed)
-                    {
-                        mainDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
-                        openDoorTime += Time.deltaTime * 3f;
-
-                        yield return null;
-                    }
-
-                    mainDoor.localPosition = doorOpenPosition;
-                    
-                    isOpened = true;
-                    if(currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
-                }
-                else if (door == "subDoor")
-                {
-                    Vector3 doorInitPosition = subDoor.localPosition;
-                    Vector3 doorOpenPosition = new Vector3(doorInitPosition.x + doorWidth, doorInitPosition.y, doorInitPosition.z);
-
-                    while (openDoorTime < openSpeed)
-                    {
-                        subDoor.localPosition = Vector3.Lerp(doorInitPosition, doorOpenPosition, openDoorTime / openSpeed);
-                        openDoorTime += Time.deltaTime * 3f;
-
-                        yield return null;
-                    }
-
-                    subDoor.localPosition = doorOpenPosition;
-                }
-            }
-            else {
-                if (door == "mainDoor") {
-                    Quaternion doorInitRoction = mainDoor.localRotation;
-                    Vector3 doorOpenRoction = new Vector3(doorInitRoction.x, doorInitRoction.y + -90f, doorInitRoction.z);
-
-                    while (openDoorTime < openSpeed) 
-                    { 
-                        mainDoor.localRotation = Quaternion.Lerp(doorInitRoction, Quaternion.Euler(doorOpenRoction), openDoorTime / openSpeed);
-                        openDoorTime += Time.deltaTime * 3f;
-
-                        yield return null;
-                    }
-
-                    mainDoor.localRotation = Quaternion.Euler(doorOpenRoction);
-
-                    isOpened = true;
-                    if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
-                }
-                else
-                {
-                    Quaternion doorInitRoction = subDoor.localRotation;
-                    Vector3 doorOpenRoction = new Vector3(doorInitRoction.x, doorInitRoction.y + 90f, doorInitRoction.z);
-
-                    while (openDoorTime < openSpeed)
-                    {
-                        subDoor.localRotation = Quaternion.Lerp(doorInitRoction, Quaternion.Euler(doorOpenRoction), openDoorTime / openSpeed);
-                        openDoorTime += Time.deltaTime * 3f;
-
-                        yield return null;
-                    }
-
-                    subDoor.localRotation = Quaternion.Euler(doorOpenRoction);
-                }
-            }
-        }
 
         //상호작용 가능한 오브젝트의 위치 반환 -> 상호작용 UI 표시를 위해 사용
         public Transform GetTransform()
@@ -174,28 +97,33 @@ namespace KGY
             return transform;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void HandleDoorAction()
         {
-
-            if (other.TryGetComponent(out PlayerCharacter player)) 
+            switch (currentDoor)
             {
-                DoorTriggerEvent();
+                case DoorType.StartPointDoor:
+                    GetComponent<Collider>().isTrigger = true;
+                    break;
+                case DoorType.StageStartDoor:
+                    doorParticleSystem.gameObject.SetActive(true);
+                    GameManager.Singleton.IsGameStarted = true;
+                    break;
+                case DoorType.DefaultDoor:
+                    break;
             }
         }
 
         private void DoorTriggerEvent()
         {
-            switch (gameObject.name) 
+            if (gameObject.name == "StartPointDoor")
             {
-                case "StartPointDoor":
-                    if(moveKey.activeSelf) moveKey.SetActive(false);
-                    if (GameManager.Singleton.IsCleanComplete)
-                    { 
-                        //청소 완료 상태일 경우 레벨 클리어
+                if (moveKey.activeSelf) moveKey.SetActive(false);
 
-                    }
-
-                    break;
+                if (GameManager.Singleton.IsCleanComplete)
+                {
+                    //청소 완료 상태일 경우 레벨 클리어
+                    GameManager.Singleton.GameClear();
+                }
             }
         }
     }

@@ -53,13 +53,29 @@ namespace KGY
 
         [SerializeField] private InteractionDoor startPointDoor;
         [SerializeField] private GameHUD gameHUD;
-        
+
+        [SerializeField] private float stageTimeLimit; //스테이지 시간 제한
+        private float timeRemaining;                   //남은 시간
+
 
         public void Start()
         {
             Invoke("GameStart", 0.1f);
 
             InitializeDirtyRoomCount();
+        }
+
+        private void Update()
+        {
+            //타이머 UI 업데이트
+            if (!isGameStarted) return;
+
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= Time.deltaTime;
+                gameHUD.UpdateTimerUI(timeRemaining);
+            }
+            else GameOver();
         }
 
         #region 게임의 전반적인 상태 담당 메서드

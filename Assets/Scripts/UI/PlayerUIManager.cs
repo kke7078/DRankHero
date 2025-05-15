@@ -9,7 +9,7 @@ namespace KGY
     {
         private void Update()
         {
-            if (!PlayerCharacter.instance.isMoving) return;
+            //if (!PlayerCharacter.instance.IsMoving) return;
             if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") return;
 
             //마우스 위치 방향으로 회전

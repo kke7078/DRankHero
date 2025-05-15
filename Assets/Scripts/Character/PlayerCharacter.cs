@@ -64,8 +64,6 @@ namespace KGY
 
         private void Update()
         {
-            if (!IsMoving) return;
-
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
             animator.SetFloat("isMove", Direction.magnitude);
 
@@ -93,7 +91,7 @@ namespace KGY
         //상호작용 센서에 의해 상호작용 오브젝트가 감지되었을 때 호출되는 메서드
         private void OnDetectedInteraction(IInteractable interactable)
         {
-            if (interactable.IsAutoInteract) interactable.Interact(this);
+            if(interactable.InteractionInfos.Count == 0) interactable.Interact(this); //상호작용 정보가 없을 경우 바로 상호작용 실행
             else currentInteractionItems.Add(interactable);
         }
 
@@ -130,8 +128,6 @@ namespace KGY
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
         {
-            if (!IsMoving) return;
-
             isCleaning = isClean;
 
             if (isClean)
@@ -267,8 +263,6 @@ namespace KGY
                 Clean(moving);
                 animator.SetFloat("isMove", 0);
             }
-
-            IsMoving = moving;
         }
 
         //플레이어 상호작용 동작 메서드

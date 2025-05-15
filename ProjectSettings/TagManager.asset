@@ -9,6 +9,8 @@ TagManager:
   - NPC
   - WaterRipple
   - MinimapCamera
+  - DirtyObj
+  - MinimapDirtyRoomIcon
   layers:
   - Default
   - TransparentFX
@@ -29,7 +31,7 @@ TagManager:
   - NPC
   - 
   - 
-  - 
+  - DirtyObj
   - CleanRoom
   - 
   - 

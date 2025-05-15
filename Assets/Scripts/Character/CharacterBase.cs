@@ -13,8 +13,6 @@ namespace KGY
     {
         public Vector2 Direction { get; set; }  //이동 방향
 
-        public bool IsMoving { get; set; } //캐릭터 이동 가능 여부
-
         //Dialogue UI에 사용될  캐릭터 이름
         public string CharacterName => characterName;
         [SerializeField] private string characterName;
@@ -50,8 +48,6 @@ namespace KGY
         //캐릭터 이동 메서드
         public virtual void Move(Vector2 direction, float speed)
         {
-            if (IsMoving) return;
-
             float magnitude = direction.magnitude;
             if (magnitude <= 0.1f) return;
 
