@@ -29,17 +29,73 @@ namespace KGY
         }
         private bool isCleanComplete;
 
-        public InteractionDoor startPointDoor;
-        public GameHUD gameHUD;
+        //게임 멈춤 유무
+        public bool IsPause
+        { 
+            get => isPause;
+            set {
+                if (isPause == value) return;
+                IsPause = value;
+                TogglePause(IsPause);
+            }
+        }
+        private bool isPause;
+
+        //레벨 별 청소해야하는 방의 개수
+        public int DirtyRoomCount {
+            get => dirtyRoomCount;
+            set {
+                dirtyRoomCount = value;
+                gameHUD.UpdatecompletedRoomsText();
+            }
+        }
+        private int dirtyRoomCount;
+
+        [SerializeField] private InteractionDoor startPointDoor;
+        [SerializeField] private GameHUD gameHUD;
+        
 
         public void Start()
         {
             Invoke("GameStart", 0.1f);
+
+            InitializeDirtyRoomCount();
         }
 
-        public void GameStart() {
+        #region 게임의 전반적인 상태 담당 메서드
+        private void GameStart() {
             startPointDoor.Interact(PlayerCharacter.instance);
-            startPointDoor.isOpened = true;
         }
+
+        public void GameClear()
+        {
+            Debug.Log("GameClear");
+        }
+
+        private void GameOver()
+        { 
+            
+        }
+
+        private void TogglePause(bool isPause)
+        {
+            if (isPause)
+            { 
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+        }
+        #endregion
+
+        #region 게임의 레벨 담당 메서드
+        private void InitializeDirtyRoomCount()
+        {
+            var dirtyRooms = GameObject.FindGameObjectsWithTag("MinimapDirtyRoomIcon");
+            DirtyRoomCount = dirtyRooms.Length;
+        }
+        #endregion
     }
 }

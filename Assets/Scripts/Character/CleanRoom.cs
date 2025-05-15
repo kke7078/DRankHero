@@ -15,33 +15,34 @@ namespace KGY
                 isComplete = value;
                 if (isComplete) {
                     //게임HUD의 청소한 방 개수 감소
-                    GameManager.Singleton.gameHUD.CountDirtyRooms--;
+                    GameManager.Singleton.DirtyRoomCount--;
 
                     //미니맵 아이콘 비활성화
                     minimapIcon.gameObject.SetActive(false);
+
+                    //청소 완료 시 청소인터렉션 UI 비활성화
+                    PlayerCharacter.instance.InteractionSensor.IsShowCleanInteractMsg = false;
                 }
             }
         }
         private bool isComplete;
 
-        public float ColliderCount
-        {
-            get { return colliderCount; }
-            set { colliderCount = value; }
-        }
-        private float colliderCount;
+        public float ColliderCount { get; set; }
 
-        public string dirtyRoomName;
-        public float dirtyTotalValue;
-        public float dirtyCleanValue;
-        public Canvas minimapIcon;
-        public GameObject projectors;
+        public string DirtyRoomName => dirtyRoomName;
+        [SerializeField] private string dirtyRoomName;
+
+        public float DirtyTotalValue { get; private set; } = 0f;
+        public float DirtyCleanValue { get; set; } = 0f;
+
+        [SerializeField] private Canvas minimapIcon;
 
         private void Start()
         {
-            for (int i = 0; i < GetComponentsInChildren<Projector>().Length; i++)
+            var projectors = GetComponentsInChildren<Projector>();
+            for (int i = 0; i < projectors.Length; i++)
             {
-                dirtyTotalValue += GetComponentsInChildren<Projector>()[i].fieldOfView;
+                DirtyTotalValue += projectors[i].fieldOfView;
             }
         }
     }

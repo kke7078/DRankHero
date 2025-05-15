@@ -21,22 +21,8 @@ namespace KGY
         public Animator cleanRoomUI;
         public DialogueUI dialogueUI;
 
-        private string mapObjectName = "Map";
         private float stageTimeLimit = 300f; //스테이지 시간 제한 (5분)
-        private float countDirtyRooms;      //청소해야하는 방의 개수
         private float timeRemaining;        //남은 시간
-        private GameObject map;
-
-        public float CountDirtyRooms
-        {
-            get { return countDirtyRooms; }
-            set
-            {
-                countDirtyRooms = value;
-                UpdatecompletedRoomsText();
-            }
-        }
-
 
         private void Start()
         {
@@ -46,8 +32,6 @@ namespace KGY
             cleanRoomSensor.OnEnterRoom += OnEnterCleanRoom;
             cleanRoomSensor.OnStayRoom += OnStayCleanRoom;
             cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
-
-            SetDirtyRooms();
         }
 
         private void Update()
@@ -73,7 +57,7 @@ namespace KGY
             roomData.ColliderCount++;
             ShowCleanRoomGaugeBar(roomData);
 
-            cleanRoomText.text = roomData.dirtyRoomName;
+            cleanRoomText.text = roomData.DirtyRoomName;
             UpdateGaugeValue(roomData);
         }
 
@@ -83,7 +67,7 @@ namespace KGY
 
             UpdateGaugeValue(roomData);
 
-            if (roomData.dirtyCleanValue >= roomData.dirtyTotalValue)
+            if (roomData.DirtyCleanValue >= roomData.DirtyTotalValue)
             {
                 roomData.IsComplete = true;
 
@@ -103,32 +87,20 @@ namespace KGY
         //청소 게이지바 UI 업데이트
         private void UpdateGaugeValue(CleanRoom roomData)
         {
-            cleanRoomGauge.fillAmount = roomData.dirtyCleanValue / roomData.dirtyTotalValue;
+            cleanRoomGauge.fillAmount = roomData.DirtyCleanValue / roomData.DirtyTotalValue;
         }
         #endregion
 
         #region UI Updates
-        //청소해야하는 방 개수 업데이트
-        private void SetDirtyRooms()
-        {
-            map = GameObject.Find(mapObjectName);
-
-            int count = 0;
-            foreach (var canvas in map.GetComponentsInChildren<Canvas>())
-            {
-                if (canvas.name == "MinimapDirtyRoomIcon") count++;
-            }
-
-            CountDirtyRooms = count;
-        }
-
         //남은 장소 UI 업데이트
-        private void UpdatecompletedRoomsText()
+        public void UpdatecompletedRoomsText()
         {
             var textComponent = cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>();
-            if (CountDirtyRooms > 0)
+            int dirtyRoomCount = GameManager.Singleton.DirtyRoomCount;
+
+            if (dirtyRoomCount > 0)
             {
-                cleanRoomUI.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("더러운  <b><size=150%>{0:0}</size></b>개의 장소를 치우세요.", CountDirtyRooms);
+                textComponent.text = $"더러운  <b><size=150%>{dirtyRoomCount}</size></b>개의 장소를 치우세요.";
             }
             else GameManager.Singleton.IsCleanComplete = true;
         }
