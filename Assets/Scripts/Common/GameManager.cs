@@ -40,6 +40,7 @@ namespace KGY
             }
         }
         private bool isPause;
+        public bool IsInDialogue { get; set; }
 
         //레벨 별 청소해야하는 방의 개수
         public int DirtyRoomCount {
@@ -53,8 +54,8 @@ namespace KGY
 
         [SerializeField] private InteractionDoor startPointDoor;
         [SerializeField] private GameHUD gameHUD;
-
         [SerializeField] private float stageTimeLimit; //스테이지 시간 제한
+
         private float timeRemaining;                   //남은 시간
 
 

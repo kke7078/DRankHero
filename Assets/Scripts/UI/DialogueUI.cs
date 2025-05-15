@@ -54,6 +54,8 @@ namespace KGY
                 DialogueSetActive(isShow);
                 
                 PlayerCharacter.instance.SetPlayerMovementState(false); //플레이어 동작 제어
+
+                GameManager.Singleton.IsInDialogue = true;
             }
 
             dialogueQueue = new Queue<DialogueLine>(dialogue.lines);
@@ -112,6 +114,7 @@ namespace KGY
         //대화 종료
         public void EndDialogue()
         {
+            GameManager.Singleton.IsInDialogue = false;
             isShow = false;
             isTyping = false;
             DialogueSetActive(false);
