@@ -14,18 +14,29 @@ namespace KGY
     public class PlayerCharacter : CharacterBase
     {
         public static PlayerCharacter instance;
-        public Transform backToolHolder;        //플레이어의 등에 위치한 청소도구 홀더
-        public Transform handToolHolder;        //플레이어의 손에 위치한 청소도구 홀더
-        public TwoBoneIKConstraint rightHandIK; //플레이어의 오른손 IK
-        public TwoBoneIKConstraint leftHandIK;  //플레이어의 왼손 IK
-        public InteractionUI interactionUI;
 
-        protected bool isCleaning = false;      //플레이어의 청소 유무
+        //상호작용 센서
+        public InteractionSensor InteractionSensor => interactionSensor;
+        [SerializeField] private InteractionSensor interactionSensor;
 
-        private bool isEquipping = false;           //플레이어의 장비 유무
+        //현재 상호작용 가능한 오브젝트 리스트
+        public List<IInteractable> CurrentInteractionItems => currentInteractionItems;
+        private List<IInteractable> currentInteractionItems = new List<IInteractable>();
+
+        //현재 가장 가까운 상호작용 아이템
+        public IInteractable ClosestInteractable { get; private set; }
+
+        [SerializeField] private Transform backToolHolder;         //등에 위치한 청소도구 홀더
+        [SerializeField] private Transform handToolHolder;         //손에 위치한 청소도구 홀더
+        [SerializeField] private TwoBoneIKConstraint rightHandIK;  //오른손 IK
+        [SerializeField] private TwoBoneIKConstraint leftHandIK;   //왼손 IK
+        [SerializeField] private InteractionUI interactionUI;      //상호작용 UI
+
+        private bool isCleaning = false;        //플레이어의 청소 유무
+        private bool isEquipping = false;       //플레이어의 장비 유무
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
         private CleanToolManager currentTool;   //현재 장착된 청소도구
-
+        
         public void OnEnable()
         {
             InputSystem.Singleton.onClean += Clean;
@@ -44,14 +55,16 @@ namespace KGY
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
 
-            SetSpeed(5.0f); //플레이어의 기본이동 속도 설정
+            //상호작용 센서 컴포넌트 선언
+            interactionSensor.OnDetected += OnDetectedInteraction;
+            interactionSensor.OnLostSignal += OnLostSignalInteraction;
 
-            interactionUI.HideUI(); //플레이어의 상호작용 UI 비활성화
+            //interactionUI.HideUI(); //플레이어의 상호작용 UI 비활성화
         }
 
-        protected void Update()
+        private void Update()
         {
-            if (!isMoving) return;
+            if (!IsMoving) return;
 
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
             animator.SetFloat("isMove", Direction.magnitude);
@@ -72,37 +85,63 @@ namespace KGY
             }
         }
 
-        public void OnDisabled()
+        private void OnDisabled()
         {
             InputSystem.Singleton.onClean -= Clean;
         }
 
-        public void SetPlayerMovementState(bool moving) {
-            if (!moving) {
-                Clean(moving);
-                animator.SetFloat("isMove", 0);
-            }
+        //상호작용 센서에 의해 상호작용 오브젝트가 감지되었을 때 호출되는 메서드
+        private void OnDetectedInteraction(IInteractable interactable)
+        {
+            if (interactable.IsAutoInteract) interactable.Interact(this);
+            else currentInteractionItems.Add(interactable);
+        }
 
-            isMoving = moving;
+        //상호작용 센서에 의해 상호작용 오브젝트의 신호가 사라졌을 때 호출되는 메서드
+        private void OnLostSignalInteraction(IInteractable interactable)
+        {
+            currentInteractionItems.Remove(interactable);
+        }
+
+        //캐릭터와 가장 가까운 상호작용 오브젝트 찾기
+        private void FindClosestinteractable()
+        {
+            //가장 가까운 상호작용 오브젝트 찾기
+            if (currentInteractionItems.Count > 0)
+            {
+                IInteractable closest = null;
+                float closestDistance = float.MaxValue;
+
+                foreach (IInteractable interactable in currentInteractionItems)
+                {
+                    float distance = Vector3.Distance(transform.position, interactable.GetTransform().position);
+                    if (distance < closestDistance)
+                    {
+                        closest = interactable;
+                        closestDistance = distance;
+                    }
+                }
+
+                ClosestInteractable = closest;
+            }
+            else ClosestInteractable = null;
         }
 
         //플레이어의 청소 유무에 따른 변화 체크
-        public void Clean(bool isClean)
+        private void Clean(bool isClean)
         {
-            if (!isMoving) return;
+            if (!IsMoving) return;
 
             isCleaning = isClean;
 
             if (isClean)
             {
                 SetSpeed(3.0f); //플레이어의 이동속도를 3.0f로 설정
-
                 Equip();
             }
             else
             {
                 SetSpeed(5.0f); //플레이어의 이동속도를 5.0f로 원복
-
                 UnEquip();
 
                 //Hand IK 초기화
@@ -110,7 +149,7 @@ namespace KGY
             }
         }
 
-        public void Equip() {
+        private void Equip() {
             if (isEquipping) return;
 
             isEquipping = true;
@@ -124,7 +163,7 @@ namespace KGY
             animator.SetTrigger("EquipTrigger");
         }
 
-        public void UnEquip() {
+        private void UnEquip() {
             isEquipping = false;
 
             //플레이어의 Equip 애니메이션 초기화
@@ -169,7 +208,7 @@ namespace KGY
         }
 
         //청소 도구 장착 및 해제
-        public void ToolEquip()
+        private void ToolEquip()
         {
             if (isCleaning)
             {
@@ -188,7 +227,7 @@ namespace KGY
         }
 
         //Hand IK 제어
-        public void HandIKControl()
+        private void HandIKControl()
         {
             if (isCleaning)
             {
@@ -201,9 +240,9 @@ namespace KGY
             }
             else
             {
-                rightHandIK.data.target = null;       //오른손 IK 타겟 설정
-                leftHandIK.data.target = null;        //왼손 IK 타겟 설정
-                rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
+                rightHandIK.data.target = null; //오른손 IK 타겟 초기화
+                leftHandIK.data.target = null;  //왼손 IK 타겟 초기화
+                rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 비활성화
 
                 currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
                 currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
@@ -212,14 +251,35 @@ namespace KGY
             rigBuilder.Build(); //RigBuilder 재구성
         }
 
-        public void Interact()
+        //캐릭터 이동 메서드
+        public override void Move(Vector2 direction, float speed)
         {
-            if (currentInteractionItems.Count <= 0) return;
+            base.Move(direction, speed);
 
-            closestInteractable.Interact(this);
-            currentInteractionItems.Remove(closestInteractable);
+            FindClosestinteractable();
+        }
+        
+        //플레이어의 움직임 상태 설정
+        public void SetPlayerMovementState(bool moving)
+        {
+            if (!moving)
+            {
+                Clean(moving);
+                animator.SetFloat("isMove", 0);
+            }
 
-            interactionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
+            IsMoving = moving;
+        }
+
+        //플레이어 상호작용 동작 메서드
+        private void Interact()
+        {
+            if (CurrentInteractionItems.Count <= 0) return;
+
+            ClosestInteractable.Interact(this);
+            CurrentInteractionItems.Remove(ClosestInteractable);
+
+            //interactionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
         }
     }
 }
