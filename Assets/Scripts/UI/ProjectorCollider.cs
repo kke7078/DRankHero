@@ -4,23 +4,8 @@ using UnityEngine;
 
 namespace KGY
 {
-    [System.Serializable]
-    public class DirtyObjInteract
-    {
-        public Sprite interactIcon;
-        public string interactKey;
-        public string interactMsg;
-
-        public DirtyObjInteract(Sprite icon, string key, string msg)
-        {
-            interactIcon = icon;
-            interactKey = key;
-            interactMsg = msg;
-        }
-    }
-
     //ProjectorCollider : 프로젝터의 충돌을 관리하는 클래스
-    public class ProjectorCollider : MonoBehaviour
+    public class ProjectorCollider : InteractionMsg
     {
         public enum DirtyType
         {
@@ -28,13 +13,10 @@ namespace KGY
             Vacuum,
             Repair,
         }
-        [SerializeField]private DirtyType dirtyType;
+        [SerializeField] private DirtyType dirtyType;
 
         private CleanRoom currentRoom;
         private Projector projector;
-
-        public List<DirtyObjInteract> DirtyObjInteract => dirtyInteract;
-        [SerializeField] private List<DirtyObjInteract> dirtyInteract;
 
         private void Start()
         {
