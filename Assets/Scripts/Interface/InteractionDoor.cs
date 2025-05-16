@@ -8,11 +8,8 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    public class InteractionDoor : MonoBehaviour, IInteractable
+    public class InteractionDoor : InteractionMsg, IInteractable
     {
-        public List<InteractionInfo> InteractionInfos => interactions;
-        [SerializeField] private List<InteractionInfo> interactions;
-
         public bool isOpened;
 
         public Transform mainDoor;
@@ -37,6 +34,7 @@ namespace KGY
         private float doorWidth;
         private GameObject moveKey;
         private ParticleSystem doorParticleSystem;
+
         private void Start()
         {
             moveKey = GameObject.Find("MoveKey");
@@ -56,7 +54,25 @@ namespace KGY
             }
         }
 
-        public void Interact(CharacterBase character)
+        IEnumerator MoveSlidingDoor(Transform door, float direction)
+        {
+            float time = 0f;
+            Vector3 startPosition = door.localPosition;
+            Vector3 endPosition = startPosition + new Vector3(direction * doorWidth, 0, 0);
+
+            while (time < openSpeed)
+            {
+                door.localPosition = Vector3.Lerp(startPosition, endPosition, time / openSpeed);
+                time += Time.deltaTime * 3f;
+                yield return null;
+            }
+
+            door.localPosition = endPosition;
+
+            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
+        }
+
+        public void Interact()
         {
             if (!isOpened) {
                 switch (doorOpenType)
@@ -72,24 +88,6 @@ namespace KGY
 
             HandleDoorAction();
         }
-
-        IEnumerator MoveSlidingDoor(Transform door, float direction)
-        {
-            float time = 0f;
-            Vector3 startPosition = door.localPosition;
-            Vector3 endPosition = startPosition + new Vector3(direction * doorWidth, 0, 0);
-
-            while (time < openSpeed) { 
-                door.localPosition = Vector3.Lerp(startPosition, endPosition, time / openSpeed);
-                time += Time.deltaTime * 3f;
-                yield return null;
-            }
-
-            door.localPosition = endPosition;
-
-            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
-        }
-
 
         //상호작용 가능한 오브젝트의 위치 반환 -> 상호작용 UI 표시를 위해 사용
         public Transform GetTransform()
