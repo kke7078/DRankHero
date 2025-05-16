@@ -7,9 +7,12 @@ namespace KGY
     //PlayerUIManager : 플레이어의 UI(DirectGuide, MinimapIcon 등)를 관리하는 클래스
     public class PlayerUIManager : MonoBehaviour
     {
+        [SerializeField] private PlayerCharacter player;
+
         private void Update()
         {
-            //if (!PlayerCharacter.instance.IsMoving) return;
+            if (GameManager.Singleton.IsInDialogue || GameManager.Singleton.IsPause) return;
+
             if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") return;
 
             //마우스 위치 방향으로 회전
@@ -26,7 +29,7 @@ namespace KGY
         private void LateUpdate()
         {
             //플레이어 캐릭터를 따라다니도록 설정
-            Vector3 guideFollowTargetPoint = PlayerCharacter.instance.transform.position;
+            Vector3 guideFollowTargetPoint = player.transform.position;
             if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") guideFollowTargetPoint.y = 50f;
             else guideFollowTargetPoint.y = 0.01f;
 
