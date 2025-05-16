@@ -81,7 +81,7 @@ namespace KGY
 
         #region 게임의 전반적인 상태 담당 메서드
         private void GameStart() {
-            startPointDoor.Interact(PlayerCharacter.instance);
+            startPointDoor.Interact();
         }
 
         public void GameClear()
