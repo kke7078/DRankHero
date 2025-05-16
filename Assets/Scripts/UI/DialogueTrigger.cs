@@ -22,7 +22,7 @@ namespace KGY
 
                 if (speechBubble != null) 
                 {
-                    dialogueUI.speechBubble = speechBubble; //대화 UI에 말풍선 애니메이션 설정
+                    dialogueUI.SpeechBubble = speechBubble; //대화 UI에 말풍선 애니메이션 설정
 
                     speechBubble.SetBool("isShow", true);
                     speechBubble.SetTrigger("showTrigger");

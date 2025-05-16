@@ -11,11 +11,11 @@ namespace KGY
     //DialogueUI 클래스 : 대화 UI를 나타내는 클래스
     public class DialogueUI : MonoBehaviour
     {
-        public Image speakerImage;
-        public TextMeshProUGUI speakerName;
-        public TextMeshProUGUI dialogueText;
-        public CinemachineVirtualCamera virtualCamera;
-        public Animator speechBubble; //대화 말풍선 애니메이션
+        [SerializeField] private PlayerCharacter player;
+        [SerializeField] private Image speakerImage;
+        [SerializeField] private TextMeshProUGUI speakerName;
+        [SerializeField] private TextMeshProUGUI dialogueText;
+        [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
         private float typingSpeed = 0.05f; //타이핑 속도
         private Animator animator; //애니메이션 컴포넌트
@@ -26,6 +26,8 @@ namespace KGY
         private bool isTyping = false; //타이핑 중인지 여부
         private bool isShow = false; //대화창이 보이는지 여부
         private CinemachineFramingTransposer framingTransposer;
+
+        public Animator SpeechBubble { get; set; } //대화 말풍선 애니메이션
 
         private void Start()
         {
@@ -52,8 +54,8 @@ namespace KGY
             {
                 isShow = true;
                 DialogueSetActive(isShow);
-                
-                PlayerCharacter.instance.SetPlayerMovementState(false); //플레이어 동작 제어
+
+                player.SetPlayerMovementState(false); //플레이어 동작 제어
 
                 GameManager.Singleton.IsInDialogue = true;
             }
@@ -120,16 +122,16 @@ namespace KGY
             DialogueSetActive(false);
 
             //말풍선 삭제
-            if (speechBubble != null)
+            if (SpeechBubble != null)
             {
-                speechBubble.SetBool("isShow", false);
-                speechBubble.ResetTrigger("showTrigger");
+                SpeechBubble.SetBool("isShow", false);
+                SpeechBubble.ResetTrigger("showTrigger");
 
-                speechBubble.SetBool("isHide", true);
-                speechBubble.SetTrigger("hideTrigger");
+                SpeechBubble.SetBool("isHide", true);
+                SpeechBubble.SetTrigger("hideTrigger");
             }
 
-            PlayerCharacter.instance.SetPlayerMovementState(true); //플레이어 이동 가능
+            player.SetPlayerMovementState(true); //플레이어 이동 가능
         }
 
         //대화창 활성화/비활성화
