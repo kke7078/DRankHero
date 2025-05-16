@@ -8,12 +8,9 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    public class InteractionDoor : InteractionMsg, IInteractable
+    public class InteractionDoor : MonoBehaviour, IInteractable
     {
-        public bool isOpened;
-
-        public Transform mainDoor;
-        public Transform subDoor;
+        public bool IsOpened { get; set; }
 
         public enum DoorType { 
             DefaultDoor,
@@ -28,8 +25,13 @@ namespace KGY
             Rotating,
             Overhead
         }
-        private DoorOpenType doorOpenType;
+        [SerializeField] private DoorOpenType doorOpenType;
 
+        [SerializeField] private InteractionData interactinData;//상호작용 데이터
+        [SerializeField] private List<string> InteractionIds;   //상호작용 ID 리스트
+        [SerializeField] private Transform mainDoor;
+        [SerializeField] private Transform subDoor;
+        
         private const float openSpeed = 1f;
         private float doorWidth;
         private GameObject moveKey;
@@ -69,12 +71,12 @@ namespace KGY
 
             door.localPosition = endPosition;
 
-            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !isOpened;
+            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !IsOpened;
         }
 
         public void Interact()
         {
-            if (!isOpened) {
+            if (!IsOpened) {
                 switch (doorOpenType)
                 {
                     case DoorOpenType.Sliding:
@@ -83,7 +85,7 @@ namespace KGY
                         break;
                 }
 
-                isOpened = !isOpened;
+                IsOpened = !IsOpened;
             }
 
             HandleDoorAction();
