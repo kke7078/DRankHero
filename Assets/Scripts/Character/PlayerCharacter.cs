@@ -13,19 +13,6 @@ namespace KGY
     //PlayerCharacter 클래스 : 플레이어 캐릭터의 속성 및 동작을 정의하는 클래스 (CharacterBase 클래스를 상속받아서 확장)
     public class PlayerCharacter : CharacterBase
     {
-        public static PlayerCharacter instance;
-
-        //상호작용 센서
-        public InteractionSensor InteractionSensor => interactionSensor;
-        [SerializeField] private InteractionSensor interactionSensor;
-
-        //현재 상호작용 가능한 오브젝트 리스트
-        public List<IInteractable> CurrentInteractionItems => currentInteractionItems;
-        private List<IInteractable> currentInteractionItems = new List<IInteractable>();
-
-        //현재 가장 가까운 상호작용 아이템
-        public IInteractable ClosestInteractable { get; private set; }
-
         [SerializeField] private Transform backToolHolder;         //등에 위치한 청소도구 홀더
         [SerializeField] private Transform handToolHolder;         //손에 위치한 청소도구 홀더
         [SerializeField] private TwoBoneIKConstraint rightHandIK;  //오른손 IK
@@ -43,23 +30,12 @@ namespace KGY
             InputSystem.Singleton.onInteract += Interact;
         }
 
-        private void Awake()
-        {
-            instance = this;
-        }
-
         protected override void Start()
         {
             base.Start();
 
             rigBuilder = GetComponent<RigBuilder>();
             currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
-
-            //상호작용 센서 컴포넌트 선언
-            interactionSensor.OnDetected += OnDetectedInteraction;
-            interactionSensor.OnLostSignal += OnLostSignalInteraction;
-
-            //interactionUI.HideUI(); //플레이어의 상호작용 UI 비활성화
         }
 
         private void Update()
@@ -76,44 +52,6 @@ namespace KGY
         {
             InputSystem.Singleton.onClean -= Clean;
         }
-
-        //상호작용 센서에 의해 상호작용 오브젝트가 감지되었을 때 호출되는 메서드
-        private void OnDetectedInteraction(IInteractable interactable)
-        {
-            if(interactable.InteractionInfos.Count == 0) interactable.Interact(this); //상호작용 정보가 없을 경우 바로 상호작용 실행
-            else currentInteractionItems.Add(interactable);
-        }
-
-        //상호작용 센서에 의해 상호작용 오브젝트의 신호가 사라졌을 때 호출되는 메서드
-        private void OnLostSignalInteraction(IInteractable interactable)
-        {
-            currentInteractionItems.Remove(interactable);
-        }
-
-        //캐릭터와 가장 가까운 상호작용 오브젝트 찾기
-        private void FindClosestinteractable()
-        {
-            //가장 가까운 상호작용 오브젝트 찾기
-            if (currentInteractionItems.Count > 0)
-            {
-                IInteractable closest = null;
-                float closestDistance = float.MaxValue;
-
-                foreach (IInteractable interactable in currentInteractionItems)
-                {
-                    float distance = Vector3.Distance(transform.position, interactable.GetTransform().position);
-                    if (distance < closestDistance)
-                    {
-                        closest = interactable;
-                        closestDistance = distance;
-                    }
-                }
-
-                ClosestInteractable = closest;
-            }
-            else ClosestInteractable = null;
-        }
-
 
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
@@ -242,11 +180,11 @@ namespace KGY
         //캐릭터 이동 메서드
         public override void Move(Vector2 direction, float speed)
         {
-            if (GameManager.Singleton.IsInDialogue) return;
+            if (GameManager.Singleton.IsInDialogue || GameManager.Singleton.IsPause) return;
 
             base.Move(direction, speed);
 
-            FindClosestinteractable();
+            InteractionManager.Singleton.FindClosestinteractable(); //상호작용 가능한 오브젝트 찾기
         }
 
         //캐릭터 회전 메서드
@@ -281,13 +219,14 @@ namespace KGY
         //플레이어 상호작용 동작 메서드
         private void Interact()
         {
-            if (GameManager.Singleton.IsInDialogue) return;
-            if (CurrentInteractionItems.Count <= 0) return;
+            var InteractMng = InteractionManager.Singleton;
+            if (GameManager.Singleton.IsInDialogue || InteractMng.CurrentInteractionItems.Count <= 0) return;
 
-            ClosestInteractable.Interact(this);
-            CurrentInteractionItems.Remove(ClosestInteractable);
+            var targetObj = InteractMng.ClosestInteractable;
+            if (targetObj == null) return;
 
-            //interactionUI.interactionObj.GetComponent<CanvasGroup>().alpha = 0;
+            targetObj.Interact();
+            InteractMng.InteractComplete(targetObj);
         }
     }
 }
