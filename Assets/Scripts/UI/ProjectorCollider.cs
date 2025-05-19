@@ -5,7 +5,7 @@ using UnityEngine;
 namespace KGY
 {
     //ProjectorCollider : 프로젝터의 충돌을 관리하는 클래스
-    public class ProjectorCollider : InteractionMsg
+    public class ProjectorCollider : MonoBehaviour, IHasInteractionIds
     {
         public enum DirtyType
         {
@@ -14,6 +14,9 @@ namespace KGY
             Repair,
         }
         [SerializeField] private DirtyType dirtyType;
+
+        public List<InteractionData.MsgId> InteractionIdList => interactionIdList;
+        [SerializeField] private List<InteractionData.MsgId> interactionIdList = new List<InteractionData.MsgId>();
 
         private CleanRoom currentRoom;
         private Projector projector;

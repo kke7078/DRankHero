@@ -52,11 +52,14 @@ namespace KGY
         }
         private int dirtyRoomCount;
 
+        public GameObject MoveKey => moveKey;
+        [SerializeField] private GameObject moveKey;
+
         [SerializeField] private InteractionDoor startPointDoor;
         [SerializeField] private GameHUD gameHUD;
         [SerializeField] private float stageTimeLimit; //스테이지 시간 제한
 
-        private float timeRemaining;                   //남은 시간
+        private float timeRemaining;    //남은 시간
 
 
         public void Start()

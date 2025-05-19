@@ -8,9 +8,10 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    public class InteractionDoor : MonoBehaviour, IInteractable
+    public class InteractionDoor : MonoBehaviour, IInteractable, IHasInteractionIds
     {
         public bool IsOpened { get; set; }
+        [SerializeField] private bool isOpened;
 
         public enum DoorType { 
             DefaultDoor,
@@ -27,24 +28,19 @@ namespace KGY
         }
         [SerializeField] private DoorOpenType doorOpenType;
 
-        [SerializeField] private InteractionData interactinData;//상호작용 데이터
-        [SerializeField] private List<string> InteractionIds;   //상호작용 ID 리스트
-        [SerializeField] private Transform mainDoor;
-        [SerializeField] private Transform subDoor;
-        
-        private const float openSpeed = 1f;
-        private float doorWidth;
-        private GameObject moveKey;
         private ParticleSystem doorParticleSystem;
+        private Animator animator;
+
+        public List<InteractionData.MsgId> InteractionIdList => interactionIdList;
+        [SerializeField] private List<InteractionData.MsgId> interactionIdList = new List<InteractionData.MsgId>();
+
 
         private void Start()
         {
-            moveKey = GameObject.Find("MoveKey");
-
-            doorWidth = GetComponent<Collider>().bounds.size.x * 0.4f;
-
             doorParticleSystem = GetComponentInChildren<ParticleSystem>();
             if(doorParticleSystem != null) doorParticleSystem.gameObject.SetActive(false);
+
+            animator = GetComponent<Animator>();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -56,32 +52,14 @@ namespace KGY
             }
         }
 
-        IEnumerator MoveSlidingDoor(Transform door, float direction)
-        {
-            float time = 0f;
-            Vector3 startPosition = door.localPosition;
-            Vector3 endPosition = startPosition + new Vector3(direction * doorWidth, 0, 0);
-
-            while (time < openSpeed)
-            {
-                door.localPosition = Vector3.Lerp(startPosition, endPosition, time / openSpeed);
-                time += Time.deltaTime * 3f;
-                yield return null;
-            }
-
-            door.localPosition = endPosition;
-
-            if (currentDoor != DoorType.StartPointDoor) GetComponent<Collider>().enabled = !IsOpened;
-        }
-
         public void Interact()
         {
-            if (!IsOpened) {
+            if (!IsOpened) 
+            {
                 switch (doorOpenType)
                 {
                     case DoorOpenType.Sliding:
-                        if (mainDoor != null) StartCoroutine(MoveSlidingDoor(mainDoor, -1));
-                        if (subDoor != null) StartCoroutine(MoveSlidingDoor(subDoor, 1));
+                        animator.SetTrigger("slidingOpenTrigger");
                         break;
                 }
 
@@ -107,22 +85,25 @@ namespace KGY
                 case DoorType.StageStartDoor:
                     doorParticleSystem.gameObject.SetActive(true);
                     GameManager.Singleton.IsGameStarted = true;
+                    GetComponent<Collider>().enabled = !IsOpened;
                     break;
                 case DoorType.DefaultDoor:
+                    GetComponent<Collider>().enabled = !IsOpened;
                     break;
             }
         }
 
         private void DoorTriggerEvent()
         {
-            if (gameObject.name == "StartPointDoor")
+            if(currentDoor == DoorType.StartPointDoor)
             {
-                if (moveKey.activeSelf) moveKey.SetActive(false);
+                GameManager gameManager = GameManager.Singleton;
+                if (gameManager.MoveKey.activeSelf) gameManager.MoveKey.SetActive(false);
 
-                if (GameManager.Singleton.IsCleanComplete)
+                if (gameManager.IsCleanComplete)
                 {
                     //청소 완료 상태일 경우 레벨 클리어
-                    GameManager.Singleton.GameClear();
+                    gameManager.GameClear();
                 }
             }
         }
