@@ -19,9 +19,6 @@ namespace KGY
 
                     //미니맵 아이콘 비활성화
                     minimapIcon.gameObject.SetActive(false);
-
-                    //청소 완료 시 청소인터렉션 UI 비활성화
-                    PlayerCharacter.instance.InteractionSensor.IsShowCleanInteractMsg = false;
                 }
             }
         }

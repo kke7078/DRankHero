@@ -13,17 +13,18 @@ namespace KGY
     //PlayerCharacter 클래스 : 플레이어 캐릭터의 속성 및 동작을 정의하는 클래스 (CharacterBase 클래스를 상속받아서 확장)
     public class PlayerCharacter : CharacterBase
     {
+        public CleanToolManager CurrentTool { get; private set; }   //현재 장착된 청소도구
+
         [SerializeField] private Transform backToolHolder;         //등에 위치한 청소도구 홀더
         [SerializeField] private Transform handToolHolder;         //손에 위치한 청소도구 홀더
         [SerializeField] private TwoBoneIKConstraint rightHandIK;  //오른손 IK
         [SerializeField] private TwoBoneIKConstraint leftHandIK;   //왼손 IK
         [SerializeField] private InteractionUI interactionUI;      //상호작용 UI
-                
+
         private bool isCleaning = false;        //플레이어의 청소 유무
         private bool isEquipping = false;       //플레이어의 장비 유무
         private RigBuilder rigBuilder;          //플레이어의 RigBuilder 컴포넌트
-        private CleanToolManager currentTool;   //현재 장착된 청소도구
-        
+                
         public void OnEnable()
         {
             InputSystem.Singleton.onClean += Clean;
@@ -35,7 +36,7 @@ namespace KGY
             base.Start();
 
             rigBuilder = GetComponent<RigBuilder>();
-            currentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
+            CurrentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //초기 청소도구 설정
         }
 
         private void Update()
@@ -139,16 +140,16 @@ namespace KGY
             if (isCleaning)
             {
                 //청소도구 손에 장착
-                currentTool.transform.SetParent(handToolHolder);
-                currentTool.transform.localRotation = Quaternion.identity;
-                currentTool.transform.localPosition = Vector3.zero;
+                CurrentTool.transform.SetParent(handToolHolder);
+                CurrentTool.transform.localRotation = Quaternion.identity;
+                CurrentTool.transform.localPosition = Vector3.zero;
             }
             else
             {
                 //청소도구를 등에 장착
-                currentTool.transform.SetParent(backToolHolder);
-                currentTool.transform.localPosition = currentTool.toolBackPosition;
-                currentTool.transform.localRotation = Quaternion.Euler(currentTool.toolBackRotation.x, currentTool.toolBackRotation.y, currentTool.toolBackRotation.z);
+                CurrentTool.transform.SetParent(backToolHolder);
+                CurrentTool.transform.localPosition = CurrentTool.ToolBackPosition;
+                CurrentTool.transform.localRotation = Quaternion.Euler(CurrentTool.ToolBackRotation.x, CurrentTool.ToolBackRotation.y, CurrentTool.ToolBackRotation.z);
             }
         }
 
@@ -157,12 +158,12 @@ namespace KGY
         {
             if (isCleaning)
             {
-                rightHandIK.data.target = currentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
-                leftHandIK.data.target = currentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
+                rightHandIK.data.target = CurrentTool.transform.Find("RightHandGrip");  //오른손 IK 타겟 설정
+                leftHandIK.data.target = CurrentTool.transform.Find("LeftHandGrip");    //왼손 IK 타겟 설정
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 활성화
 
-                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
-                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 활성화
+                CurrentTool.ToolMainEffect.SetActive(isCleaning); //청소도구 이펙트 활성화
+                CurrentTool.ToolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 활성화
             }
             else
             {
@@ -170,8 +171,8 @@ namespace KGY
                 leftHandIK.data.target = null;  //왼손 IK 타겟 초기화
                 rigBuilder.layers[0].active = isCleaning;  //RigBuilder의 레이어 비활성화
 
-                currentTool.toolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
-                currentTool.toolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
+                CurrentTool.ToolMainEffect.SetActive(isCleaning); //청소도구 이펙트 비활성화
+                CurrentTool.ToolSubEffext.SetActive(isCleaning); //청소도구 서브 이펙트 비활성화
             }
 
             rigBuilder.Build(); //RigBuilder 재구성

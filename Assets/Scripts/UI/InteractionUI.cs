@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace KGY
         [SerializeField] private PlayerCharacter player;        //플레이어 캐릭터
         [SerializeField] private Camera mainCamera;             //메인 카메라
 
+
         private void Update()
         {
             if (player == null) return;
@@ -28,154 +30,75 @@ namespace KGY
             //화면 좌표를 다시 월드 좌표로 변환해서 UI 배치
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, GetComponent<Canvas>().planeDistance));
             interactionObjs.position = worldPos;
+
+            //인터렉션 메시지 실시간 동기화
+            CheckInteractionMsg();
         }
 
-        public void ShowInteractionMsg(IHasInteractionIds interactable) 
+        private void CheckInteractionMsg()
         {
-            /*
-             [오브젝트 마주침]
-                    ↓
-                [인터랙션 메시지 ID 확인]
-                    ↓
-                [현재 띄워진 메시지 중 동일 ID 있는가?]
-                    ├─▶ 있음
-                    │    ├─ 활성화 상태? → return
-                    │    └─ 비활성화 상태 → 초기화 후 활성화
-                    │
-                    └─▶ 없음
-                         ├─ 비활성 메시지 있음 → 내용 세팅 후 활성화
-                         └─ 없음
-                              ├─ 최대 개수 초과 아님 → 프리팹 복제 후 세팅+활성화
-                              └─ 초과 → 가장 오래된 메시지 제거 또는 무시
-             */
+            var currentIds = InteractionManager.Singleton.CurrentInteractionIds;           
 
-            foreach (InteractionData.MsgId id in interactable.InteractionIdList)
+            if (currentIds.Count <= 0)
             {
-                SetInteractionMsg sameIdMsg = null;
+                foreach (Transform msgObj in interactionObjs)
+                {
+                    if (msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false);
+                }
+                return;
+            }
+
+            //HashSet : 중복을 허용하지 않는 집합 자료구조
+            HashSet<InteractionData.MsgId> activeMsgID = new HashSet<InteractionData.MsgId>();
+
+            foreach (IHasInteractionIds interactable in currentIds)
+            {
+                foreach (InteractionData.MsgId id in interactable.InteractionIdList)
+                {
+                    activeMsgID.Add(id);    //현재 들어와있는 메시지의 ID를 모두 추가
+                }
+            }
+
+            foreach (var id in activeMsgID)
+            {
+                bool foundActive = false;
                 SetInteractionMsg inactiveMsg = null;
 
-                //같은 ID의 메시지가 있는지 확인
-                foreach (Transform child in interactionObjs)
+                foreach (Transform msgObj in interactionObjs)
                 {
-                    SetInteractionMsg msg = child.GetComponent<SetInteractionMsg>();
+                    SetInteractionMsg msg = msgObj.GetComponent<SetInteractionMsg>();
 
-                    if (msg.MsgId == id)
+                    if (msg.MsgId == id && msgObj.gameObject.activeSelf)
                     {
-                        sameIdMsg = msg;
-                        msg.InitMessage(id);
+                        foundActive = true;
+                        break;  //이미 활성화 되어있으면 다음 ID로
+                    }
+                    if (!msgObj.gameObject.activeSelf && inactiveMsg == null) inactiveMsg = msg; //비활성화된 메시지 저장
+                }
+
+                if (!foundActive)
+                {
+                    if (inactiveMsg != null)
+                    {
+                        inactiveMsg.InitMessage(id);
+                        inactiveMsg.gameObject.SetActive(true); //비활성화된 메시지 활성화
                         break;
                     }
                     else
                     {
-                        if (!child.gameObject.activeSelf && inactiveMsg == null) inactiveMsg = msg;
+                        var newMsg = Instantiate(interactionObjPref, interactionObjs).GetComponent<SetInteractionMsg>();
+                        newMsg.InitMessage(id);    //메시지 초기화
+                        newMsg.gameObject.SetActive(true); //활성화
                     }
-                }
-
-                //같은 ID의 메시지가 있을 때
-                if (sameIdMsg != null)
-                {
-                    if (sameIdMsg.gameObject.activeSelf) return;    //이미 활성화 상태라면 리턴
-                    else
-                    {
-                        sameIdMsg.gameObject.SetActive(true);          //비활성화 상태라면 활성화 후 종료
-                        return;
-                    }
-                }
-
-                //같은 ID의 메시지가 없을 때, 비활성화 메시지가 있을 때
-                if (inactiveMsg != null)
-                {
-                    inactiveMsg.InitMessage(id);    //메시지 초기화
-                    inactiveMsg.gameObject.SetActive(true); //활성화
-                    Debug.Log(inactiveMsg);
-                    return;
-                }
-                //같은 ID의 메시지가 없고, 비활성화 메시지가 없을 때
-                else
-                { 
-                    var newMsg = Instantiate(interactionObjPref, interactionObjs).GetComponent<SetInteractionMsg>();
-                    newMsg.InitMessage(id);    //메시지 초기화
-                    newMsg.gameObject.SetActive(true); //활성화
-                    return;
                 }
             }
-        }
 
-        public void HideInteractionUI(IHasInteractionIds interactable)
-        {
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void UpdateInteractionUI()
-        {
-            //플레이어에게 상호작용 가능한 오브젝트가 있을 때
-            //if (PlayerCharacter.instance.closestInteractable != null) ShowInteractionUI(PlayerCharacter.instance.closestInteractable);
-        }
-
-        private void CheckInteractObj(Transform parent)
-        {
-            int count = 0;
-            foreach (Transform child in parent.transform)
+            foreach (Transform msgObj in interactionObjs)
             {
-                CanvasGroup cg = child.GetComponent<CanvasGroup>();
-                if (cg != null && cg.alpha == 0f) count++;
+                SetInteractionMsg msg = msgObj.GetComponent<SetInteractionMsg>();
+
+                if (!activeMsgID.Contains(msg.MsgId) && msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false); //활성화된 메시지 중 현재 ID에 포함되지 않는 메시지 비활성화
             }
         }
-
-        //public void ShowInteractionUI(IInteractable interactable)
-        //{
-        //    //if (!interactable.IsAutoInteract)
-        //    //{
-        //    //    //형변환 : 오브젝트가 문일 때
-        //    //    if (interactable is InteractionDoor door)
-        //    //    {
-        //    //        if (door.isOpened) return;
-        //    //    }
-        //    //}
-        //}
-
-        //public void ShowInteractionUI(IInteractable interactable)
-        //{
-        //    if (!interactable.IsAutoInteract)
-        //    {
-        //        
-                
-        //        interactionText.text = interactable.InteractionMsg;
-
-        //        //부모 레이아웃을 강제로 갱신
-        //        RectTransform parentRect = interactionText.GetComponent<RectTransform>().parent as RectTransform;
-        //        LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
-
-        //        //alpha값을 1로 올려 보이게 만들기
-        //        interactionText.GetComponentInParent<CanvasGroup>().alpha = 1;
-        //        //interactionObj.GetComponent<CanvasGroup>().alpha = 1;
-        //    }
-        //}
-
-        //public void HideInteractionUI()
-        //{
-        //    //alpha값을 0으로 내려 안 보이게 만들기
-        //    interactionText.GetComponentInParent<CanvasGroup>().alpha = 0;
-        //    //interactionObj.GetComponent<CanvasGroup>().alpha = 0;
-        //}
     }
 }

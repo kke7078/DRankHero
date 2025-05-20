@@ -10,7 +10,10 @@ namespace KGY
 {
     public class InteractionDoor : MonoBehaviour, IInteractable, IHasInteractionIds
     {
-        public bool IsOpened { get; set; }
+        public bool IsOpened {
+            get => isOpened;
+            set => isOpened = value;
+        }
         [SerializeField] private bool isOpened;
 
         public enum DoorType { 

@@ -27,5 +27,10 @@ namespace KGY
                 OnLostSignal?.Invoke(interactable);
             }
         }
+
+        public void CheckColliderExit(Collider other)
+        {
+            OnTriggerExit(other);
+        }
     }
 }

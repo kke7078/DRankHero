@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace KGY
@@ -10,6 +11,10 @@ namespace KGY
     {
         [SerializeField] private InteractionSensor interactionSensor;   //상호작용 센서
         private InteractionUI interactionUI; //상호작용 UI
+
+        //현재 상호작용 메시지를 띄울 수 있는 오브젝트 리스트
+        public List<IHasInteractionIds> CurrentInteractionIds => currentInteractionIds;
+        private List<IHasInteractionIds> currentInteractionIds = new List<IHasInteractionIds>();
 
         //현재 상호작용 가능한 오브젝트 리스트
         public List<IInteractable> CurrentInteractionItems => currentInteractionItems;
@@ -27,7 +32,7 @@ namespace KGY
             interactionUI = GetComponent<InteractionUI>();
 
             interactionSensor.OnDetected += OnDetectedInteraction;
-            //interactionSensor.OnLostSignal += OnLostSignalInteraction;
+            interactionSensor.OnLostSignal += OnLostSignalInteraction;
         }
 
         #region Detected / LostSignal
@@ -35,7 +40,7 @@ namespace KGY
         private void OnDetectedInteraction(IHasInteractionIds interactable)
         {
             //상호작용 메시지 호출
-            if (interactable.InteractionIdList.Count > 0) interactionUI.ShowInteractionMsg(interactable);
+            if (interactable.InteractionIdList.Count > 0) CurrentInteractionIds.Add(interactable);
 
             //interactable이 IInteractable 인터페이스를 구현하고 있는지 확인 -> Interact()가 되는 오브젝트인지 확인
             if (interactable is IInteractable interactableObj)
@@ -46,14 +51,15 @@ namespace KGY
         }
 
         ////상호작용 센서에 의해 상호작용 오브젝트의 신호가 사라졌을 때 호출되는 메서드
-        //private void OnLostSignalInteraction(InteractionMsg interactable)
-        //{
-        //    //interactable이 IInteractable 인터페이스를 구현하고 있는지 확인
-        //    if (interactable is IInteractable interactableObj)
-        //    {
-        //        CurrentInteractionItems.Remove(interactableObj);
-        //    }
-        //}
+        private void OnLostSignalInteraction(IHasInteractionIds interactable)
+        {
+            CurrentInteractionIds.Remove(interactable);
+
+            //interactable이 IInteractable 인터페이스를 구현하고 있는지 확인
+            if (interactable is IInteractable interactableItem) CurrentInteractionItems.Remove(interactableItem);
+
+            
+        }
         #endregion
 
 
@@ -87,30 +93,8 @@ namespace KGY
         //상호작용 완료 후 호출되는 메서드
         public void InteractComplete(IInteractable interactable)
         {
-            currentInteractionItems.Remove(interactable);
+            CurrentInteractionItems.Remove(interactable);
+            CurrentInteractionIds.Remove(interactable as IHasInteractionIds);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

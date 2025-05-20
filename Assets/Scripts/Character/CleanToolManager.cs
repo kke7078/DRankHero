@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,18 +11,47 @@ namespace KGY
     //CleanToolManager 클래스 : 청소도구의 속성을 정의하는 클래스
     public class CleanToolManager : MonoBehaviour
     {
-        public enum ToolType { 
+        public enum ToolType
+        {
             WaterTank,
-
+            None,
         }
-        public ToolType currentTool;
-        public Vector3 toolBackPosition;    //등에 위치한 청소도구의 위치
-        public Vector3 toolBackRotation; //등에 위치한 청소도구의 회전
-        
-        public GameObject toolMainEffect;       //청소도구의 이펙트
-        public GameObject toolSubEffext;        //청소도구의 서브 이펙트
+        public ToolType CurrentToolType
+        {
+            get => currentToolType;
+            set => currentToolType = value;
+        }
+        [SerializeField] private ToolType currentToolType; //현재 장착된 청소도구 타입
 
-        private GameObject waterTankCap;
+
+        public Vector3 ToolBackPosition { 
+            get => toolBackPosition;
+            set => toolBackPosition = value;
+        }
+        [SerializeField] private Vector3 toolBackPosition;    //등에 위치한 청소도구의 위치
+
+
+        public Vector3 ToolBackRotation
+        {
+            get => toolBackRotation;
+            set => toolBackRotation = value;
+        }
+        [SerializeField] private Vector3 toolBackRotation; //등에 위치한 청소도구의 회전
+        
+        public GameObject ToolMainEffect
+        {
+            get => toolMainEffect;
+            set => toolMainEffect = value;
+        }
+        [SerializeField] private GameObject toolMainEffect; //청소도구의 메인 이펙트
+
+        public GameObject ToolSubEffext {
+            get => toolSubEffext;
+            set => toolSubEffext = value;
+        }
+        [SerializeField] private GameObject toolSubEffext; //청소도구의 서브 이펙트
+
+        [SerializeField] private GameObject waterTankCap;
 
         private void OnEnable()
         {
@@ -30,7 +60,7 @@ namespace KGY
 
         private void OnClean(bool cleanState)
         {
-            switch (currentTool) {
+            switch (CurrentToolType) {
                 case ToolType.WaterTank:
                     if (waterTankCap == null) waterTankCap = GameObject.Find("BottleCap");
 

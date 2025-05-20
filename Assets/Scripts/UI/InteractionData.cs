@@ -11,9 +11,10 @@ namespace KGY
     {
         public enum MsgId
         {
+            none,
+            stageStartDoor,
             projectorWater,
             projectorWaterError,
-            stageStartDoor,
         }
 
         [System.Serializable]
