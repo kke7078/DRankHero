@@ -16,7 +16,7 @@ namespace KGY
         [SerializeField] private Animator minimapUI; //미니맵 UI
         [SerializeField] private Animator remainingTimeUI; //남은 시간 UI
         [SerializeField] private Animator remainingRoomUI; //남은 장소 UI
-        [SerializeField] private GameObject moveKey;    //이동키 UI
+        [SerializeField] private GameObject moveKeyUI;    //이동키 UI
 
         #region 레벨 시작 시 UI 세팅
         //스테이지 시작 UI 표시
@@ -70,9 +70,9 @@ namespace KGY
         #endregion
 
         //이동키 UI 숨김
-        public void HideMoveKey()
+        public void HideMoveKeyUI()
         {
-            if(moveKey.activeSelf) moveKey.SetActive(false);
+            if(moveKeyUI.activeSelf) moveKeyUI.SetActive(false);
         }
     }
 }
