@@ -101,13 +101,8 @@ namespace KGY
             if(currentDoor == DoorType.StartPointDoor)
             {
                 GameManager gameManager = GameManager.Singleton;
-                if (gameManager.MoveKey.activeSelf) gameManager.MoveKey.SetActive(false);
-
-                if (gameManager.IsCleanComplete)
-                {
-                    //청소 완료 상태일 경우 레벨 클리어
-                    gameManager.GameClear();
-                }
+                if (gameManager.IsCleanComplete) gameManager.EndGame(true);//청소 완료 상태일 경우 레벨 클리어
+                else gameManager.GameHUD.HideMoveKey(); //아닐 경우 이동키 UI 숨김
             }
         }
     }

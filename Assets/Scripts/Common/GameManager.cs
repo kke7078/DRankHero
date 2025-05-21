@@ -12,8 +12,9 @@ namespace KGY
         {
             get { return isGameStarted; }
             set {
+                if (isGameStarted == value) return;
                 isGameStarted = value;
-                gameHUD.StartStage();
+                GameHUD.StartLevel();
             }
         }
         private bool isGameStarted;
@@ -21,10 +22,10 @@ namespace KGY
         //청소 완료 유무
         public bool IsCleanComplete
         {
-            get { return isCleanComplete; }
+            get => isCleanComplete;
             set {
                 isCleanComplete = value;
-                gameHUD.CleanComplete();
+                if (isCleanComplete) GameHUD.UpdatecompletedRoomsText(true); //청소 완료 UI 업데이트
             }
         }
         private bool isCleanComplete;
@@ -35,11 +36,13 @@ namespace KGY
             get => isPause;
             set {
                 if (isPause == value) return;
-                IsPause = value;
-                TogglePause(IsPause);
+                isPause = value;
+                TogglePause(isPause);
             }
         }
         private bool isPause;
+
+        //대화 중 유무
         public bool IsInDialogue { get; set; }
 
         //레벨 별 청소해야하는 방의 개수
@@ -47,54 +50,54 @@ namespace KGY
             get => dirtyRoomCount;
             set {
                 dirtyRoomCount = value;
-                gameHUD.UpdatecompletedRoomsText();
+                if (dirtyRoomCount == 0) IsCleanComplete = true;
+                else GameHUD.UpdatecompletedRoomsText(false); //청소 미완료 UI 업데이트
             }
         }
         private int dirtyRoomCount;
 
-        public GameObject MoveKey => moveKey;
-        [SerializeField] private GameObject moveKey;
+        //게임 HUD
+        public GameHUD GameHUD => gameHUD;
+        [SerializeField] private GameHUD gameHUD;
 
         [SerializeField] private InteractionDoor startPointDoor;
-        [SerializeField] private GameHUD gameHUD;
-        [SerializeField] private float stageTimeLimit; //스테이지 시간 제한
 
-        private float timeRemaining;    //남은 시간
-
+        private const float MaxTime = 300f; //스테이지 제한시간
+        private float remainingTime;    //남은 시간
 
         public void Start()
         {
-            Invoke("GameStart", 0.1f);
-
-            InitializeDirtyRoomCount();
+            remainingTime = MaxTime; //스테이지 남은 시간 초기화
+            InitializeDirtyRoomCount(); //스테이지 남은 장소 초기화
+            Invoke("StartGame", 0.1f);  //게임 시작
         }
 
         private void Update()
         {
             //타이머 UI 업데이트
-            if (!isGameStarted) return;
+            if (!IsGameStarted) return;
 
-            if (timeRemaining > 0)
+            if (remainingTime > 0)
             {
-                timeRemaining -= Time.deltaTime;
-                gameHUD.UpdateTimerUI(timeRemaining);
+                remainingTime = Mathf.Max(remainingTime - Time.deltaTime, 0f);
+                GameHUD.UpdateTimerUI(remainingTime);
             }
-            else GameOver();
+            else EndGame(false);
         }
 
         #region 게임의 전반적인 상태 담당 메서드
-        private void GameStart() {
+        private void StartGame() {
             startPointDoor.Interact();
         }
 
-        public void GameClear()
+        public void EndGame(bool isClear)
         {
-            Debug.Log("GameClear");
-        }
-
-        private void GameOver()
-        { 
-            
+            if (isClear)
+            {
+                Debug.Log("레벨 클리어!");
+            }
+            else
+            { }
         }
 
         private void TogglePause(bool isPause)
