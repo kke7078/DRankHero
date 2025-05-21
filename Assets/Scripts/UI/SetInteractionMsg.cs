@@ -25,8 +25,6 @@ namespace KGY
         public TextMeshProUGUI MsgMessage => msgMessage;
         [SerializeField] private TextMeshProUGUI msgMessage;
 
-
-        //얘는 InteractionObj 각각의 정보를 보여주는 거임! 헷갈리지 말것!!!
         public void InitMessage(InteractionData.MsgId id) 
         {
             var data = InteractionManager.Singleton.InteractionData;

@@ -14,34 +14,32 @@ namespace KGY
     //InteractionUI 클래스 : 상호작용 UI의 속성 및 동작을 정의하는 클래스
     public class InteractionUI : MonoBehaviour
     {
-        [SerializeField] private Transform interactionObjs;     //상호작용 Obj의 위치
-        [SerializeField] private GameObject interactionObjPref;
-        [SerializeField] private PlayerCharacter player;        //플레이어 캐릭터
-        [SerializeField] private Camera mainCamera;             //메인 카메라
+        [SerializeField] private RectTransform interactionMsg;    //상호작용 메시지 UI의 위치
+        [SerializeField] private GameObject interactionMsgPref; //상호작용 메시지 UI 프리팹
+        [SerializeField] private Transform player;        //플레이어 캐릭터
+        [SerializeField] private Camera mainCamera; //메인 카메라
 
+        private Vector3 worldOffset = new Vector3(0, -1.8f, 0);
 
         private void Update()
         {
-            if (player == null) return;
+            if (player == null || mainCamera == null) return;
 
-            //오브젝트 위치를 화면 좌표로 전환
-            Vector3 screenPos = mainCamera.WorldToScreenPoint(player.transform.position + new Vector3(0, -1.8f, 0));
+            Vector3 worldPos = player.position + worldOffset;
+            Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos); //오브젝트 위치를 화면 좌표로 전환
 
-            //화면 좌표를 다시 월드 좌표로 변환해서 UI 배치
-            Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, GetComponent<Canvas>().planeDistance));
-            interactionObjs.position = worldPos;
+            interactionMsg.position = screenPos;
 
-            //인터렉션 메시지 실시간 동기화
-            CheckInteractionMsg();
+            CheckInteractionMsg();  //상호작용 메시지 체크
         }
 
         private void CheckInteractionMsg()
         {
-            var currentIds = InteractionManager.Singleton.CurrentInteractionIds;           
+            var currentIds = InteractionManager.Singleton.CurrentInteractionID;
 
             if (currentIds.Count <= 0)
             {
-                foreach (Transform msgObj in interactionObjs)
+                foreach (Transform msgObj in interactionMsg)
                 {
                     if (msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false);
                 }
@@ -55,7 +53,7 @@ namespace KGY
             {
                 foreach (InteractionData.MsgId id in interactable.InteractionIdList)
                 {
-                    activeMsgID.Add(id);    //현재 들어와있는 메시지의 ID를 모두 추가
+                    if (id != InteractionData.MsgId.none) activeMsgID.Add(id);    //현재 들어와있는 메시지의 ID를 모두 추가
                 }
             }
 
@@ -64,7 +62,7 @@ namespace KGY
                 bool foundActive = false;
                 SetInteractionMsg inactiveMsg = null;
 
-                foreach (Transform msgObj in interactionObjs)
+                foreach (Transform msgObj in interactionMsg)
                 {
                     SetInteractionMsg msg = msgObj.GetComponent<SetInteractionMsg>();
 
@@ -80,20 +78,22 @@ namespace KGY
                 {
                     if (inactiveMsg != null)
                     {
-                        inactiveMsg.InitMessage(id);
+                        inactiveMsg.InitMessage(id);//메시지 초기화
                         inactiveMsg.gameObject.SetActive(true); //비활성화된 메시지 활성화
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(inactiveMsg.GetComponent<RectTransform>()); //레이아웃 강제 재구성
                         break;
                     }
                     else
                     {
-                        var newMsg = Instantiate(interactionObjPref, interactionObjs).GetComponent<SetInteractionMsg>();
-                        newMsg.InitMessage(id);    //메시지 초기화
-                        newMsg.gameObject.SetActive(true); //활성화
+                        var newMsg = Instantiate(interactionMsgPref, interactionMsg).GetComponent<SetInteractionMsg>(); //새로운 메시지 프리팹 생성
+                        newMsg.InitMessage(id);    
+                        newMsg.gameObject.SetActive(true);
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(newMsg.GetComponent<RectTransform>());
                     }
                 }
             }
 
-            foreach (Transform msgObj in interactionObjs)
+            foreach (Transform msgObj in interactionMsg)
             {
                 SetInteractionMsg msg = msgObj.GetComponent<SetInteractionMsg>();
 

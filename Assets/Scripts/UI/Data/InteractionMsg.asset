@@ -20,7 +20,7 @@ MonoBehaviour:
   - msgId: 1
     key: E
     icon: {fileID: 0}
-    msg: "\uB97C \uB20C\uB7EC \uB808\uBCA8 \uC2DC"
+    msg: "\uB97C \uB20C\uB7EC \uB808\uBCA8 \uC2DC\uC791"
   - msgId: 2
     key: 
     icon: {fileID: 21300000, guid: d4dc190bb49530e4b9257cc296148d42, type: 3}

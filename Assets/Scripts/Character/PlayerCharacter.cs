@@ -221,7 +221,7 @@ namespace KGY
         private void Interact()
         {
             var InteractMng = InteractionManager.Singleton;
-            if (GameManager.Singleton.IsInDialogue || InteractMng.CurrentInteractionItems.Count <= 0) return;
+            if (GameManager.Singleton.IsInDialogue || InteractMng.CurrentInteractable.Count <= 0) return;
 
             var targetObj = InteractMng.ClosestInteractable;
             if (targetObj == null) return;
