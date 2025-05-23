@@ -34,13 +34,14 @@ namespace KGY
         public float DirtyCleanValue { get; set; } = 0f;    //방의 청소된 값
         public float ColliderCount { get; private set; } = 0f;  //청소할 방의 콜라이더 개수
 
+        [SerializeField] private InteractionSensor interactionSensor;
         [SerializeField] private InteractionUI interactionUI;
         [SerializeField] private Canvas minimapIcon;
-
+        private Projector[] projectors;
 
         private void Start()
         {
-            var projectors = GetComponentsInChildren<Projector>();
+            projectors = GetComponentsInChildren<Projector>();
             for (int i = 0; i < projectors.Length; i++)
             {
                 DirtyTotalValue += projectors[i].fieldOfView;
@@ -70,11 +71,18 @@ namespace KGY
                 if (IsComplete) return;
                 interactionUI.UpdateGaugeValue(this);
 
+                //청소가 완료되면
                 if (DirtyCleanValue >= DirtyTotalValue)
                 {
                     IsComplete = true;
                     ColliderCount = 0;
                     interactionUI.ShowCleanRoomGaugeUI(this);
+
+                    foreach (Projector pj in projectors)
+                    {
+                        Collider collider = pj.GetComponentInChildren<Collider>();
+                        interactionSensor.CheckColliderExit(collider); //청소 완료 시 상호작용 센서에서 청소구역 콜라이더 제거
+                    }
                 }
             }
         }
