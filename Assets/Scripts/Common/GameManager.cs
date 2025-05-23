@@ -120,5 +120,14 @@ namespace KGY
             DirtyRoomCount = dirtyRooms.Length;
         }
         #endregion
+
+        public void ClosedDoor()
+        {
+            var animator = startPointDoor.GetComponent<Animator>();
+            animator.SetBool("isClosed", true);
+            animator.SetTrigger("slidingCloseTrigger");
+
+            animator.SetBool("isOpen", false);
+        }
     }
 }

@@ -62,7 +62,11 @@ namespace KGY
                 switch (doorOpenType)
                 {
                     case DoorOpenType.Sliding:
+                        animator.SetBool("isOpen", true);
                         animator.SetTrigger("slidingOpenTrigger");
+
+                        animator.SetBool("isClosed", false);
+                        animator.ResetTrigger("slidingCloseTrigger");
                         break;
                 }
 

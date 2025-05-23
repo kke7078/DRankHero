@@ -34,14 +34,15 @@ namespace KGY
             stageStartUI.SetTrigger("hideTrigger");
 
             //남은 시간 UI 표시
-            remainingTimeUI.SetTrigger("showTrigger");
+            StartCoroutine(PlayUIAnimation(remainingTimeUI, true));
 
             //미니맵 UI 표시
             yield return new WaitForSeconds(0.3f);
-            minimapUI.SetTrigger("showTrigger");
+            StartCoroutine(PlayUIAnimation(minimapUI, true));
 
             //남은 장소 UI 표시
-            remainingRoomUI.gameObject.SetActive(true);
+            StartCoroutine(PlayUIAnimation(remainingRoomUI, true));
+            LayoutRebuilder.ForceRebuildLayoutImmediate(remainingRoomUI.GetComponent<RectTransform>());
         }
 
         //남은 시간 UI 업데이트
@@ -83,13 +84,43 @@ namespace KGY
             Vector3 targetRotation = new Vector3(0, -135, 0);
             StartCoroutine(player.SetPlayerTransform(targetPosition, targetRotation));
             StartCoroutine(HideNextUISequence());
-
         }
 
         IEnumerator HideNextUISequence()
         {
-            yield return null;
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PlayUIAnimation(minimapUI, false));
+            StartCoroutine(PlayUIAnimation(remainingTimeUI, false));
+            StartCoroutine(PlayUIAnimation(remainingRoomUI, false));
 
+            yield return new WaitForSeconds(0.4f);
+            GameManager.Singleton.ClosedDoor(); //출입문 닫기
+        }
+
+        private IEnumerator PlayUIAnimation(Animator targetUI, bool isPlay)
+        {
+            if (isPlay)
+            {
+                if (!targetUI.gameObject.activeSelf) targetUI.gameObject.SetActive(true);
+
+                targetUI.SetBool("isShow", isPlay);
+                targetUI.SetTrigger("showTrigger");
+                targetUI.SetBool("isHide", !isPlay);
+                targetUI.ResetTrigger("hideTrigger");
+            }
+            else
+            {
+                if (targetUI.gameObject.activeSelf)
+                {
+                    targetUI.SetBool("isShow", isPlay);
+                    targetUI.ResetTrigger("showTrigger");
+                    targetUI.SetBool("isHide", !isPlay);
+                    targetUI.SetTrigger("hideTrigger");
+
+                    yield return new WaitForSeconds(0.5f);
+                    targetUI.gameObject.SetActive(false);
+                }
+            }
         }
         #endregion
     }
