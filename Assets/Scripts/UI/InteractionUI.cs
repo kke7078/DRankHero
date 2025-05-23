@@ -1,4 +1,4 @@
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
+ï»¿using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,14 +11,14 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    //InteractionUI Å¬·¡½º : »óÈ£ÀÛ¿ë UIÀÇ ¼Ó¼º ¹× µ¿ÀÛÀ» Á¤ÀÇÇÏ´Â Å¬·¡½º
+    //InteractionUI í´ë˜ìŠ¤ : ìƒí˜¸ì‘ìš© UIì˜ ì†ì„± ë° ë™ì‘ì„ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤
     public class InteractionUI : MonoBehaviour
     {
-        [SerializeField] private RectTransform interactionMsg;  //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö UIÀÇ À§Ä¡
-        [SerializeField] private GameObject interactionMsgPref; //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö UI ÇÁ¸®ÆÕ
-        [SerializeField] private CleanRoomGaugeUI cleanRoomGaugeUI;//Ã»¼Ò °ÔÀÌÁö ÀÌ¸§
-        [SerializeField] private Transform player;  //ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍ
-        [SerializeField] private Camera mainCamera; //¸ŞÀÎ Ä«¸Ş¶ó
+        [SerializeField] private RectTransform interactionMsg;  //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ UIì˜ ìœ„ì¹˜
+        [SerializeField] private GameObject interactionMsgPref; //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ UI í”„ë¦¬íŒ¹
+        [SerializeField] private CleanRoomGaugeUI cleanRoomGaugeUI;//ì²­ì†Œ ê²Œì´ì§€ ì´ë¦„
+        [SerializeField] private Transform player;  //í”Œë ˆì´ì–´ ìºë¦­í„°
+        [SerializeField] private Camera mainCamera; //ë©”ì¸ ì¹´ë©”ë¼
 
         private Vector3 worldOffset = new Vector3(0, -1.8f, 0);
 
@@ -27,14 +27,14 @@ namespace KGY
             if (player == null || mainCamera == null) return;
 
             Vector3 worldPos = player.position + worldOffset;
-            Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos); //¿ÀºêÁ§Æ® À§Ä¡¸¦ È­¸é ÁÂÇ¥·Î ÀüÈ¯
+            Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos); //ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ë¥¼ í™”ë©´ ì¢Œí‘œë¡œ ì „í™˜
 
             interactionMsg.position = screenPos;
 
             CheckInteractionMsg();  
         }
 
-        //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö Ã¼Å©
+        //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ ì²´í¬
         private void CheckInteractionMsg()
         {
             var currentIds = InteractionManager.Singleton.CurrentInteractionID;
@@ -48,14 +48,14 @@ namespace KGY
                 return;
             }
 
-            //HashSet : Áßº¹À» Çã¿ëÇÏÁö ¾Ê´Â ÁıÇÕ ÀÚ·á±¸Á¶
+            //HashSet : ì¤‘ë³µì„ í—ˆìš©í•˜ì§€ ì•ŠëŠ” ì§‘í•© ìë£Œêµ¬ì¡°
             HashSet<InteractionData.MsgId> activeMsgID = new HashSet<InteractionData.MsgId>();
 
             foreach (IHasInteractionIds interactable in currentIds)
             {
                 foreach (InteractionData.MsgId id in interactable.InteractionIdList)
                 {
-                    if (id != InteractionData.MsgId.none) activeMsgID.Add(id);    //ÇöÀç µé¾î¿ÍÀÖ´Â ¸Ş½ÃÁöÀÇ ID¸¦ ¸ğµÎ Ãß°¡
+                    if (id != InteractionData.MsgId.none) activeMsgID.Add(id);    //í˜„ì¬ ë“¤ì–´ì™€ìˆëŠ” ë©”ì‹œì§€ì˜ IDë¥¼ ëª¨ë‘ ì¶”ê°€
                 }
             }
 
@@ -71,23 +71,23 @@ namespace KGY
                     if (msg.MsgId == id && msgObj.gameObject.activeSelf)
                     {
                         foundActive = true;
-                        break;  //ÀÌ¹Ì È°¼ºÈ­ µÇ¾îÀÖÀ¸¸é ´ÙÀ½ ID·Î
+                        break;  //ì´ë¯¸ í™œì„±í™” ë˜ì–´ìˆìœ¼ë©´ ë‹¤ìŒ IDë¡œ
                     }
-                    if (!msgObj.gameObject.activeSelf && inactiveMsg == null) inactiveMsg = msg; //ºñÈ°¼ºÈ­µÈ ¸Ş½ÃÁö ÀúÀå
+                    if (!msgObj.gameObject.activeSelf && inactiveMsg == null) inactiveMsg = msg; //ë¹„í™œì„±í™”ëœ ë©”ì‹œì§€ ì €ì¥
                 }
 
                 if (!foundActive)
                 {
                     if (inactiveMsg != null)
                     {
-                        inactiveMsg.InitMessage(id);//¸Ş½ÃÁö ÃÊ±âÈ­
-                        inactiveMsg.gameObject.SetActive(true); //ºñÈ°¼ºÈ­µÈ ¸Ş½ÃÁö È°¼ºÈ­
-                        LayoutRebuilder.ForceRebuildLayoutImmediate(inactiveMsg.GetComponent<RectTransform>()); //·¹ÀÌ¾Æ¿ô °­Á¦ Àç±¸¼º
+                        inactiveMsg.InitMessage(id);//ë©”ì‹œì§€ ì´ˆê¸°í™”
+                        inactiveMsg.gameObject.SetActive(true); //ë¹„í™œì„±í™”ëœ ë©”ì‹œì§€ í™œì„±í™”
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(inactiveMsg.GetComponent<RectTransform>()); //ë ˆì´ì•„ì›ƒ ê°•ì œ ì¬êµ¬ì„±
                         break;
                     }
                     else
                     {
-                        var newMsg = Instantiate(interactionMsgPref, interactionMsg).GetComponent<SetInteractionMsg>(); //»õ·Î¿î ¸Ş½ÃÁö ÇÁ¸®ÆÕ »ı¼º
+                        var newMsg = Instantiate(interactionMsgPref, interactionMsg).GetComponent<SetInteractionMsg>(); //ìƒˆë¡œìš´ ë©”ì‹œì§€ í”„ë¦¬íŒ¹ ìƒì„±
                         newMsg.InitMessage(id);    
                         newMsg.gameObject.SetActive(true);
                         LayoutRebuilder.ForceRebuildLayoutImmediate(newMsg.GetComponent<RectTransform>());
@@ -99,7 +99,7 @@ namespace KGY
             {
                 SetInteractionMsg msg = msgObj.GetComponent<SetInteractionMsg>();
 
-                if (!activeMsgID.Contains(msg.MsgId) && msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false); //È°¼ºÈ­µÈ ¸Ş½ÃÁö Áß ÇöÀç ID¿¡ Æ÷ÇÔµÇÁö ¾Ê´Â ¸Ş½ÃÁö ºñÈ°¼ºÈ­
+                if (!activeMsgID.Contains(msg.MsgId) && msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false); //í™œì„±í™”ëœ ë©”ì‹œì§€ ì¤‘ í˜„ì¬ IDì— í¬í•¨ë˜ì§€ ì•ŠëŠ” ë©”ì‹œì§€ ë¹„í™œì„±í™”
             }
         }
 
@@ -139,13 +139,13 @@ namespace KGY
         }
         #endregion
 
-        //CleanGauge ÀÌ¸§ ¼³Á¤
+        //CleanGauge ì´ë¦„ ì„¤ì •
         public void SetGaugeBarName(string roomName)
         {
             cleanRoomGaugeUI.SetGaugeBarName(roomName);
         }
 
-        //CleanGauge °ª ¾÷µ¥ÀÌÆ®
+        //CleanGauge ê°’ ì—…ë°ì´íŠ¸
         public void UpdateGaugeValue(CleanRoom roomData)
         {
             cleanRoomGaugeUI.UpdateGaugeValue(roomData);
