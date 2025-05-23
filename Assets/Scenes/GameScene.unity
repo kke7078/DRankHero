@@ -797,13 +797,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1483867214}
   - {fileID: 941813337}
   - {fileID: 239226013}
   - {fileID: 1215008223}
   - {fileID: 34955399}
   - {fileID: 1493208892}
-  - {fileID: 1506159395}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -827,6 +825,7 @@ MonoBehaviour:
   minimapUI: {fileID: 1215008227}
   remainingTimeUI: {fileID: 34955403}
   remainingRoomUI: {fileID: 1493208897}
+  moveKeyUI: {fileID: 941813336}
 --- !u!1 &21161724
 GameObject:
   m_ObjectHideFlags: 0
@@ -14851,7 +14850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326b8418496383d4ea8bed9c777cedf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveKey: {fileID: 941813336}
   gameHUD: {fileID: 18650343}
   startPointDoor: {fileID: 2664308560258134859}
 --- !u!1 &424475083
@@ -30858,7 +30856,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirtyRoomName: "\uD504\uB9B0\uD130 \uC624\uC791\uB3D9"
+  interactionUI: {fileID: 0}
   minimapIcon: {fileID: 1437790609}
+  colliderCount: 0
 --- !u!1 &854185673
 GameObject:
   m_ObjectHideFlags: 0
@@ -44043,7 +44043,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -44061,6 +44061,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1993416403}
+  - {fileID: 1483867214}
+  - {fileID: 1506159395}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -44096,6 +44098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMsg: {fileID: 1993416403}
   interactionMsgPref: {fileID: 3670794970210387362, guid: 6786ac0dbfa74c942aff54a0fe70c3e1, type: 3}
+  cleanRoomGaugeUI: {fileID: 1483867218}
   player: {fileID: 543450652084435329}
   mainCamera: {fileID: 963194227}
 --- !u!1 &1419854946
@@ -44796,8 +44799,9 @@ GameObject:
   - component: {fileID: 1483867216}
   - component: {fileID: 1483867215}
   - component: {fileID: 1483867217}
+  - component: {fileID: 1483867218}
   m_Layer: 5
-  m_Name: CleanGaugeBar
+  m_Name: CleanRoomGaugeUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44810,14 +44814,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483867213}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2146406447}
   - {fileID: 577076440}
-  m_Father: {fileID: 18650342}
+  m_Father: {fileID: 1419644177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -44883,6 +44887,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1483867218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483867213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f6f6cfa97a0e545a64090ceaf9a86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gaugeBarName: {fileID: 2146406449}
+  gaugeBar: {fileID: 638460578}
 --- !u!1 &1486856725
 GameObject:
   m_ObjectHideFlags: 0
@@ -46121,14 +46139,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1506159394}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1032965793}
   - {fileID: 943813899}
-  m_Father: {fileID: 18650342}
+  m_Father: {fileID: 1419644177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -65119,7 +65137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirtyRoomName: "\uCEE4\uD53C \uD3EC\uD2B8 \uD3ED\uBC1C"
+  interactionUI: {fileID: 1419644180}
   minimapIcon: {fileID: 6350567015015053572}
+  colliderCount: 0
 --- !u!1 &2086066754
 GameObject:
   m_ObjectHideFlags: 0
@@ -66260,7 +66280,7 @@ GameObject:
   - component: {fileID: 2146406451}
   - component: {fileID: 2146406452}
   m_Layer: 5
-  m_Name: GaugeBarText
+  m_Name: GaugeBarName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71133,7 +71153,6 @@ GameObject:
   - component: {fileID: 5866666020286997499}
   - component: {fileID: 5866666020286997500}
   - component: {fileID: 5866666020286997504}
-  - component: {fileID: 5866666020286997502}
   - component: {fileID: 5866666020286997501}
   - component: {fileID: 5866666020286997503}
   m_Layer: 15
@@ -113836,18 +113855,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.375, z: 0}
---- !u!114 &5866666020286997502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132147556688699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bc40067a4562a946b48725d55390998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &5866666020286997503
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -113890,7 +113897,6 @@ MonoBehaviour:
   handToolHolder: {fileID: 1575547869}
   rightHandIK: {fileID: 1984510961}
   leftHandIK: {fileID: 1782685995}
-  interactionUI: {fileID: 0}
 --- !u!33 &5893965414498835043
 MeshFilter:
   m_ObjectHideFlags: 0

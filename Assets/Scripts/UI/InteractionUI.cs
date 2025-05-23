@@ -14,9 +14,10 @@ namespace KGY
     //InteractionUI 클래스 : 상호작용 UI의 속성 및 동작을 정의하는 클래스
     public class InteractionUI : MonoBehaviour
     {
-        [SerializeField] private RectTransform interactionMsg;    //상호작용 메시지 UI의 위치
+        [SerializeField] private RectTransform interactionMsg;  //상호작용 메시지 UI의 위치
         [SerializeField] private GameObject interactionMsgPref; //상호작용 메시지 UI 프리팹
-        [SerializeField] private Transform player;        //플레이어 캐릭터
+        [SerializeField] private CleanRoomGaugeUI cleanRoomGaugeUI;//청소 게이지 이름
+        [SerializeField] private Transform player;  //플레이어 캐릭터
         [SerializeField] private Camera mainCamera; //메인 카메라
 
         private Vector3 worldOffset = new Vector3(0, -1.8f, 0);
@@ -30,9 +31,10 @@ namespace KGY
 
             interactionMsg.position = screenPos;
 
-            CheckInteractionMsg();  //상호작용 메시지 체크
+            CheckInteractionMsg();  
         }
 
+        //상호작용 메시지 체크
         private void CheckInteractionMsg()
         {
             var currentIds = InteractionManager.Singleton.CurrentInteractionID;
@@ -99,6 +101,54 @@ namespace KGY
 
                 if (!activeMsgID.Contains(msg.MsgId) && msgObj.gameObject.activeSelf) msgObj.gameObject.SetActive(false); //활성화된 메시지 중 현재 ID에 포함되지 않는 메시지 비활성화
             }
+        }
+
+        #region CleanGauge Show/Hide
+        public void ShowCleanRoomGaugeUI(CleanRoom roomData)
+        {
+            if (roomData.IsComplete)
+            {
+                cleanRoomGaugeUI.ChangeNameAnimation();
+                StartCoroutine(DelayHideGaugeAnimation());
+            }
+            else ApplyGaugeAnimation(true);
+        }
+
+        private IEnumerator DelayHideGaugeAnimation()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ApplyGaugeAnimation(false);
+        }
+
+        private void ApplyGaugeAnimation(bool isShow)
+        {
+            Animator animator = cleanRoomGaugeUI.GetComponent<Animator>();
+            animator.SetBool("isShow", isShow);
+            animator.SetBool("isHide", !isShow);
+
+            if (isShow)
+            {
+                animator.SetTrigger("showTrigger");
+                animator.ResetTrigger("hideTrigger");
+            }
+            else
+            {
+                animator.ResetTrigger("showTrigger");
+                animator.SetTrigger("hideTrigger");
+            }
+        }
+        #endregion
+
+        //CleanGauge 이름 설정
+        public void SetGaugeBarName(string roomName)
+        {
+            cleanRoomGaugeUI.SetGaugeBarName(roomName);
+        }
+
+        //CleanGauge 값 업데이트
+        public void UpdateGaugeValue(CleanRoom roomData)
+        {
+            cleanRoomGaugeUI.UpdateGaugeValue(roomData);
         }
     }
 }
