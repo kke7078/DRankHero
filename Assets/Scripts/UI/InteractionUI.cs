@@ -111,7 +111,11 @@ namespace KGY
                 cleanRoomGaugeUI.ChangeNameAnimation();
                 StartCoroutine(DelayHideGaugeAnimation());
             }
-            else ApplyGaugeAnimation(true);
+            else
+            {
+                if (roomData.ColliderCount > 0) ApplyGaugeAnimation(true);
+                else ApplyGaugeAnimation(false);
+            }
         }
 
         private IEnumerator DelayHideGaugeAnimation()

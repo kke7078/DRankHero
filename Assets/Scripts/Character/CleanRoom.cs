@@ -33,9 +33,10 @@ namespace KGY
         public float DirtyTotalValue { get; private set; } = 0f;    //방의 청소해야할 값
         public float DirtyCleanValue { get; set; } = 0f;    //방의 청소된 값
 
+        public float ColliderCount { get; private set; } = 0f;  //청소할 방의 콜라이더 개수
+
         [SerializeField] private InteractionUI interactionUI;
         [SerializeField] private Canvas minimapIcon;
-        [SerializeField] private float colliderCount;
 
 
         private void Start()
@@ -47,17 +48,32 @@ namespace KGY
             }
         }
 
+        #region OnTrigger
+        //플레이어가 청소구역에 들어왔을 때
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
                 if (IsComplete) return;
 
-                colliderCount++;
+                ColliderCount++;
                 interactionUI.SetGaugeBarName(DirtyRoomName);
                 interactionUI.ShowCleanRoomGaugeUI(this);
                 interactionUI.UpdateGaugeValue(this);
             }
         }
+
+        //플레이어가 청소구역에서 나갔을 때
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            { 
+                if(IsComplete) return;
+
+                ColliderCount--;
+                interactionUI.ShowCleanRoomGaugeUI(this);
+            }
+        }
+        #endregion
     }
 }
