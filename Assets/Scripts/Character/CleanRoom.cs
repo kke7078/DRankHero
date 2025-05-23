@@ -32,7 +32,6 @@ namespace KGY
 
         public float DirtyTotalValue { get; private set; } = 0f;    //방의 청소해야할 값
         public float DirtyCleanValue { get; set; } = 0f;    //방의 청소된 값
-
         public float ColliderCount { get; private set; } = 0f;  //청소할 방의 콜라이더 개수
 
         [SerializeField] private InteractionUI interactionUI;
@@ -60,6 +59,23 @@ namespace KGY
                 interactionUI.SetGaugeBarName(DirtyRoomName);
                 interactionUI.ShowCleanRoomGaugeUI(this);
                 interactionUI.UpdateGaugeValue(this);
+            }
+        }
+
+        //플레이어가 청소구역에 있을 때
+        private void OnTriggerStay(Collider other)
+        {
+            if(other.CompareTag("Player"))
+            {
+                if (IsComplete) return;
+                interactionUI.UpdateGaugeValue(this);
+
+                if (DirtyCleanValue >= DirtyTotalValue)
+                {
+                    IsComplete = true;
+                    ColliderCount = 0;
+                    interactionUI.ShowCleanRoomGaugeUI(this);
+                }
             }
         }
 

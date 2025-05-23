@@ -30856,9 +30856,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirtyRoomName: "\uD504\uB9B0\uD130 \uC624\uC791\uB3D9"
-  interactionUI: {fileID: 0}
+  interactionUI: {fileID: 1419644180}
   minimapIcon: {fileID: 1437790609}
-  colliderCount: 0
 --- !u!1 &854185673
 GameObject:
   m_ObjectHideFlags: 0
@@ -65139,7 +65138,6 @@ MonoBehaviour:
   dirtyRoomName: "\uCEE4\uD53C \uD3EC\uD2B8 \uD3ED\uBC1C"
   interactionUI: {fileID: 1419644180}
   minimapIcon: {fileID: 6350567015015053572}
-  colliderCount: 0
 --- !u!1 &2086066754
 GameObject:
   m_ObjectHideFlags: 0
