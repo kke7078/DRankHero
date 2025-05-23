@@ -1,13 +1,13 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KGY
 {
-    //GameManager : °ÔÀÓÀÇ Àü¹İÀûÀÎ »óÅÂ¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
+    //GameManager : ê²Œì„ì˜ ì „ë°˜ì ì¸ ìƒíƒœë¥¼ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤
     public class GameManager : SingletonBase<GameManager>
     {
-        //°ÔÀÓ ½ÃÀÛ À¯¹«
+        //ê²Œì„ ì‹œì‘ ìœ ë¬´
         public bool IsGameStarted
         {
             get { return isGameStarted; }
@@ -19,18 +19,18 @@ namespace KGY
         }
         private bool isGameStarted;
 
-        //Ã»¼Ò ¿Ï·á À¯¹«
+        //ì²­ì†Œ ì™„ë£Œ ìœ ë¬´
         public bool IsCleanComplete
         {
             get => isCleanComplete;
             set {
                 isCleanComplete = value;
-                if (isCleanComplete) GameHUD.UpdatecompletedRoomsText(true); //Ã»¼Ò ¿Ï·á UI ¾÷µ¥ÀÌÆ®
+                if (isCleanComplete) GameHUD.UpdatecompletedRoomsText(true); //ì²­ì†Œ ì™„ë£Œ UI ì—…ë°ì´íŠ¸
             }
         }
         private bool isCleanComplete;
 
-        //°ÔÀÓ ¸ØÃã À¯¹«
+        //ê²Œì„ ë©ˆì¶¤ ìœ ë¬´
         public bool IsPause
         { 
             get => isPause;
@@ -42,39 +42,39 @@ namespace KGY
         }
         private bool isPause;
 
-        //´ëÈ­ Áß À¯¹«
+        //ëŒ€í™” ì¤‘ ìœ ë¬´
         public bool IsInDialogue { get; set; }
 
-        //·¹º§ º° Ã»¼ÒÇØ¾ßÇÏ´Â ¹æÀÇ °³¼ö
+        //ë ˆë²¨ ë³„ ì²­ì†Œí•´ì•¼í•˜ëŠ” ë°©ì˜ ê°œìˆ˜
         public int DirtyRoomCount {
             get => dirtyRoomCount;
             set {
                 dirtyRoomCount = value;
                 if (dirtyRoomCount == 0) IsCleanComplete = true;
-                else GameHUD.UpdatecompletedRoomsText(false); //Ã»¼Ò ¹Ì¿Ï·á UI ¾÷µ¥ÀÌÆ®
+                else GameHUD.UpdatecompletedRoomsText(false); //ì²­ì†Œ ë¯¸ì™„ë£Œ UI ì—…ë°ì´íŠ¸
             }
         }
         private int dirtyRoomCount;
 
-        //°ÔÀÓ HUD
+        //ê²Œì„ HUD
         public GameHUD GameHUD => gameHUD;
         [SerializeField] private GameHUD gameHUD;
 
         [SerializeField] private InteractionDoor startPointDoor;
 
-        private const float MaxTime = 300f; //½ºÅ×ÀÌÁö Á¦ÇÑ½Ã°£
-        private float remainingTime;    //³²Àº ½Ã°£
+        private const float MaxTime = 300f; //ìŠ¤í…Œì´ì§€ ì œí•œì‹œê°„
+        private float remainingTime;    //ë‚¨ì€ ì‹œê°„
 
         public void Start()
         {
-            remainingTime = MaxTime; //½ºÅ×ÀÌÁö ³²Àº ½Ã°£ ÃÊ±âÈ­
-            InitializeDirtyRoomCount(); //½ºÅ×ÀÌÁö ³²Àº Àå¼Ò ÃÊ±âÈ­
-            Invoke("StartGame", 0.1f);  //°ÔÀÓ ½ÃÀÛ
+            remainingTime = MaxTime; //ìŠ¤í…Œì´ì§€ ë‚¨ì€ ì‹œê°„ ì´ˆê¸°í™”
+            InitializeDirtyRoomCount(); //ìŠ¤í…Œì´ì§€ ë‚¨ì€ ì¥ì†Œ ì´ˆê¸°í™”
+            Invoke("StartGame", 0.1f);  //ê²Œì„ ì‹œì‘
         }
 
         private void Update()
         {
-            //Å¸ÀÌ¸Ó UI ¾÷µ¥ÀÌÆ®
+            //íƒ€ì´ë¨¸ UI ì—…ë°ì´íŠ¸
             if (!IsGameStarted) return;
 
             if (remainingTime > 0)
@@ -85,7 +85,7 @@ namespace KGY
             else EndGame(false);
         }
 
-        #region °ÔÀÓÀÇ Àü¹İÀûÀÎ »óÅÂ ´ã´ç ¸Ş¼­µå
+        #region ê²Œì„ì˜ ì „ë°˜ì ì¸ ìƒíƒœ ë‹´ë‹¹ ë©”ì„œë“œ
         private void StartGame() {
             startPointDoor.Interact();
         }
@@ -94,7 +94,7 @@ namespace KGY
         {
             if (isClear)
             {
-                Debug.Log("·¹º§ Å¬¸®¾î!");
+                Debug.Log("ë ˆë²¨ í´ë¦¬ì–´!");
             }
             else
             { }
@@ -113,7 +113,7 @@ namespace KGY
         }
         #endregion
 
-        #region °ÔÀÓÀÇ ·¹º§ ´ã´ç ¸Ş¼­µå
+        #region ê²Œì„ì˜ ë ˆë²¨ ë‹´ë‹¹ ë©”ì„œë“œ
         private void InitializeDirtyRoomCount()
         {
             var dirtyRooms = GameObject.FindGameObjectsWithTag("MinimapDirtyRoomIcon");

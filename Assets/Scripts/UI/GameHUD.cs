@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,41 +9,41 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    //GameHUD Å¬·¡½º : °ÔÀÓ È­¸éÀÇ HUD¸¦ ³ªÅ¸³»´Â Å¬·¡½º
+    //GameHUD í´ë˜ìŠ¤ : ê²Œì„ í™”ë©´ì˜ HUDë¥¼ ë‚˜íƒ€ë‚´ëŠ” í´ë˜ìŠ¤
     public class GameHUD : MonoBehaviour
     {
-        [SerializeField] private Animator stageStartUI; //½ºÅ×ÀÌÁö ½ÃÀÛ UI
-        [SerializeField] private Animator minimapUI; //¹Ì´Ï¸Ê UI
-        [SerializeField] private Animator remainingTimeUI; //³²Àº ½Ã°£ UI
-        [SerializeField] private Animator remainingRoomUI; //³²Àº Àå¼Ò UI
-        [SerializeField] private GameObject moveKeyUI;    //ÀÌµ¿Å° UI
+        [SerializeField] private Animator stageStartUI; //ìŠ¤í…Œì´ì§€ ì‹œì‘ UI
+        [SerializeField] private Animator minimapUI; //ë¯¸ë‹ˆë§µ UI
+        [SerializeField] private Animator remainingTimeUI; //ë‚¨ì€ ì‹œê°„ UI
+        [SerializeField] private Animator remainingRoomUI; //ë‚¨ì€ ì¥ì†Œ UI
+        [SerializeField] private GameObject moveKeyUI;    //ì´ë™í‚¤ UI
 
-        #region ·¹º§ ½ÃÀÛ ½Ã UI ¼¼ÆÃ
-        //½ºÅ×ÀÌÁö ½ÃÀÛ UI Ç¥½Ã
+        #region ë ˆë²¨ ì‹œì‘ ì‹œ UI ì„¸íŒ…
+        //ìŠ¤í…Œì´ì§€ ì‹œì‘ UI í‘œì‹œ
         public void StartLevel()
         {
             stageStartUI.SetTrigger("showTrigger");
-            StartCoroutine(ShowNextUISequence());   //stageStartUI°¡ »ç¶óÁø ÈÄ ´ÙÀ½ UI Ç¥½Ã
+            StartCoroutine(ShowNextUISequence());   //stageStartUIê°€ ì‚¬ë¼ì§„ í›„ ë‹¤ìŒ UI í‘œì‹œ
         }
 
-        //¹Ì´Ï¸Ê, ³²Àº½Ã°£, ³²ÀºÀå¼Ò UI  Ç¥½Ã
+        //ë¯¸ë‹ˆë§µ, ë‚¨ì€ì‹œê°„, ë‚¨ì€ì¥ì†Œ UI  í‘œì‹œ
         IEnumerator ShowNextUISequence()
         {
             yield return new WaitForSeconds(1f);
             stageStartUI.SetTrigger("hideTrigger");
 
-            //³²Àº ½Ã°£ UI Ç¥½Ã
+            //ë‚¨ì€ ì‹œê°„ UI í‘œì‹œ
             remainingTimeUI.SetTrigger("showTrigger");
 
-            //¹Ì´Ï¸Ê UI Ç¥½Ã
+            //ë¯¸ë‹ˆë§µ UI í‘œì‹œ
             yield return new WaitForSeconds(0.3f);
             minimapUI.SetTrigger("showTrigger");
 
-            //³²Àº Àå¼Ò UI Ç¥½Ã
+            //ë‚¨ì€ ì¥ì†Œ UI í‘œì‹œ
             remainingRoomUI.gameObject.SetActive(true);
         }
 
-        //³²Àº ½Ã°£ UI ¾÷µ¥ÀÌÆ®
+        //ë‚¨ì€ ì‹œê°„ UI ì—…ë°ì´íŠ¸
         public void UpdateTimerUI(float timeRemaining)
         {
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
@@ -51,7 +51,7 @@ namespace KGY
             remainingTimeUI.GetComponent<TextMeshProUGUI>().text = $"{minutes:0}:{seconds:00}";
         }
 
-        //³²Àº Àå¼Ò UI ¾÷µ¥ÀÌÆ®
+        //ë‚¨ì€ ì¥ì†Œ UI ì—…ë°ì´íŠ¸
         public void UpdatecompletedRoomsText(bool isComplete)
         {
             var textComponent = remainingRoomUI.GetComponentInChildren<TextMeshProUGUI>();
@@ -65,11 +65,11 @@ namespace KGY
                 minimap.exitIcon.gameObject.SetActive(true);
                 minimap.exitTransform.gameObject.SetActive(true);
             }
-            else textComponent.text = $"´õ·¯¿î  <b><size=150%>{dirtyRoomCount}</size></b>°³ÀÇ Àå¼Ò¸¦ Ä¡¿ì¼¼¿ä.";
+            else textComponent.text = $"ë”ëŸ¬ìš´  <b><size=150%>{dirtyRoomCount}</size></b>ê°œì˜ ì¥ì†Œë¥¼ ì¹˜ìš°ì„¸ìš”.";
         }
         #endregion
 
-        //ÀÌµ¿Å° UI ¼û±è
+        //ì´ë™í‚¤ UI ìˆ¨ê¹€
         public void HideMoveKeyUI()
         {
             if(moveKeyUI.activeSelf) moveKeyUI.SetActive(false);
@@ -107,7 +107,7 @@ namespace KGY
 
 //    private void Start()
 //    {
-//        //ÀÌº¥Æ® µî·Ï
+//        //ì´ë²¤íŠ¸ ë“±ë¡
 //        cleanRoomSensor.OnEnterRoom += OnEnterCleanRoom;
 //        cleanRoomSensor.OnStayRoom += OnStayCleanRoom;
 //        cleanRoomSensor.OnEixtRoom += OnExitCleanRoom;
@@ -148,7 +148,7 @@ namespace KGY
 //        ShowCleanRoomGaugeBar(roomData);
 //    }
 
-//    //Ã»¼Ò °ÔÀÌÁö¹Ù UI ¾÷µ¥ÀÌÆ®
+//    //ì²­ì†Œ ê²Œì´ì§€ë°” UI ì—…ë°ì´íŠ¸
 //    private void UpdateGaugeValue(CleanRoom roomData)
 //    {
 //        cleanRoomGauge.fillAmount = roomData.DirtyCleanValue / roomData.DirtyTotalValue;

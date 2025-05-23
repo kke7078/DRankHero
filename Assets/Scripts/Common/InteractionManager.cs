@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
@@ -6,25 +6,25 @@ using UnityEngine;
 
 namespace KGY
 {
-    //InteractionManager Å¬·¡½º : »óÈ£ÀÛ¿ëÀ» °ü¸®ÇÏ´Â Å¬·¡½º
+    //InteractionManager í´ë˜ìŠ¤ : ìƒí˜¸ì‘ìš©ì„ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤
     public class InteractionManager : SingletonBase<InteractionManager>
     {
-        private InteractionUI itneractionUI;  //»óÈ£ÀÛ¿ë UI
-        [SerializeField] private InteractionSensor interactionSensor;   //ÇÃ·¹ÀÌ¾î »óÈ£ÀÛ¿ë ¼¾¼­
+        private InteractionUI itneractionUI;  //ìƒí˜¸ì‘ìš© UI
+        [SerializeField] private InteractionSensor interactionSensor;   //í”Œë ˆì´ì–´ ìƒí˜¸ì‘ìš© ì„¼ì„œ
 
-        //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö µ¥ÀÌÅÍ
+        //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ ë°ì´í„°
         public InteractionData InteractionData => interactionData;
         [SerializeField] private InteractionData interactionData;
 
-        //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö(IHasInteractionIds) ¸¦ °¡Áø ¿ÀºêÁ§Æ® ¸®½ºÆ® ¡æ InteractionSensor¿¡¼­ °¨Áö
+        //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€(IHasInteractionIds) ë¥¼ ê°€ì§„ ì˜¤ë¸Œì íŠ¸ ë¦¬ìŠ¤íŠ¸ â†’ InteractionSensorì—ì„œ ê°ì§€
         public List<IHasInteractionIds> CurrentInteractionID => currentInteractionID;
         private List<IHasInteractionIds> currentInteractionID = new List<IHasInteractionIds>();
 
-        //»óÈ£ÀÛ¿ë °¡´É(IInteractable) ¿ÀºêÁ§Æ® ¸®½ºÆ® ¡æ InteractionSensor¿¡¼­ °¨Áö
+        //ìƒí˜¸ì‘ìš© ê°€ëŠ¥(IInteractable) ì˜¤ë¸Œì íŠ¸ ë¦¬ìŠ¤íŠ¸ â†’ InteractionSensorì—ì„œ ê°ì§€
         public List<IInteractable> CurrentInteractable => currentInteractable;
         private List<IInteractable> currentInteractable = new List<IInteractable>();
 
-        public IInteractable ClosestInteractable { get; private set; }  //ÇöÀç °¡Àå °¡±î¿î »óÈ£ÀÛ¿ë ¾ÆÀÌÅÛ
+        public IInteractable ClosestInteractable { get; private set; }  //í˜„ì¬ ê°€ì¥ ê°€ê¹Œìš´ ìƒí˜¸ì‘ìš© ì•„ì´í…œ
 
         private void Start()
         {
@@ -34,32 +34,32 @@ namespace KGY
         }
 
         #region Detected / LostSignal
-        //»óÈ£ÀÛ¿ë ¼¾¼­¿¡ ÀÇÇØ ¿ÀºêÁ§Æ®°¡ °¨ÁöµÇ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
+        //ìƒí˜¸ì‘ìš© ì„¼ì„œì— ì˜í•´ ì˜¤ë¸Œì íŠ¸ê°€ ê°ì§€ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
         private void OnDetectedInteraction(IHasInteractionIds interactable)
         {
-            //»óÈ£ÀÛ¿ë ¸Ş½ÃÁö È£Ãâ
+            //ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ í˜¸ì¶œ
             if (interactable.InteractionIdList.Count > 0) CurrentInteractionID.Add(interactable);
 
-            //interactableÀÌ IInteractable ÀÎÅÍÆäÀÌ½º¸¦ ±¸ÇöÇÏ°í ÀÖ´ÂÁö È®ÀÎ -> Interact()°¡ µÇ´Â ¿ÀºêÁ§Æ®ÀÎÁö È®ÀÎ
+            //interactableì´ IInteractable ì¸í„°í˜ì´ìŠ¤ë¥¼ êµ¬í˜„í•˜ê³  ìˆëŠ”ì§€ í™•ì¸ -> Interact()ê°€ ë˜ëŠ” ì˜¤ë¸Œì íŠ¸ì¸ì§€ í™•ì¸
             if (interactable is IInteractable interactableObj)
             {
-                if (interactable.InteractionIdList.Count == 0) interactableObj.Interact();  //»ç¿ëÀÚ »óÈ£ÀÛ¿ë ¾øÀÌ ¹Ù·Î µ¿ÀÛ
-                else CurrentInteractable.Add(interactableObj);  //»ç¿ëÀÚ°¡ »óÈ£ÀÛ¿ë ÇÒ ¼ö ÀÖ´Â ¸®½ºÆ®¿¡ Ãß°¡
+                if (interactable.InteractionIdList.Count == 0) interactableObj.Interact();  //ì‚¬ìš©ì ìƒí˜¸ì‘ìš© ì—†ì´ ë°”ë¡œ ë™ì‘
+                else CurrentInteractable.Add(interactableObj);  //ì‚¬ìš©ìê°€ ìƒí˜¸ì‘ìš© í•  ìˆ˜ ìˆëŠ” ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
             }
         }
 
-        //»óÈ£ÀÛ¿ë ¼¾¼­¿¡ ÀÇÇØ »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®ÀÇ ½ÅÈ£°¡ »ç¶óÁ³À» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
+        //ìƒí˜¸ì‘ìš© ì„¼ì„œì— ì˜í•´ ìƒí˜¸ì‘ìš© ì˜¤ë¸Œì íŠ¸ì˜ ì‹ í˜¸ê°€ ì‚¬ë¼ì¡Œì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
         private void OnLostSignalInteraction(IHasInteractionIds interactable)
         {
             if (interactable.InteractionIdList.Count > 0) CurrentInteractionID.Remove(interactable);
 
-            //interactableÀÌ IInteractable ÀÎÅÍÆäÀÌ½º¸¦ ±¸ÇöÇÏ°í ÀÖ´ÂÁö È®ÀÎ
+            //interactableì´ IInteractable ì¸í„°í˜ì´ìŠ¤ë¥¼ êµ¬í˜„í•˜ê³  ìˆëŠ”ì§€ í™•ì¸
             if (interactable is IInteractable interactableItem) CurrentInteractable.Remove(interactableItem);
         }
         #endregion
 
 
-        //ÇÃ·¹ÀÌ¾î¿Í °¡Àå °¡±î¿î »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ® Ã£±â
+        //í”Œë ˆì´ì–´ì™€ ê°€ì¥ ê°€ê¹Œìš´ ìƒí˜¸ì‘ìš© ì˜¤ë¸Œì íŠ¸ ì°¾ê¸°
         public void FindClosestinteractable()
         {
             if (CurrentInteractable.Count > 0)
@@ -83,7 +83,7 @@ namespace KGY
             else ClosestInteractable = null;
         }
 
-        //»óÈ£ÀÛ¿ë ¿Ï·á ÈÄ È£ÃâµÇ´Â ¸Ş¼­µå
+        //ìƒí˜¸ì‘ìš© ì™„ë£Œ í›„ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
         public void InteractComplete(IInteractable interactable)
         {
             CurrentInteractable.Remove(interactable);

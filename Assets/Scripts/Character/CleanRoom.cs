@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -6,32 +6,32 @@ using UnityEngine.TextCore.LowLevel;
 
 namespace KGY
 {
-    //CleanRoom Å¬·¡½º : Ã»¼Ò±¸¿ªÀ» ³ªÅ¸³»´Â Å¬·¡½º
+    //CleanRoom í´ë˜ìŠ¤ : ì²­ì†Œêµ¬ì—­ì„ ë‚˜íƒ€ë‚´ëŠ” í´ë˜ìŠ¤
     public class CleanRoom : MonoBehaviour
     {
-        //¹æÀÇ Ã»¼Ò ¿Ï·á »óÅÂ
+        //ë°©ì˜ ì²­ì†Œ ì™„ë£Œ ìƒíƒœ
         public bool IsComplete
         {
             get { return isComplete; }
             set {
                 isComplete = value;
                 if (isComplete) {
-                    //°ÔÀÓHUDÀÇ Ã»¼ÒÇÑ ¹æ °³¼ö °¨¼Ò
+                    //ê²Œì„HUDì˜ ì²­ì†Œí•œ ë°© ê°œìˆ˜ ê°ì†Œ
                     GameManager.Singleton.DirtyRoomCount--;
 
-                    //¹Ì´Ï¸Ê ¾ÆÀÌÄÜ ºñÈ°¼ºÈ­
+                    //ë¯¸ë‹ˆë§µ ì•„ì´ì½˜ ë¹„í™œì„±í™”
                     minimapIcon.gameObject.SetActive(false);
                 }
             }
         }
         private bool isComplete;
 
-        //¹æÀÇ ÀÌ¸§
+        //ë°©ì˜ ì´ë¦„
         public string DirtyRoomName => dirtyRoomName;
         [SerializeField] private string dirtyRoomName;
 
-        public float DirtyTotalValue { get; private set; } = 0f;    //¹æÀÇ Ã»¼ÒÇØ¾ßÇÒ °ª
-        public float DirtyCleanValue { get; set; } = 0f;    //¹æÀÇ Ã»¼ÒµÈ °ª
+        public float DirtyTotalValue { get; private set; } = 0f;    //ë°©ì˜ ì²­ì†Œí•´ì•¼í•  ê°’
+        public float DirtyCleanValue { get; set; } = 0f;    //ë°©ì˜ ì²­ì†Œëœ ê°’
 
         [SerializeField] private InteractionUI interactionUI;
         [SerializeField] private Canvas minimapIcon;

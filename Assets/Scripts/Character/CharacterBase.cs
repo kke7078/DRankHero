@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace KGY
 {
-    //CharacterBase Å¬·¡½º : ¸ğµç Ä³¸¯ÅÍÀÇ ±âº» Å¬·¡½º(°øÅë ¼Ó¼º/±â´ÉÀ» Á¤ÀÇ ex.ÀÌµ¿, È¸Àü, µîµî)
-    //¸ğµç Ä³¸¯ÅÍ°¡ °øÅëÀûÀ¸·Î °¡Áö´Â ¼Ó¼º°ú ¸Ş¼­µå Á¤ÀÇ
+    //CharacterBase í´ë˜ìŠ¤ : ëª¨ë“  ìºë¦­í„°ì˜ ê¸°ë³¸ í´ë˜ìŠ¤(ê³µí†µ ì†ì„±/ê¸°ëŠ¥ì„ ì •ì˜ ex.ì´ë™, íšŒì „, ë“±ë“±)
+    //ëª¨ë“  ìºë¦­í„°ê°€ ê³µí†µì ìœ¼ë¡œ ê°€ì§€ëŠ” ì†ì„±ê³¼ ë©”ì„œë“œ ì •ì˜
     public class CharacterBase : MonoBehaviour
     {
-        public Vector2 Direction { get; set; }  //ÀÌµ¿ ¹æÇâ
+        public Vector2 Direction { get; set; }  //ì´ë™ ë°©í–¥
 
-        //Dialogue UI¿¡ »ç¿ëµÉ  Ä³¸¯ÅÍ ÀÌ¸§
+        //Dialogue UIì— ì‚¬ìš©ë   ìºë¦­í„° ì´ë¦„
         public string CharacterName => characterName;
         [SerializeField] private string characterName;
 
-        //Dialogue UI¿¡ »ç¿ëµÉ Ä³¸¯ÅÍ ÃÊ»óÈ­
+        //Dialogue UIì— ì‚¬ìš©ë  ìºë¦­í„° ì´ˆìƒí™”
         public IReadOnlyList<Sprite> CharacterPortraits => characterPortraits;
         [SerializeField] private Sprite[] characterPortraits; 
 
@@ -30,9 +30,9 @@ namespace KGY
 
         protected virtual void Start()
         {
-            SetSpeed(5.0f);   //±âº» ÀÌµ¿ ¼Óµµ ¼³Á¤
+            SetSpeed(5.0f);   //ê¸°ë³¸ ì´ë™ ì†ë„ ì„¤ì •
             animator = GetComponent<Animator>();
-            unityCharacterController = GetComponent<UnityEngine.CharacterController>(); //À¯´ÏÆ¼¿£Áø Ä³¸¯ÅÍÄÁÆ®·Ñ·¯ ¼±¾ğ
+            unityCharacterController = GetComponent<UnityEngine.CharacterController>(); //ìœ ë‹ˆí‹°ì—”ì§„ ìºë¦­í„°ì»¨íŠ¸ë¡¤ëŸ¬ ì„ ì–¸
         }
 
         public float GetSpeed()
@@ -45,7 +45,7 @@ namespace KGY
             baseSpeed = newSpeed;
         }
 
-        //Ä³¸¯ÅÍ ÀÌµ¿ ¸Ş¼­µå
+        //ìºë¦­í„° ì´ë™ ë©”ì„œë“œ
         public virtual void Move(Vector2 direction, float speed)
         {
             float magnitude = direction.magnitude;
