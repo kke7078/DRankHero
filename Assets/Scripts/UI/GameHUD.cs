@@ -12,6 +12,7 @@ namespace KGY
     //GameHUD 클래스 : 게임 화면의 HUD를 나타내는 클래스
     public class GameHUD : MonoBehaviour
     {
+        [SerializeField] private PlayerCharacter player; //플레이어의 위치
         [SerializeField] private Animator stageStartUI; //스테이지 시작 UI
         [SerializeField] private Animator minimapUI; //미니맵 UI
         [SerializeField] private Animator remainingTimeUI; //남은 시간 UI
@@ -19,7 +20,7 @@ namespace KGY
         [SerializeField] private GameObject moveKeyUI;    //이동키 UI
 
         #region 레벨 시작 시 UI 세팅
-        //스테이지 시작 UI 표시
+        //레벨 시작 UI 표시
         public void StartLevel()
         {
             stageStartUI.SetTrigger("showTrigger");
@@ -74,5 +75,22 @@ namespace KGY
         {
             if(moveKeyUI.activeSelf) moveKeyUI.SetActive(false);
         }
+
+        #region 레벨 클리어 시 UI 세팅
+        public void ClearLevel()
+        {
+            Vector3 targetPosition = new Vector3(0, 0.705f, 0);
+            Vector3 targetRotation = new Vector3(0, -135, 0);
+            StartCoroutine(player.SetPlayerTransform(targetPosition, targetRotation));
+            StartCoroutine(HideNextUISequence());
+
+        }
+
+        IEnumerator HideNextUISequence()
+        {
+            yield return null;
+
+        }
+        #endregion
     }
 }

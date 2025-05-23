@@ -60,6 +60,8 @@ namespace KGY
 
         private void OnClean(bool cleanState)
         {
+            if (GameManager.Singleton.IsCharacterMovementLocked == true) return;
+
             switch (CurrentToolType) {
                 case ToolType.WaterTank:
                     if (waterTankCap == null) waterTankCap = GameObject.Find("BottleCap");

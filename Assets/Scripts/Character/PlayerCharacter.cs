@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GLTFast.Schema;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -40,7 +41,7 @@ namespace KGY
 
         private void Update()
         {
-            if (GameManager.Singleton.IsInDialogue) return;
+            if (GameManager.Singleton.IsCharacterMovementLocked) return;
 
             Direction = InputSystem.Singleton.MoveInput;    //플레이어의 이동 방향 설정
             animator.SetFloat("isMove", Direction.magnitude);
@@ -52,12 +53,45 @@ namespace KGY
         private void OnDisabled()
         {
             InputSystem.Singleton.onClean -= Clean;
+            InputSystem.Singleton.onInteract -= Interact;
         }
 
+        #region 플레이어 이동, 회전 관련 메서드 - Move, Rotate
+        //캐릭터 이동 메서드
+        public override void Move(Vector2 direction, float speed)
+        {
+            if (GameManager.Singleton.IsCharacterMovementLocked || GameManager.Singleton.IsGamePaused) return;
+
+            base.Move(direction, speed);
+
+            InteractionManager.Singleton.FindClosestinteractable(); //상호작용 가능한 오브젝트 찾기
+        }
+
+        //캐릭터 회전 메서드
+        private void Rotate()
+        {
+            //플레이어의 회전 방향 설정
+            if (isCleaning)
+            {
+                //클릭하는 방향으로 플레이어 회전
+                Ray mouseRay = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, 1000f))
+                {
+                    Vector3 direction = hitInfo.point - transform.position;
+
+                    Quaternion targetRot = Quaternion.LookRotation(direction);
+                    targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
+                    transform.rotation = targetRot;
+                }
+            }
+        }
+        #endregion
+
+        #region 플레이어 청소 관련 메서드 - Clean, Equip, UnEquip, EquipControl, ToolEquip, HandIKControl
         //플레이어의 청소 유무에 따른 변화 체크
         private void Clean(bool isClean)
         {
-            if (GameManager.Singleton.IsInDialogue) return;
+            if (GameManager.Singleton.IsCharacterMovementLocked) return;
 
             isCleaning = isClean;
 
@@ -177,35 +211,7 @@ namespace KGY
 
             rigBuilder.Build(); //RigBuilder 재구성
         }
-
-        //캐릭터 이동 메서드
-        public override void Move(Vector2 direction, float speed)
-        {
-            if (GameManager.Singleton.IsInDialogue || GameManager.Singleton.IsPause) return;
-
-            base.Move(direction, speed);
-
-            InteractionManager.Singleton.FindClosestinteractable(); //상호작용 가능한 오브젝트 찾기
-        }
-
-        //캐릭터 회전 메서드
-        private void Rotate()
-        {
-            //플레이어의 회전 방향 설정
-            if (isCleaning)
-            {
-                //클릭하는 방향으로 플레이어 회전
-                Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, 1000f))
-                {
-                    Vector3 direction = hitInfo.point - transform.position;
-
-                    Quaternion targetRot = Quaternion.LookRotation(direction);
-                    targetRot.eulerAngles = new Vector3(0, targetRot.eulerAngles.y, 0);
-                    transform.rotation = targetRot;
-                }
-            }
-        }
+        #endregion
 
         //플레이어의 움직임 상태 설정
         public void SetPlayerMovementState(bool moving)
@@ -217,11 +223,29 @@ namespace KGY
             }
         }
 
+        //플레이어의 위치, 회전 초기화 - 게임 클리어 시 호출
+        public IEnumerator SetPlayerTransform(Vector3 targetPosition, Vector3 targetRotation)
+        {
+            Clean(false);
+            GameManager.Singleton.IsCharacterMovementLocked = true; //플레이어 이동 잠금
+
+            transform.rotation = Quaternion.Euler(targetRotation);  //플레이어 회전 초기화
+            while (Vector3.Distance(transform.position, targetPosition) > 0.01f) //플레이어 이동 초기화
+            {
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                unityCharacterController.Move(direction * GetSpeed() * Time.deltaTime);
+                yield return null;
+            }
+
+            animator.SetFloat("isMove", 0); //플레이어 이동 애니메이션 초기화
+        }
+        
+
         //플레이어 상호작용 동작 메서드
         private void Interact()
         {
             var InteractMng = InteractionManager.Singleton;
-            if (GameManager.Singleton.IsInDialogue || InteractMng.CurrentInteractable.Count <= 0) return;
+            if (GameManager.Singleton.IsCharacterMovementLocked || InteractMng.CurrentInteractable.Count <= 0) return;
 
             var targetObj = InteractMng.ClosestInteractable;
             if (targetObj == null) return;

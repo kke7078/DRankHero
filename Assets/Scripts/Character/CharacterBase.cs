@@ -22,11 +22,11 @@ namespace KGY
         [SerializeField] private Sprite[] characterPortraits; 
 
         protected Animator animator;
+        protected UnityEngine.CharacterController unityCharacterController;
 
         private float targetRotation;
         private float rotationVelocity;
         private float baseSpeed;
-        private UnityEngine.CharacterController unityCharacterController;
 
         protected virtual void Start()
         {

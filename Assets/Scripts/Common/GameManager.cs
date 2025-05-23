@@ -31,19 +31,19 @@ namespace KGY
         private bool isCleanComplete;
 
         //게임 멈춤 유무
-        public bool IsPause
+        public bool IsGamePaused
         { 
-            get => isPause;
+            get => isGamePaused;
             set {
-                if (isPause == value) return;
-                isPause = value;
-                TogglePause(isPause);
+                if (isGamePaused == value) return;
+                isGamePaused = value;
+                TogglePause(isGamePaused);
             }
         }
-        private bool isPause;
+        private bool isGamePaused;
 
         //대화 중 유무
-        public bool IsInDialogue { get; set; }
+        public bool IsCharacterMovementLocked { get; set; }
 
         //레벨 별 청소해야하는 방의 개수
         public int DirtyRoomCount {
@@ -94,7 +94,7 @@ namespace KGY
         {
             if (isClear)
             {
-                Debug.Log("레벨 클리어!");
+                GameHUD.ClearLevel();
             }
             else
             { }
@@ -102,7 +102,7 @@ namespace KGY
 
         private void TogglePause(bool isPause)
         {
-            if (isPause)
+            if (IsGamePaused)
             { 
                 Time.timeScale = 0f;
             }

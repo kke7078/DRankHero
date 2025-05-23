@@ -11,7 +11,7 @@ namespace KGY
 
         private void Update()
         {
-            if (GameManager.Singleton.IsInDialogue || GameManager.Singleton.IsPause) return;
+            if (GameManager.Singleton.IsCharacterMovementLocked || GameManager.Singleton.IsGamePaused) return;
 
             if (LayerMask.LayerToName(gameObject.layer) == "MinimapOnly") return;
 

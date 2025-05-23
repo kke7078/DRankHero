@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -55,9 +56,9 @@ namespace KGY
                 isShow = true;
                 DialogueSetActive(isShow);
 
-                player.SetPlayerMovementState(false); //플레이어 동작 제어
-
-                GameManager.Singleton.IsInDialogue = true;
+                Vector3 targetPosition = new Vector3(4.15f, 0.705f, 6.3f);
+                Vector3 targetRotation = new Vector3(0, -34.15f, 0);
+                StartCoroutine(player.SetPlayerTransform(targetPosition, targetRotation));
             }
 
             dialogueQueue = new Queue<DialogueLine>(dialogue.lines);
@@ -116,7 +117,8 @@ namespace KGY
         //대화 종료
         public void EndDialogue()
         {
-            GameManager.Singleton.IsInDialogue = false;
+            if (GameManager.Singleton.IsCharacterMovementLocked == false || isShow == false) return;
+            GameManager.Singleton.IsCharacterMovementLocked = false;
             isShow = false;
             isTyping = false;
             DialogueSetActive(false);
