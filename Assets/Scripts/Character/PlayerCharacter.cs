@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -10,20 +10,19 @@ using UnityEngine.UIElements;
 
 namespace KGY
 {
-    //PlayerCharacter Å¬·¡½º : ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍÀÇ ¼Ó¼º ¹× µ¿ÀÛÀ» Á¤ÀÇÇÏ´Â Å¬·¡½º (CharacterBase Å¬·¡½º¸¦ »ó¼Ó¹Ş¾Æ¼­ È®Àå)
+    //PlayerCharacter í´ë˜ìŠ¤ : í”Œë ˆì´ì–´ ìºë¦­í„°ì˜ ì†ì„± ë° ë™ì‘ì„ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤ (CharacterBase í´ë˜ìŠ¤ë¥¼ ìƒì†ë°›ì•„ì„œ í™•ì¥)
     public class PlayerCharacter : CharacterBase
     {
-        public CleanToolManager CurrentTool { get; private set; }   //ÇöÀç ÀåÂøµÈ Ã»¼Òµµ±¸
+        public CleanToolManager CurrentTool { get; private set; }   //í˜„ì¬ ì¥ì°©ëœ ì²­ì†Œë„êµ¬
 
-        [SerializeField] private Transform backToolHolder;         //µî¿¡ À§Ä¡ÇÑ Ã»¼Òµµ±¸ È¦´õ
-        [SerializeField] private Transform handToolHolder;         //¼Õ¿¡ À§Ä¡ÇÑ Ã»¼Òµµ±¸ È¦´õ
-        [SerializeField] private TwoBoneIKConstraint rightHandIK;  //¿À¸¥¼Õ IK
-        [SerializeField] private TwoBoneIKConstraint leftHandIK;   //¿Ş¼Õ IK
-        [SerializeField] private InteractionUI interactionUI;      //»óÈ£ÀÛ¿ë UI
+        [SerializeField] private Transform backToolHolder;         //ë“±ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ í™€ë”
+        [SerializeField] private Transform handToolHolder;         //ì†ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ í™€ë”
+        [SerializeField] private TwoBoneIKConstraint rightHandIK;  //ì˜¤ë¥¸ì† IK
+        [SerializeField] private TwoBoneIKConstraint leftHandIK;   //ì™¼ì† IK
 
-        private bool isCleaning = false;        //ÇÃ·¹ÀÌ¾îÀÇ Ã»¼Ò À¯¹«
-        private bool isEquipping = false;       //ÇÃ·¹ÀÌ¾îÀÇ Àåºñ À¯¹«
-        private RigBuilder rigBuilder;          //ÇÃ·¹ÀÌ¾îÀÇ RigBuilder ÄÄÆ÷³ÍÆ®
+        private bool isCleaning = false;        //í”Œë ˆì´ì–´ì˜ ì²­ì†Œ ìœ ë¬´
+        private bool isEquipping = false;       //í”Œë ˆì´ì–´ì˜ ì¥ë¹„ ìœ ë¬´
+        private RigBuilder rigBuilder;          //í”Œë ˆì´ì–´ì˜ RigBuilder ì»´í¬ë„ŒíŠ¸
                 
         public void OnEnable()
         {
@@ -36,16 +35,17 @@ namespace KGY
             base.Start();
 
             rigBuilder = GetComponent<RigBuilder>();
-            CurrentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //ÃÊ±â Ã»¼Òµµ±¸ ¼³Á¤
+            CurrentTool = backToolHolder.GetComponentInChildren<CleanToolManager>(); //ì´ˆê¸° ì²­ì†Œë„êµ¬ ì„¤ì •
         }
 
         private void Update()
         {
             if (GameManager.Singleton.IsInDialogue) return;
 
-            Direction = InputSystem.Singleton.MoveInput;    //ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿ ¹æÇâ ¼³Á¤
+            Direction = InputSystem.Singleton.MoveInput;    //í”Œë ˆì´ì–´ì˜ ì´ë™ ë°©í–¥ ì„¤ì •
             animator.SetFloat("isMove", Direction.magnitude);
 
+            Move(Direction, GetSpeed());
             Rotate();
         }
 
@@ -54,7 +54,7 @@ namespace KGY
             InputSystem.Singleton.onClean -= Clean;
         }
 
-        //ÇÃ·¹ÀÌ¾îÀÇ Ã»¼Ò À¯¹«¿¡ µû¸¥ º¯È­ Ã¼Å©
+        //í”Œë ˆì´ì–´ì˜ ì²­ì†Œ ìœ ë¬´ì— ë”°ë¥¸ ë³€í™” ì²´í¬
         private void Clean(bool isClean)
         {
             if (GameManager.Singleton.IsInDialogue) return;
@@ -63,15 +63,15 @@ namespace KGY
 
             if (isClean)
             {
-                SetSpeed(3.0f); //ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿¼Óµµ¸¦ 3.0f·Î ¼³Á¤
+                SetSpeed(3.0f); //í”Œë ˆì´ì–´ì˜ ì´ë™ì†ë„ë¥¼ 3.0fë¡œ ì„¤ì •
                 Equip();
             }
             else
             {
-                SetSpeed(5.0f); //ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿¼Óµµ¸¦ 5.0f·Î ¿øº¹
+                SetSpeed(5.0f); //í”Œë ˆì´ì–´ì˜ ì´ë™ì†ë„ë¥¼ 5.0fë¡œ ì›ë³µ
                 UnEquip();
 
-                //Hand IK ÃÊ±âÈ­
+                //Hand IK ì´ˆê¸°í™”
                 HandIKControl();
             }
         }
@@ -81,11 +81,11 @@ namespace KGY
 
             isEquipping = true;
 
-            //ÇÃ·¹ÀÌ¾îÀÇ UnEquip ¾Ö´Ï¸ŞÀÌ¼Ç ÃÊ±âÈ­
+            //í”Œë ˆì´ì–´ì˜ UnEquip ì• ë‹ˆë©”ì´ì…˜ ì´ˆê¸°í™”
             animator.SetBool("isUnEquip", !isEquipping);
             animator.ResetTrigger("UnEquipTrigger");
 
-            //ÇÃ·¹ÀÌ¾îÀÇ Equip ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+            //í”Œë ˆì´ì–´ì˜ Equip ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
             animator.SetBool("isEquip", isEquipping);
             animator.SetTrigger("EquipTrigger");
         }
@@ -93,11 +93,11 @@ namespace KGY
         private void UnEquip() {
             isEquipping = false;
 
-            //ÇÃ·¹ÀÌ¾îÀÇ Equip ¾Ö´Ï¸ŞÀÌ¼Ç ÃÊ±âÈ­
+            //í”Œë ˆì´ì–´ì˜ Equip ì• ë‹ˆë©”ì´ì…˜ ì´ˆê¸°í™”
             animator.SetBool("isEquip", isEquipping);
             animator.ResetTrigger("EquipTrigger");
 
-            //ÇÃ·¹ÀÌ¾îÀÇ UnEquip ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+            //í”Œë ˆì´ì–´ì˜ UnEquip ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
             animator.SetBool("isUnEquip", !isEquipping);
             animator.SetTrigger("UnEquipTrigger");
         }
@@ -106,95 +106,95 @@ namespace KGY
         {
             if (status == "equip")
             {
-                //Ã»¼Òµµ±¸ ¼Õ¿¡ ÀåÂø
+                //ì²­ì†Œë„êµ¬ ì†ì— ì¥ì°©
                 ToolEquip();
             }
             else if (status == "equipEnd")
             {
-                //equip ¾Ö´Ï¸ŞÀÌ¼Ç ÇØÁ¦
+                //equip ì• ë‹ˆë©”ì´ì…˜ í•´ì œ
                 animator.SetBool("isEquip", false);
 
-                //clean ¾Ö´Ï¸ŞÀÌ¼Ç ¼³Á¤
+                //clean ì• ë‹ˆë©”ì´ì…˜ ì„¤ì •
                 animator.SetFloat("isClean", 1);
 
-                //Hand IK ¼³Á¤
+                //Hand IK ì„¤ì •
                 Invoke("HandIKControl", 0.03f);
             }
             else if (status == "unEquip")
             {
-                //Ã»¼Òµµ±¸ µî¿¡ ÀåÂø
+                //ì²­ì†Œë„êµ¬ ë“±ì— ì¥ì°©
                 ToolEquip();
 
-                //Idle ¾Ö´Ï¸ŞÀÌ¼Ç ¼³Á¤
+                //Idle ì• ë‹ˆë©”ì´ì…˜ ì„¤ì •
                 animator.SetFloat("isClean", 0);
             }
             else if (status == "unEquipEnd") {
-                //unEquip ¾Ö´Ï¸ŞÀÌ¼Ç ÇØÁ¦
+                //unEquip ì• ë‹ˆë©”ì´ì…˜ í•´ì œ
                 animator.SetBool("isUnEquip", false);
             }
         }
 
-        //Ã»¼Ò µµ±¸ ÀåÂø ¹× ÇØÁ¦
+        //ì²­ì†Œ ë„êµ¬ ì¥ì°© ë° í•´ì œ
         private void ToolEquip()
         {
             if (isCleaning)
             {
-                //Ã»¼Òµµ±¸ ¼Õ¿¡ ÀåÂø
+                //ì²­ì†Œë„êµ¬ ì†ì— ì¥ì°©
                 CurrentTool.transform.SetParent(handToolHolder);
                 CurrentTool.transform.localRotation = Quaternion.identity;
                 CurrentTool.transform.localPosition = Vector3.zero;
             }
             else
             {
-                //Ã»¼Òµµ±¸¸¦ µî¿¡ ÀåÂø
+                //ì²­ì†Œë„êµ¬ë¥¼ ë“±ì— ì¥ì°©
                 CurrentTool.transform.SetParent(backToolHolder);
                 CurrentTool.transform.localPosition = CurrentTool.ToolBackPosition;
                 CurrentTool.transform.localRotation = Quaternion.Euler(CurrentTool.ToolBackRotation.x, CurrentTool.ToolBackRotation.y, CurrentTool.ToolBackRotation.z);
             }
         }
 
-        //Hand IK Á¦¾î
+        //Hand IK ì œì–´
         private void HandIKControl()
         {
             if (isCleaning)
             {
-                rightHandIK.data.target = CurrentTool.transform.Find("RightHandGrip");  //¿À¸¥¼Õ IK Å¸°Ù ¼³Á¤
-                leftHandIK.data.target = CurrentTool.transform.Find("LeftHandGrip");    //¿Ş¼Õ IK Å¸°Ù ¼³Á¤
-                rigBuilder.layers[0].active = isCleaning;  //RigBuilderÀÇ ·¹ÀÌ¾î È°¼ºÈ­
+                rightHandIK.data.target = CurrentTool.transform.Find("RightHandGrip");  //ì˜¤ë¥¸ì† IK íƒ€ê²Ÿ ì„¤ì •
+                leftHandIK.data.target = CurrentTool.transform.Find("LeftHandGrip");    //ì™¼ì† IK íƒ€ê²Ÿ ì„¤ì •
+                rigBuilder.layers[0].active = isCleaning;  //RigBuilderì˜ ë ˆì´ì–´ í™œì„±í™”
 
-                CurrentTool.ToolMainEffect.SetActive(isCleaning); //Ã»¼Òµµ±¸ ÀÌÆåÆ® È°¼ºÈ­
-                CurrentTool.ToolSubEffext.SetActive(isCleaning); //Ã»¼Òµµ±¸ ¼­ºê ÀÌÆåÆ® È°¼ºÈ­
+                CurrentTool.ToolMainEffect.SetActive(isCleaning); //ì²­ì†Œë„êµ¬ ì´í™íŠ¸ í™œì„±í™”
+                CurrentTool.ToolSubEffext.SetActive(isCleaning); //ì²­ì†Œë„êµ¬ ì„œë¸Œ ì´í™íŠ¸ í™œì„±í™”
             }
             else
             {
-                rightHandIK.data.target = null; //¿À¸¥¼Õ IK Å¸°Ù ÃÊ±âÈ­
-                leftHandIK.data.target = null;  //¿Ş¼Õ IK Å¸°Ù ÃÊ±âÈ­
-                rigBuilder.layers[0].active = isCleaning;  //RigBuilderÀÇ ·¹ÀÌ¾î ºñÈ°¼ºÈ­
+                rightHandIK.data.target = null; //ì˜¤ë¥¸ì† IK íƒ€ê²Ÿ ì´ˆê¸°í™”
+                leftHandIK.data.target = null;  //ì™¼ì† IK íƒ€ê²Ÿ ì´ˆê¸°í™”
+                rigBuilder.layers[0].active = isCleaning;  //RigBuilderì˜ ë ˆì´ì–´ ë¹„í™œì„±í™”
 
-                CurrentTool.ToolMainEffect.SetActive(isCleaning); //Ã»¼Òµµ±¸ ÀÌÆåÆ® ºñÈ°¼ºÈ­
-                CurrentTool.ToolSubEffext.SetActive(isCleaning); //Ã»¼Òµµ±¸ ¼­ºê ÀÌÆåÆ® ºñÈ°¼ºÈ­
+                CurrentTool.ToolMainEffect.SetActive(isCleaning); //ì²­ì†Œë„êµ¬ ì´í™íŠ¸ ë¹„í™œì„±í™”
+                CurrentTool.ToolSubEffext.SetActive(isCleaning); //ì²­ì†Œë„êµ¬ ì„œë¸Œ ì´í™íŠ¸ ë¹„í™œì„±í™”
             }
 
-            rigBuilder.Build(); //RigBuilder Àç±¸¼º
+            rigBuilder.Build(); //RigBuilder ì¬êµ¬ì„±
         }
 
-        //Ä³¸¯ÅÍ ÀÌµ¿ ¸Ş¼­µå
+        //ìºë¦­í„° ì´ë™ ë©”ì„œë“œ
         public override void Move(Vector2 direction, float speed)
         {
             if (GameManager.Singleton.IsInDialogue || GameManager.Singleton.IsPause) return;
 
             base.Move(direction, speed);
 
-            InteractionManager.Singleton.FindClosestinteractable(); //»óÈ£ÀÛ¿ë °¡´ÉÇÑ ¿ÀºêÁ§Æ® Ã£±â
+            InteractionManager.Singleton.FindClosestinteractable(); //ìƒí˜¸ì‘ìš© ê°€ëŠ¥í•œ ì˜¤ë¸Œì íŠ¸ ì°¾ê¸°
         }
 
-        //Ä³¸¯ÅÍ È¸Àü ¸Ş¼­µå
+        //ìºë¦­í„° íšŒì „ ë©”ì„œë“œ
         private void Rotate()
         {
-            //ÇÃ·¹ÀÌ¾îÀÇ È¸Àü ¹æÇâ ¼³Á¤
+            //í”Œë ˆì´ì–´ì˜ íšŒì „ ë°©í–¥ ì„¤ì •
             if (isCleaning)
             {
-                //Å¬¸¯ÇÏ´Â ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î È¸Àü
+                //í´ë¦­í•˜ëŠ” ë°©í–¥ìœ¼ë¡œ í”Œë ˆì´ì–´ íšŒì „
                 Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, 1000f))
                 {
@@ -207,7 +207,7 @@ namespace KGY
             }
         }
 
-        //ÇÃ·¹ÀÌ¾îÀÇ ¿òÁ÷ÀÓ »óÅÂ ¼³Á¤
+        //í”Œë ˆì´ì–´ì˜ ì›€ì§ì„ ìƒíƒœ ì„¤ì •
         public void SetPlayerMovementState(bool moving)
         {
             if (!moving)
@@ -217,7 +217,7 @@ namespace KGY
             }
         }
 
-        //ÇÃ·¹ÀÌ¾î »óÈ£ÀÛ¿ë µ¿ÀÛ ¸Ş¼­µå
+        //í”Œë ˆì´ì–´ ìƒí˜¸ì‘ìš© ë™ì‘ ë©”ì„œë“œ
         private void Interact()
         {
             var InteractMng = InteractionManager.Singleton;
