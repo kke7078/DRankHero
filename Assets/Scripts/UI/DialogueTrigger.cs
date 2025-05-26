@@ -1,32 +1,46 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KGY
 {
-    ///DialogueTrigger Å¬·¡½º : DialogueUI¿¡ DialogueData¸¦ Àü´ŞÇÏ´Â Å¬·¡½º
+    ///DialogueTrigger í´ë˜ìŠ¤ : DialogueUIì— DialogueDataë¥¼ ì „ë‹¬í•˜ëŠ” í´ë˜ìŠ¤
     public class DialogueTrigger : MonoBehaviour
     {
-        public DialogueData dialogueData; //´ëÈ­ µ¥ÀÌÅÍ
-        public DialogueUI dialogueUI; //´ëÈ­ UI
-        public Animator speechBubble; //´ëÈ­ ¸»Ç³¼±    
+        [SerializeField] private DialogueData dialogueData; //ëŒ€í™” ë°ì´í„°
+        [SerializeField] private DialogueUI dialogueUI; //ëŒ€í™” UI
+        [SerializeField] private Animator speechBubble; //ëŒ€í™” ë§í’ì„ 
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                dialogueData.SetCharacter(); //´ëÈ­ µ¥ÀÌÅÍ¿¡ Ä³¸¯ÅÍ ¼³Á¤
-                dialogueUI.StartDialogue(dialogueData); //´ëÈ­ ½ÃÀÛ
-
-                gameObject.SetActive(false); //Æ®¸®°Å ºñÈ°¼ºÈ­
-
-                if (speechBubble != null) 
+                if (!dialogueUI.IsSet)
                 {
-                    dialogueUI.SpeechBubble = speechBubble; //´ëÈ­ UI¿¡ ¸»Ç³¼± ¾Ö´Ï¸ŞÀÌ¼Ç ¼³Á¤
+                    dialogueData.SetCharacter(); //ëŒ€í™” ë°ì´í„°ì— ìºë¦­í„° ì„¤ì •
+
+                    dialogueUI.IsSet = true;
+                    dialogueUI.DialogueTrigger = gameObject; //DialogueTrigger ì„¤ì •
+                    dialogueUI.StartDialogue(dialogueData); //ëŒ€í™” ì‹œì‘
+                }
+                else dialogueUI.DialogueSetActive(true); //ëŒ€í™” UI ë¹„í™œì„±í™”
+
+                if (speechBubble != null)
+                {
+                    dialogueUI.SpeechBubble = speechBubble; //ëŒ€í™” UIì— ë§í’ì„  ì• ë‹ˆë©”ì´ì…˜ ì„¤ì •
 
                     speechBubble.SetBool("isShow", true);
                     speechBubble.SetTrigger("showTrigger");
                 }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                dialogueUI.DialogueSetActive(false); //ëŒ€í™” UI ë¹„í™œì„±í™”
+                StartCoroutine(dialogueUI.ShowCurrentLine()); //í˜„ì¬ ëŒ€ì‚¬ í‘œì‹œ
             }
         }
     }

@@ -86,7 +86,7 @@ namespace KGY
         }
 
         #region 게임의 전반적인 상태 담당 메서드
-        private void StartGame() {
+        public void StartGame() {
             startPointDoor.Interact();
         }
 
@@ -123,6 +123,8 @@ namespace KGY
 
         public void ClosedDoor()
         {
+            if (!startPointDoor.IsOpened) return;
+
             var animator = startPointDoor.GetComponent<Animator>();
             animator.SetBool("isClosed", true);
             animator.SetTrigger("slidingCloseTrigger");

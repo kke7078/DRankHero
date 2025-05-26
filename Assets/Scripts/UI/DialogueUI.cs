@@ -1,7 +1,9 @@
-using Cinemachine;
+ï»¿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +11,7 @@ using UnityEngine.UI;
 
 namespace KGY
 {
-    //DialogueUI Å¬·¡½º : ´ëÈ­ UI¸¦ ³ªÅ¸³»´Â Å¬·¡½º
+    //DialogueUI í´ë˜ìŠ¤ : ëŒ€í™” UIë¥¼ ë‚˜íƒ€ë‚´ëŠ” í´ë˜ìŠ¤
     public class DialogueUI : MonoBehaviour
     {
         [SerializeField] private PlayerCharacter player;
@@ -17,28 +19,30 @@ namespace KGY
         [SerializeField] private TextMeshProUGUI speakerName;
         [SerializeField] private TextMeshProUGUI dialogueText;
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
+        [SerializeField] private Transform cameraTarget;    //ëŒ€í™”ì°½ ì—´ë ¸ì„ ë•Œ ì¹´ë©”ë¼ì˜ íƒ€ê²Ÿ
 
-        private float typingSpeed = 0.05f; //Å¸ÀÌÇÎ ¼Óµµ
-        private Animator animator; //¾Ö´Ï¸ŞÀÌ¼Ç ÄÄÆ÷³ÍÆ®
-        private DialogueData dialogueData; //´ëÈ­ µ¥ÀÌÅÍ
-        private Queue<DialogueLine> dialogueQueue; //´ëÈ­ ³»¿ë Å¥
-        private DialogueLine currentLine; //ÇöÀç ´ëÈ­ ³»¿ë
-        private Coroutine typingCoroutine; //Å¸ÀÌÇÎ ÄÚ·çÆ¾
-        private bool isTyping = false; //Å¸ÀÌÇÎ ÁßÀÎÁö ¿©ºÎ
-        private bool isShow = false; //´ëÈ­Ã¢ÀÌ º¸ÀÌ´ÂÁö ¿©ºÎ
-        private CinemachineFramingTransposer framingTransposer;
+        private float typingSpeed = 0.05f; //íƒ€ì´í•‘ ì†ë„
+        private Animator animator; //ì• ë‹ˆë©”ì´ì…˜ ì»´í¬ë„ŒíŠ¸
+        private DialogueData dialogueData; //ëŒ€í™” ë°ì´í„°
+        private Queue<DialogueLine> dialogueQueue; //ëŒ€í™” ë‚´ìš© í
+        private DialogueLine currentLine; //í˜„ì¬ ëŒ€í™” ë‚´ìš©
+        private Coroutine typingCoroutine; //íƒ€ì´í•‘ ì½”ë£¨í‹´
+        private bool isShow = false;    //ëŒ€í™”ì°½ì´ ë³´ì´ëŠ”ì§€ ì—¬ë¶€
+        private bool isTyping = false; //íƒ€ì´í•‘ ì¤‘ì¸ì§€ ì—¬ë¶€
+        private CinemachineFramingTransposer framingTransposer; // ì¹´ë©”ë¼ì˜ í”„ë ˆì´ë° íŠ¸ëœìŠ¤í¬ì €
 
-        public Animator SpeechBubble { get; set; } //´ëÈ­ ¸»Ç³¼± ¾Ö´Ï¸ŞÀÌ¼Ç
+        public bool IsSet { get; set; } //DialogueTriggerì—ì„œ ëŒ€í™” ë°ì´í„°ê°€ ì„¤ì •ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€
+        public Animator SpeechBubble { get; set; } //ëŒ€í™” ë§í’ì„  ì• ë‹ˆë©”ì´ì…˜
+        public GameObject DialogueTrigger { get; set; } // ëŒ€í™” íŠ¸ë¦¬ê±° ì˜¤ë¸Œì íŠ¸
 
         private void Start()
         {
             animator = GetComponent<Animator>();
 
-            InputSystem.Singleton.onDialogueNextText += ShowNextLine; //´ÙÀ½ ´ëÈ­ ÅØ½ºÆ® Ç¥½Ã
-            InputSystem.Singleton.onDialogueEnd += EndDialogue; //´ëÈ­ Á¾·á
+            InputSystem.Singleton.onDialogueNextText += ShowNextLine; //ë‹¤ìŒ ëŒ€í™” í…ìŠ¤íŠ¸ í‘œì‹œ
+            InputSystem.Singleton.onDialogueEnd += EndDialogue; //ëŒ€í™” ì¢…ë£Œ
 
             framingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-
         }
 
         private void Update()
@@ -46,26 +50,21 @@ namespace KGY
             ControlCamera(isShow);
         }
 
-        //´ëÈ­ ½ÃÀÛ
+        //ëŒ€í™” ì‹œì‘
         public void StartDialogue(DialogueData dialogue)
         {
+            GameManager.Singleton.ClosedDoor(); //ì‹œì‘ì§€ì  ë¬¸ ë‹«ê¸°
+
             dialogueData = dialogue;
 
-            if (!isShow)
-            {
-                isShow = true;
-                DialogueSetActive(isShow);
-
-                Vector3 targetPosition = new Vector3(4.15f, 0.705f, 6.3f);
-                Vector3 targetRotation = new Vector3(0, -34.15f, 0);
-                StartCoroutine(player.SetPlayerTransform(targetPosition, targetRotation));
-            }
+            isShow = true;
+            DialogueSetActive(isShow);
 
             dialogueQueue = new Queue<DialogueLine>(dialogue.lines);
             ShowNextLine();
         }
 
-        //´ë»ç ³Ñ±â±â
+        //ëŒ€ì‚¬ ë„˜ê¸°ê¸°
         public void ShowNextLine()
         {
             if (!isShow) return;
@@ -98,32 +97,56 @@ namespace KGY
 
             typingCoroutine = StartCoroutine(TypeSentence(line.dialogueText));
         }
+        
+        //í˜„ì¬ ëŒ€ì‚¬ ì „ì²´ í‘œì‹œ
+        public IEnumerator ShowCurrentLine()
+        {
+            yield return new WaitForSeconds(0.5f); //ëŒ€í™”ì°½ì´ ë¹„í™œì„±í™”ëœ í›„ ì ì‹œ ëŒ€ê¸°
 
-        //´ë»ç Å¸ÀÌÇÎ È¿°ú
+            if (isTyping)
+            {
+                StopCoroutine(typingCoroutine);
+                dialogueText.text = currentLine.dialogueText;
+                isTyping = false;
+            }
+        }
+
+        //ëŒ€ì‚¬ íƒ€ì´í•‘ íš¨ê³¼
         IEnumerator TypeSentence(string sentence)
         {
             isTyping = true;
             dialogueText.text = "";
 
-            foreach (char letter in sentence.ToCharArray())
-            {
-                dialogueText.text += letter;
-                yield return new WaitForSeconds(typingSpeed);
+            string currentText = "";
+            bool insideTag = false;
+
+            for (int i = 0; i < sentence.Length; i++)
+            { 
+                char c = sentence[i];
+                currentText += c;
+
+                if (c == '<') insideTag = true;
+                else if(c == '>') insideTag = false;
+
+                if (!insideTag)
+                {
+                    dialogueText.text = currentText;
+                    yield return new WaitForSeconds(typingSpeed);
+                }
             }
 
+            dialogueText.text = sentence;
             isTyping = false;
         }
 
-        //´ëÈ­ Á¾·á
+        //ëŒ€í™” ì¢…ë£Œ
         public void EndDialogue()
         {
-            if (GameManager.Singleton.IsCharacterMovementLocked == false || isShow == false) return;
-            GameManager.Singleton.IsCharacterMovementLocked = false;
             isShow = false;
             isTyping = false;
-            DialogueSetActive(false);
+            DialogueSetActive(isShow);
 
-            //¸»Ç³¼± »èÁ¦
+            //ë§í’ì„  ì‚­ì œ
             if (SpeechBubble != null)
             {
                 SpeechBubble.SetBool("isShow", false);
@@ -133,16 +156,20 @@ namespace KGY
                 SpeechBubble.SetTrigger("hideTrigger");
             }
 
-            player.SetPlayerMovementState(true); //ÇÃ·¹ÀÌ¾î ÀÌµ¿ °¡´É
+            IsSet = false; //ëŒ€í™” ë°ì´í„° ì„¤ì • ì´ˆê¸°í™”
+            DialogueTrigger.SetActive(false); //ëŒ€í™” íŠ¸ë¦¬ê±° ë¹„í™œì„±í™”
+            DialogueTrigger = null; //ëŒ€í™” íŠ¸ë¦¬ê±° ì´ˆê¸°í™”
         }
 
-        //´ëÈ­Ã¢ È°¼ºÈ­/ºñÈ°¼ºÈ­
+        //ëŒ€í™”ì°½ í™œì„±í™”/ë¹„í™œì„±í™”
         public void DialogueSetActive(bool show)
         {
-            animator.SetBool("isShow", show);
-            animator.SetBool("isHide", !show);
+            isShow = show;
 
-            if (show)
+            animator.SetBool("isShow", isShow);
+            animator.SetBool("isHide", !isShow);
+
+            if (isShow)
             {
                 animator.SetTrigger("showTrigger");
                 animator.ResetTrigger("hideTrigger");
@@ -154,25 +181,28 @@ namespace KGY
             }
         }
 
-        //´ëÈ­ ½ÃÀÛ/Á¾·á ½Ã Ä«¸Ş¶ó Á¦¾î
-        public void ControlCamera(bool show)
+        //ëŒ€í™” ì‹œì‘/ì¢…ë£Œ ì‹œ ì¹´ë©”ë¼ ì œì–´
+        public void ControlCamera(bool isShow)
         {
-            //Ä«¸Ş¶óÀÇ ÇöÀç À§Ä¡
+            //ì¹´ë©”ë¼ì˜ í˜„ì¬ ìœ„ì¹˜
             Vector3 currentOffset = framingTransposer.m_TrackedObjectOffset;
-            Vector3 desiredOffset = Vector3.zero;
+            Vector3 desiredOffset = new Vector3(0, 1f, 0);
 
-            if (show)
+            if (isShow)
             {
-                desiredOffset = new Vector3(currentOffset.x, 3.5f, currentOffset.z);
+                virtualCamera.Follow = cameraTarget;
+                virtualCamera.LookAt = cameraTarget;
             }
             else
             {
-                desiredOffset = new Vector3(currentOffset.x, 1f, currentOffset.z);
+                virtualCamera.Follow = player.transform;
+                virtualCamera.LookAt = player.transform;
             }
 
             if (Vector3.Distance(currentOffset, desiredOffset) > 0.01f)
             {
-                framingTransposer.m_TrackedObjectOffset = Vector3.Lerp(currentOffset, desiredOffset, Time.deltaTime * 10f);
+                framingTransposer.m_TrackedObjectOffset = Vector3.Lerp(currentOffset, desiredOffset, Time.deltaTime * 1f);
+                //ëŒ€í™” íŠ¸ë¦¬ê±° ì‚¬ë¼ì§€ëŠ” ê±° í•´ì•¼í•¨
             }
         }
     }
