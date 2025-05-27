@@ -21,6 +21,10 @@ namespace KGY
                     return;
                 }
 
+                if (speechBubble != null) dialogueUI.SpeechBubble = speechBubble; //대화 UI에 말풍선 애니메이션 설정
+
+                dialogueUI.DialogueSetActive(true); //대화 UI 활성화
+
                 if (!dialogueUI.IsSet)
                 {
                     dialogueData.SetCharacter(); //대화 데이터에 캐릭터 설정
@@ -28,15 +32,6 @@ namespace KGY
                     dialogueUI.IsSet = true;
                     dialogueUI.DialogueTrigger = gameObject; //DialogueTrigger 설정
                     dialogueUI.StartDialogue(dialogueData); //대화 시작
-                }
-                else dialogueUI.DialogueSetActive(true); //대화 UI 비활성화
-
-                if (speechBubble != null)
-                {
-                    dialogueUI.SpeechBubble = speechBubble; //대화 UI에 말풍선 애니메이션 설정
-
-                    speechBubble.SetBool("isShow", true);
-                    speechBubble.SetTrigger("showTrigger");
                 }
             }
         }

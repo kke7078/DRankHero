@@ -56,9 +56,7 @@ namespace KGY
             GameManager.Singleton.ClosedDoor(); //시작지점 문 닫기
 
             dialogueData = dialogue;
-
             isShow = true;
-            DialogueSetActive(isShow);
 
             dialogueQueue = new Queue<DialogueLine>(dialogue.lines);
             ShowNextLine();
@@ -146,16 +144,6 @@ namespace KGY
             isTyping = false;
             DialogueSetActive(isShow);
 
-            //말풍선 삭제
-            if (SpeechBubble != null)
-            {
-                SpeechBubble.SetBool("isShow", false);
-                SpeechBubble.ResetTrigger("showTrigger");
-
-                SpeechBubble.SetBool("isHide", true);
-                SpeechBubble.SetTrigger("hideTrigger");
-            }
-
             IsSet = false; //대화 데이터 설정 초기화
             DialogueTrigger.SetActive(false); //대화 트리거 비활성화
             DialogueTrigger = null; //대화 트리거 초기화
@@ -173,11 +161,30 @@ namespace KGY
             {
                 animator.SetTrigger("showTrigger");
                 animator.ResetTrigger("hideTrigger");
+
+                if (SpeechBubble != null)
+                {
+                    SpeechBubble.SetBool("isShow", true);
+                    SpeechBubble.SetTrigger("showTrigger");
+
+                    SpeechBubble.SetBool("isHide", false);
+                    SpeechBubble.ResetTrigger("hideTrigger");
+                }
             }
             else
             {
                 animator.SetTrigger("hideTrigger");
                 animator.ResetTrigger("showTrigger");
+
+                //말풍선 삭제
+                if (SpeechBubble != null)
+                {
+                    SpeechBubble.SetBool("isShow", false);
+                    SpeechBubble.ResetTrigger("showTrigger");
+
+                    SpeechBubble.SetBool("isHide", true);
+                    SpeechBubble.SetTrigger("hideTrigger");
+                }
             }
         }
 
