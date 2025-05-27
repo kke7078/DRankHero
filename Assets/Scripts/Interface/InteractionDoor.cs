@@ -91,7 +91,7 @@ namespace KGY
                     break;
 
                 case DoorType.StageStartDoor:
-                    GameManager.Singleton.IsGameStarted = true;
+                    GameManager.Singleton.IsStageStarted = true;
 
                     doorParticleSystem.gameObject.SetActive(true);
                     GetComponent<Collider>().enabled = !IsOpened;

@@ -20,7 +20,7 @@ namespace KGY
         [SerializeField] private Transform player;  //플레이어 캐릭터
         [SerializeField] private Camera mainCamera; //메인 카메라
 
-        private Vector3 worldOffset = new Vector3(0, -1.8f, 0);
+        private Vector3 worldOffset = new Vector3(0, -1f, 0);
 
         private void Update()
         {

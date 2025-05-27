@@ -15,6 +15,12 @@ namespace KGY
         {
             if (other.CompareTag("Player"))
             {
+                if (GameManager.Singleton.IsStageStarted)
+                { 
+                    gameObject.SetActive(false); //스테이지 시작 후 대화 트리거 비활성화
+                    return;
+                }
+
                 if (!dialogueUI.IsSet)
                 {
                     dialogueData.SetCharacter(); //대화 데이터에 캐릭터 설정

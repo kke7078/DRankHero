@@ -21,7 +21,7 @@ namespace KGY
 
         #region 레벨 시작 시 UI 세팅
         //레벨 시작 UI 표시
-        public void StartLevel()
+        public void StartStage()
         {
             stageStartUI.SetTrigger("showTrigger");
             StartCoroutine(ShowNextUISequence());   //stageStartUI가 사라진 후 다음 UI 표시
@@ -78,9 +78,9 @@ namespace KGY
         }
 
         #region 레벨 클리어 시 UI 세팅
-        public void ClearLevel()
+        public void ClearStage()
         {
-            Vector3 targetPosition = new Vector3(0, 0.705f, 0);
+            Vector3 targetPosition = new Vector3(0, 0.08f, 0);
             Vector3 targetRotation = new Vector3(0, -135, 0);
             StartCoroutine(player.SetPlayerTransform(targetPosition, targetRotation));
             StartCoroutine(HideNextUISequence());

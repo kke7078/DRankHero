@@ -7,17 +7,17 @@ namespace KGY
     //GameManager : 게임의 전반적인 상태를 관리하는 클래스
     public class GameManager : SingletonBase<GameManager>
     {
-        //게임 시작 유무
-        public bool IsGameStarted
+        //스테이지 시작 유무 -> 스테이지 시작 문이 열림
+        public bool IsStageStarted
         {
-            get { return isGameStarted; }
+            get { return isStageStarted; }
             set {
-                if (isGameStarted == value) return;
-                isGameStarted = value;
-                GameHUD.StartLevel();
+                if (isStageStarted == value) return;
+                isStageStarted = value;
+                GameHUD.StartStage();
             }
         }
-        private bool isGameStarted;
+        private bool isStageStarted;
 
         //청소 완료 유무
         public bool IsCleanComplete
@@ -25,7 +25,11 @@ namespace KGY
             get => isCleanComplete;
             set {
                 isCleanComplete = value;
-                if (isCleanComplete) GameHUD.UpdatecompletedRoomsText(true); //청소 완료 UI 업데이트
+                if (isCleanComplete)
+                {
+                    GameHUD.UpdatecompletedRoomsText(true); //청소 완료 UI 업데이트
+                    StartGame();    //startPoint 문 열기
+                }
             }
         }
         private bool isCleanComplete;
@@ -75,7 +79,7 @@ namespace KGY
         private void Update()
         {
             //타이머 UI 업데이트
-            if (!IsGameStarted) return;
+            if (!IsStageStarted) return;
 
             if (remainingTime > 0)
             {
@@ -94,7 +98,7 @@ namespace KGY
         {
             if (isClear)
             {
-                GameHUD.ClearLevel();
+                GameHUD.ClearStage();
             }
             else
             { }
@@ -125,11 +129,14 @@ namespace KGY
         {
             if (!startPointDoor.IsOpened) return;
 
+            startPointDoor.IsOpened = false;
+
             var animator = startPointDoor.GetComponent<Animator>();
             animator.SetBool("isClosed", true);
             animator.SetTrigger("slidingCloseTrigger");
 
             animator.SetBool("isOpen", false);
+            animator.ResetTrigger("slidingOpenTrigger");
         }
     }
 }
