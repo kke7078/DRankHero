@@ -175,15 +175,15 @@ namespace KGY
             {
                 //청소도구 손에 장착
                 CurrentTool.transform.SetParent(handToolHolder);
-                CurrentTool.transform.localRotation = Quaternion.identity;
-                CurrentTool.transform.localPosition = Vector3.zero;
+                CurrentTool.transform.localPosition = CurrentTool.ToolTransform.handPosition; //손에 위치한 청소도구의 위치 설정
+                CurrentTool.transform.localRotation = Quaternion.Euler(CurrentTool.ToolTransform.handRotation.x, CurrentTool.ToolTransform.handRotation.y, CurrentTool.ToolTransform.handRotation.z); //손에 위치한 청소도구의 회전 설정
             }
             else
             {
                 //청소도구를 등에 장착
                 CurrentTool.transform.SetParent(backToolHolder);
-                CurrentTool.transform.localPosition = CurrentTool.ToolBackPosition;
-                CurrentTool.transform.localRotation = Quaternion.Euler(CurrentTool.ToolBackRotation.x, CurrentTool.ToolBackRotation.y, CurrentTool.ToolBackRotation.z);
+                CurrentTool.transform.localPosition = CurrentTool.ToolTransform.backPosition; //등에 위치한 청소도구의 위치 설정
+                CurrentTool.transform.localRotation = Quaternion.Euler(CurrentTool.ToolTransform.backRotation.x, CurrentTool.ToolTransform.backRotation.y, CurrentTool.ToolTransform.backRotation.z); //등에 위치한 청소도구의 회전 설정
             }
         }
 

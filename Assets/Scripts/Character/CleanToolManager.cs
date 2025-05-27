@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -8,7 +8,16 @@ using UnityEngine.UIElements;
 
 namespace KGY
 {
-    //CleanToolManager Å¬·¡½º : Ã»¼Òµµ±¸ÀÇ ¼Ó¼ºÀ» Á¤ÀÇÇÏ´Â Å¬·¡½º
+    [System.Serializable]
+    public struct ToolTransform
+    {
+        public Vector3 backPosition; //ë“±ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ì˜ ìœ„ì¹˜
+        public Vector3 backRotation; //ë“±ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ì˜ íšŒì „
+        public Vector3 handPosition; //ì†ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ì˜ ìœ„ì¹˜
+        public Vector3 handRotation; //ì†ì— ìœ„ì¹˜í•œ ì²­ì†Œë„êµ¬ì˜ íšŒì „
+    }
+
+    //CleanToolManager í´ë˜ìŠ¤ : ì²­ì†Œë„êµ¬ì˜ ì†ì„±ì„ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤
     public class CleanToolManager : MonoBehaviour
     {
         public enum ToolType
@@ -21,35 +30,23 @@ namespace KGY
             get => currentToolType;
             set => currentToolType = value;
         }
-        [SerializeField] private ToolType currentToolType; //ÇöÀç ÀåÂøµÈ Ã»¼Òµµ±¸ Å¸ÀÔ
+        [SerializeField] private ToolType currentToolType; //í˜„ì¬ ì¥ì°©ëœ ì²­ì†Œë„êµ¬ íƒ€ì…
 
-
-        public Vector3 ToolBackPosition { 
-            get => toolBackPosition;
-            set => toolBackPosition = value;
-        }
-        [SerializeField] private Vector3 toolBackPosition;    //µî¿¡ À§Ä¡ÇÑ Ã»¼Òµµ±¸ÀÇ À§Ä¡
-
-
-        public Vector3 ToolBackRotation
-        {
-            get => toolBackRotation;
-            set => toolBackRotation = value;
-        }
-        [SerializeField] private Vector3 toolBackRotation; //µî¿¡ À§Ä¡ÇÑ Ã»¼Òµµ±¸ÀÇ È¸Àü
-        
         public GameObject ToolMainEffect
         {
             get => toolMainEffect;
             set => toolMainEffect = value;
         }
-        [SerializeField] private GameObject toolMainEffect; //Ã»¼Òµµ±¸ÀÇ ¸ŞÀÎ ÀÌÆåÆ®
+        [SerializeField] private GameObject toolMainEffect; //ì²­ì†Œë„êµ¬ì˜ ë©”ì¸ ì´í™íŠ¸
 
         public GameObject ToolSubEffext {
             get => toolSubEffext;
             set => toolSubEffext = value;
         }
-        [SerializeField] private GameObject toolSubEffext; //Ã»¼Òµµ±¸ÀÇ ¼­ºê ÀÌÆåÆ®
+        [SerializeField] private GameObject toolSubEffext; //ì²­ì†Œë„êµ¬ì˜ ì„œë¸Œ ì´í™íŠ¸
+
+        public ToolTransform ToolTransform => toolTransform;
+        [SerializeField] private ToolTransform toolTransform;   //ì²­ì†Œë„êµ¬ì˜ ìœ„ì¹˜ì™€ íšŒì „ ì •ë³´
 
         [SerializeField] private GameObject waterTankCap;
 
