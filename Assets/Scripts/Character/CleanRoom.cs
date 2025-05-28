@@ -25,7 +25,7 @@ namespace KGY
             }
         }
         private bool isComplete;
-
+         
         //방의 이름
         public string DirtyRoomName => dirtyRoomName;
         [SerializeField] private string dirtyRoomName;
@@ -37,14 +37,13 @@ namespace KGY
         [SerializeField] private InteractionSensor interactionSensor;
         [SerializeField] private InteractionUI interactionUI;
         [SerializeField] private Canvas minimapIcon;
-        private Projector[] projectors;
+        [SerializeField] private Transform projectors;
 
         private void Start()
         {
-            projectors = GetComponentsInChildren<Projector>();
-            for (int i = 0; i < projectors.Length; i++)
+            foreach (Transform child in projectors)
             {
-                DirtyTotalValue += projectors[i].fieldOfView;
+                if(child.TryGetComponent(out Projector projector)) DirtyTotalValue += projector.fieldOfView;
             }
         }
 
@@ -76,13 +75,11 @@ namespace KGY
                 {
                     IsComplete = true;
                     ColliderCount = 0;
-                    interactionUI.ShowCleanRoomGaugeUI(this);
 
-                    foreach (Projector pj in projectors)
-                    {
-                        Collider collider = pj.GetComponentInChildren<Collider>();
-                        interactionSensor.CheckColliderExit(collider); //청소 완료 시 상호작용 센서에서 청소구역 콜라이더 제거
-                    }
+                    interactionSensor.CheckColliderExit(projectors.GetComponent<BoxCollider>());
+                    projectors.gameObject.SetActive(false);
+
+                    interactionUI.ShowCleanRoomGaugeUI(this);
                 }
             }
         }

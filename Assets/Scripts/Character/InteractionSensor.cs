@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,11 +6,11 @@ using UnityEngine.Assertions.Must;
 
 namespace KGY
 {
-    //InteractionSensor Å¬·¡½º : »óÈ£ÀÛ¿ë ¼¾¼­ÀÇ ¼Ó¼º ¹× µ¿ÀÛÀ» Á¤ÀÇÇÏ´Â Å¬·¡½º
+    //InteractionSensor í´ë˜ìŠ¤ : ìƒí˜¸ì‘ìš© ì„¼ì„œì˜ ì†ì„± ë° ë™ì‘ì„ ì •ì˜í•˜ëŠ” í´ë˜ìŠ¤
     public class InteractionSensor : MonoBehaviour
     {
-        public System.Action<IHasInteractionIds> OnDetected; //»óÈ£ÀÛ¿ë ¼¾¼­¿¡¼­ »óÈ£ÀÛ¿ë ¸Ş½ÃÁö µ¥ÀÌÅÍ¸¦ °¨ÁöÇßÀ» ¶§ È£ÃâµÇ´Â ÀÌº¥Æ®
-        public System.Action<IHasInteractionIds> OnLostSignal; //»óÈ£ÀÛ¿ë ¼¾¼­¿¡¼­ »óÈ£ÀÛ¿ë ¸Ş½ÃÁö µ¥ÀÌÅÍ°¡ ºüÁ³À» ¶§ È£ÃâµÇ´Â ÀÌº¥Æ®
+        public System.Action<IHasInteractionIds> OnDetected; //ìƒí˜¸ì‘ìš© ì„¼ì„œì—ì„œ ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ ë°ì´í„°ë¥¼ ê°ì§€í–ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ì´ë²¤íŠ¸
+        public System.Action<IHasInteractionIds> OnLostSignal; //ìƒí˜¸ì‘ìš© ì„¼ì„œì—ì„œ ìƒí˜¸ì‘ìš© ë©”ì‹œì§€ ë°ì´í„°ê°€ ë¹ ì¡Œì„ ë•Œ í˜¸ì¶œë˜ëŠ” ì´ë²¤íŠ¸
 
         private void OnTriggerEnter(Collider other)
         {
