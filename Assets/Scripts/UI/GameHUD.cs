@@ -14,6 +14,7 @@ namespace KGY
     {
         [SerializeField] private PlayerCharacter player; //플레이어의 위치
         [SerializeField] private Animator stageStartUI; //스테이지 시작 UI
+        [SerializeField] private Animator stageClearUI; //스테이지 클리어 UI
         [SerializeField] private Animator minimapUI; //미니맵 UI
         [SerializeField] private Animator remainingTimeUI; //남은 시간 UI
         [SerializeField] private Animator remainingRoomUI; //남은 장소 UI
@@ -95,6 +96,8 @@ namespace KGY
 
             yield return new WaitForSeconds(0.4f);
             GameManager.Singleton.ClosedDoor(); //출입문 닫기
+            yield return new WaitForSeconds(0.5f);
+            stageClearUI.gameObject.SetActive(true); //스테이지 클리어 UI 활성화
         }
 
         private IEnumerator PlayUIAnimation(Animator targetUI, bool isPlay)

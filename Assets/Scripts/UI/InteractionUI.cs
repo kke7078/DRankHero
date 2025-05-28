@@ -31,7 +31,7 @@ namespace KGY
 
             interactionMsg.position = screenPos;
 
-            CheckInteractionMsg();  
+            CheckInteractionMsg();
         }
 
         //상호작용 메시지 체크
