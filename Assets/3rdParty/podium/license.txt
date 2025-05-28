@@ -1,0 +1,11 @@
+Model Information:
+* title:	Podium
+* source:	https://sketchfab.com/3d-models/podium-e228f4566ef54a268a16a538a1cd1f74
+* author:	awa (https://sketchfab.com/awa)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Podium" (https://sketchfab.com/3d-models/podium-e228f4566ef54a268a16a538a1cd1f74) by awa (https://sketchfab.com/awa) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
