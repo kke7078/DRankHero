@@ -6,28 +6,18 @@ using UnityEngine;
 namespace KGY
 {
     //ProjectorCollider : 프로젝터의 충돌을 관리하는 클래스
-    public class ProjectorCollider : MonoBehaviour, IHasInteractionIds
+    public class ProjectorCollider : MonoBehaviour
     {
-        [SerializeField] private CleanToolManager.ToolType toolType;
-
-        public List<InteractionData.MsgId> InteractionIdList
-        {
-            get => interactionIdList;
-            set => interactionIdList = value;
-        }
-        [SerializeField] private List<InteractionData.MsgId> interactionIdList = new List<InteractionData.MsgId>();
+        
 
         private CleanRoom currentRoom;
         private Projector projector;
-        [SerializeField] Transform projectors;
 
         private void Start()
         {
             currentRoom = GetComponentInParent<CleanRoom>();
             projector = GetComponentInParent<Projector>();
         }
-
-
         private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("WaterRipple"))
@@ -46,33 +36,6 @@ namespace KGY
                 }
 
                 currentRoom.DirtyCleanValue = currentRoom.DirtyTotalValue - currentFOV;
-            }
-            
-            if (other.TryGetComponent(out PlayerCharacter player)) {
-
-                var currentTool = player.CurrentTool.CurrentToolType;
-
-                switch (toolType)
-                {
-                    case CleanToolManager.ToolType.WaterTank:
-                        if (currentTool == toolType)
-                        {
-                            foreach (Transform child in projectors)
-                            {
-                                ProjectorCollider pc = child.GetComponentInChildren<ProjectorCollider>();
-                                if (pc.InteractionIdList[0] != InteractionData.MsgId.projectorWater) pc.InteractionIdList[0] = InteractionData.MsgId.projectorWater;
-                            }
-                        }
-                        else
-                        {
-                            foreach (Transform child in projectors)
-                            {
-                                ProjectorCollider pc = child.GetComponentInChildren<ProjectorCollider>();
-                                if (pc.InteractionIdList[0] != InteractionData.MsgId.projectorWaterError) pc.InteractionIdList[0] = InteractionData.MsgId.projectorWaterError;
-                            }
-                        }
-                        break;
-                }
             }
         }
     }
