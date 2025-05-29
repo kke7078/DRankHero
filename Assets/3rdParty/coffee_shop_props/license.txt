@@ -1,0 +1,11 @@
+Model Information:
+* title:	Coffee Shop Props
+* source:	https://sketchfab.com/3d-models/coffee-shop-props-7bf03274d7a9443d807ec668a332b852
+* author:	Blarb (https://sketchfab.com/Blarb)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Coffee Shop Props" (https://sketchfab.com/3d-models/coffee-shop-props-7bf03274d7a9443d807ec668a332b852) by Blarb (https://sketchfab.com/Blarb) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
