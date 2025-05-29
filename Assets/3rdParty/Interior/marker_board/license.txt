@@ -1,0 +1,11 @@
+Model Information:
+* title:	marker board
+* source:	https://sketchfab.com/3d-models/marker-board-98be30f5453a4227bd46965932593c0f
+* author:	DDZ production (https://sketchfab.com/ddzk)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "marker board" (https://sketchfab.com/3d-models/marker-board-98be30f5453a4227bd46965932593c0f) by DDZ production (https://sketchfab.com/ddzk) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
