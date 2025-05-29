@@ -41,7 +41,6 @@ namespace KGY
             set {
                 if (isGamePaused == value) return;
                 isGamePaused = value;
-                TogglePause(isGamePaused);
             }
         }
         private bool isGamePaused;
@@ -71,6 +70,8 @@ namespace KGY
 
         public void Start()
         {
+            InputSystem.Singleton.onGamePause += PauseGame; //게임 일시정지
+
             remainingTime = MaxTime; //스테이지 남은 시간 초기화
             InitializeDirtyRoomCount(); //스테이지 남은 장소 초기화
             Invoke("StartGame", 0.1f);  //게임 시작
@@ -94,6 +95,14 @@ namespace KGY
             startPointDoor.Interact();
         }
 
+        public void PauseGame()
+        {
+            IsGamePaused = !IsGamePaused;   //게임 일시정지 토글
+
+            if (IsGamePaused) Time.timeScale = 0f;
+            else Time.timeScale = 1f;
+        }
+
         public void EndGame(bool isClear)
         {
             if (isClear)
@@ -102,18 +111,6 @@ namespace KGY
             }
             else
             { }
-        }
-
-        private void TogglePause(bool isPause)
-        {
-            if (IsGamePaused)
-            { 
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-            }
         }
         #endregion
 

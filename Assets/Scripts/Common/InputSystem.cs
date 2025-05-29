@@ -11,7 +11,7 @@ namespace KGY
         public System.Action<int> onChangeTool;
         public System.Action onInteract;
         public System.Action onDialogueNextText;
-        public System.Action onDialogueEnd;
+        public System.Action onGamePause;
 
         public Vector2 MoveInput { get; set; }
 
@@ -38,7 +38,7 @@ namespace KGY
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
-                onDialogueEnd?.Invoke();
+                onGamePause?.Invoke();
             }
         }
     }
